@@ -1,13 +1,12 @@
-package com.chris.smartpark.ibms.controller;
+package com.chris.smartpark.base.controller;
 
 import com.chris.base.common.utils.CommonResponse;
 import com.chris.base.common.utils.PageUtils;
 import com.chris.base.common.utils.Query;
-import com.chris.smartpark.ibms.entity.IBMSSubsystemEntity;
-import com.chris.smartpark.ibms.service.IBMSSubsystemService;
+import com.chris.smartpark.base.entity.BaseFloorEntity;
+import com.chris.smartpark.base.service.BaseFloorService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,32 +15,32 @@ import java.util.Map;
 
 
 /**
- * ibms子系统表
+ * 园区楼层信息表
  *
  * @author chris
  * @email 258321511@qq.com
- * @since Oct 06.18
+ * @since Oct 16.18
  */
 @RestController
-@RequestMapping("/app/ibms/ibmssubsystem")
-@Api("子系统接口")
-public class IBMSSubsystemController {
+@RequestMapping("/app//base/floor")
+@Api("园区楼层信息接口")
+public class BaseFloorController {
     @Autowired
-    private IBMSSubsystemService ibmsSubsystemService;
+    private BaseFloorService baseFloorService;
 
     /**
      * 列表
      */
     @RequestMapping(value = "/list", method = RequestMethod.GET)
-    @ApiOperation(value = "查询列表", notes = "查询列表")
+    @ApiOperation(value = "查询列表数据", notes = "查询列表数据")
     public CommonResponse list(@RequestParam Map<String, Object> params) {
         //查询列表数据
         Query query = new Query(params);
 
-        List<IBMSSubsystemEntity> ibmsSubsystemList = ibmsSubsystemService.queryList(query);
-        int total = ibmsSubsystemService.queryTotal(query);
+        List<BaseFloorEntity> baseFloorList = baseFloorService.queryList(query);
+        int total = baseFloorService.queryTotal(query);
 
-        PageUtils pageUtil = new PageUtils(ibmsSubsystemList, total, query.getLimit(), query.getPage());
+        PageUtils pageUtil = new PageUtils(baseFloorList, total, query.getLimit(), query.getPage());
 
         return CommonResponse.ok().put("page", pageUtil);
     }
@@ -51,10 +50,11 @@ public class IBMSSubsystemController {
      * 信息
      */
     @RequestMapping(value = "/info/{id}", method = RequestMethod.GET)
-    @ApiOperation(value = "根据ID查询子系统", notes = "根据ID查询子系统")
+    @ApiOperation(value = "根据ID查询楼层", notes = "根据ID查询楼层")
     public CommonResponse info(@PathVariable("id") Integer id) {
-        IBMSSubsystemEntity ibmsSubsystem = ibmsSubsystemService.queryObject(id);
-        return CommonResponse.ok().setData(ibmsSubsystem);
+        BaseFloorEntity baseFloor = baseFloorService.queryObject(id);
+
+        return CommonResponse.ok().put("baseFloor", baseFloor);
     }
 
     /**
@@ -62,8 +62,8 @@ public class IBMSSubsystemController {
      */
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     @ApiOperation(value = "保存", notes = "保存")
-    public CommonResponse save(@RequestBody IBMSSubsystemEntity ibmsSubsystem) {
-        ibmsSubsystemService.save(ibmsSubsystem);
+    public CommonResponse save(@RequestBody BaseFloorEntity baseFloor) {
+        baseFloorService.save(baseFloor);
 
         return CommonResponse.ok();
     }
@@ -71,10 +71,10 @@ public class IBMSSubsystemController {
     /**
      * 修改
      */
-    @RequestMapping("/update")
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
     @ApiOperation(value = "修改", notes = "修改")
-    public CommonResponse update(@RequestBody IBMSSubsystemEntity ibmsSubsystem) {
-        ibmsSubsystemService.update(ibmsSubsystem);
+    public CommonResponse update(@RequestBody BaseFloorEntity baseFloor) {
+        baseFloorService.update(baseFloor);
 
         return CommonResponse.ok();
     }
@@ -85,7 +85,7 @@ public class IBMSSubsystemController {
     @RequestMapping(value = "/delete", method = RequestMethod.GET)
     @ApiOperation(value = "删除", notes = "删除")
     public CommonResponse delete(@RequestBody Integer[] ids) {
-        ibmsSubsystemService.deleteBatch(ids);
+        baseFloorService.deleteBatch(ids);
 
         return CommonResponse.ok();
     }

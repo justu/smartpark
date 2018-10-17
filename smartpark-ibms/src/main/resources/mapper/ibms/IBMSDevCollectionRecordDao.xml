@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.chris.smartpark.ibms.dao.IBMSDevCollectionRecordDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.chris.smartpark.ibms.entity.IBMSDevCollectionRecordEntity" id="ibmsDevCollectionRecordMap">
+        <result property="id" column="id"/>
+        <result property="deviceId" column="device_id"/>
+        <result property="subsystemId" column="subsystem_id"/>
+        <result property="attrId" column="attr_id"/>
+        <result property="value" column="value"/>
+        <result property="collectionDate" column="collection_date"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="com.chris.smartpark.ibms.entity.IBMSDevCollectionRecordEntity">
+		select * from ibms_dev_collection_record where id = #{value}
+	</select>
+
+	<select id="queryList" resultType="com.chris.smartpark.ibms.entity.IBMSDevCollectionRecordEntity">
+		select * from ibms_dev_collection_record where 1=1
+			<if test="id != null and id !='' ">
+				AND id = #{id}
+			</if>
+				<if test="deviceId != null and deviceId !='' ">
+				AND device_id = #{deviceId}
+			</if>
+				<if test="subsystemId != null and subsystemId !='' ">
+				AND subsystem_id = #{subsystemId}
+			</if>
+				<if test="attrId != null and attrId !='' ">
+				AND attr_id = #{attrId}
+			</if>
+				<if test="value != null and value !='' ">
+				AND value = #{value}
+			</if>
+				<if test="collectionDate != null and collectionDate !='' ">
+				AND collection_date = #{collectionDate}
+			</if>
+		        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from ibms_dev_collection_record where 1=1
+			<if test="id != null and id !='' ">
+                AND id = #{id}
+            </if>
+				<if test="deviceId != null and deviceId !='' ">
+                AND device_id = #{deviceId}
+            </if>
+				<if test="subsystemId != null and subsystemId !='' ">
+                AND subsystem_id = #{subsystemId}
+            </if>
+				<if test="attrId != null and attrId !='' ">
+                AND attr_id = #{attrId}
+            </if>
+				<if test="value != null and value !='' ">
+                AND value = #{value}
+            </if>
+				<if test="collectionDate != null and collectionDate !='' ">
+                AND collection_date = #{collectionDate}
+            </if>
+			</select>
+	 
+	<insert id="save" parameterType="com.chris.smartpark.ibms.entity.IBMSDevCollectionRecordEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into ibms_dev_collection_record
+		(
+			`device_id`, 
+			`subsystem_id`, 
+			`attr_id`, 
+			`value`, 
+			`collection_date`, 
+			`create_time`
+		)
+		values
+		(
+			#{deviceId}, 
+			#{subsystemId}, 
+			#{attrId}, 
+			#{value}, 
+			#{collectionDate}, 
+			#{createTime}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.chris.smartpark.ibms.entity.IBMSDevCollectionRecordEntity">
+		update ibms_dev_collection_record 
+		<set>
+			<if test="deviceId != null">`device_id` = #{deviceId}, </if>
+			<if test="subsystemId != null">`subsystem_id` = #{subsystemId}, </if>
+			<if test="attrId != null">`attr_id` = #{attrId}, </if>
+			<if test="value != null">`value` = #{value}, </if>
+			<if test="collectionDate != null">`collection_date` = #{collectionDate}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from ibms_dev_collection_record where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from ibms_dev_collection_record where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

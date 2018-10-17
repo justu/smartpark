@@ -1,13 +1,12 @@
-package com.chris.smartpark.ibms.controller;
+package com.chris.smartpark.base.controller;
 
 import com.chris.base.common.utils.CommonResponse;
 import com.chris.base.common.utils.PageUtils;
 import com.chris.base.common.utils.Query;
-import com.chris.smartpark.ibms.entity.IBMSSubsystemEntity;
-import com.chris.smartpark.ibms.service.IBMSSubsystemService;
+import com.chris.smartpark.base.entity.BaseCompanyEntity;
+import com.chris.smartpark.base.service.BaseCompanyService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,32 +15,32 @@ import java.util.Map;
 
 
 /**
- * ibms子系统表
+ * 园区公司信息表
  *
  * @author chris
  * @email 258321511@qq.com
- * @since Oct 06.18
+ * @since Oct 16.18
  */
 @RestController
-@RequestMapping("/app/ibms/ibmssubsystem")
-@Api("子系统接口")
-public class IBMSSubsystemController {
+@RequestMapping("/app/base/company")
+@Api("园区公司信息接口")
+public class BaseCompanyController {
     @Autowired
-    private IBMSSubsystemService ibmsSubsystemService;
+    private BaseCompanyService baseCompanyService;
 
     /**
      * 列表
      */
     @RequestMapping(value = "/list", method = RequestMethod.GET)
-    @ApiOperation(value = "查询列表", notes = "查询列表")
+    @ApiOperation(value = "查询列表数据", notes = "查询列表数据")
     public CommonResponse list(@RequestParam Map<String, Object> params) {
         //查询列表数据
         Query query = new Query(params);
 
-        List<IBMSSubsystemEntity> ibmsSubsystemList = ibmsSubsystemService.queryList(query);
-        int total = ibmsSubsystemService.queryTotal(query);
+        List<BaseCompanyEntity> baseCompanyList = baseCompanyService.queryList(query);
+        int total = baseCompanyService.queryTotal(query);
 
-        PageUtils pageUtil = new PageUtils(ibmsSubsystemList, total, query.getLimit(), query.getPage());
+        PageUtils pageUtil = new PageUtils(baseCompanyList, total, query.getLimit(), query.getPage());
 
         return CommonResponse.ok().put("page", pageUtil);
     }
@@ -51,10 +50,11 @@ public class IBMSSubsystemController {
      * 信息
      */
     @RequestMapping(value = "/info/{id}", method = RequestMethod.GET)
-    @ApiOperation(value = "根据ID查询子系统", notes = "根据ID查询子系统")
+    @ApiOperation(value = "根据ID查询公司", notes = "根据ID查询公司")
     public CommonResponse info(@PathVariable("id") Integer id) {
-        IBMSSubsystemEntity ibmsSubsystem = ibmsSubsystemService.queryObject(id);
-        return CommonResponse.ok().setData(ibmsSubsystem);
+        BaseCompanyEntity baseCompany = baseCompanyService.queryObject(id);
+
+        return CommonResponse.ok().put("baseCompany", baseCompany);
     }
 
     /**
@@ -62,8 +62,8 @@ public class IBMSSubsystemController {
      */
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     @ApiOperation(value = "保存", notes = "保存")
-    public CommonResponse save(@RequestBody IBMSSubsystemEntity ibmsSubsystem) {
-        ibmsSubsystemService.save(ibmsSubsystem);
+    public CommonResponse save(@RequestBody BaseCompanyEntity baseCompany) {
+        baseCompanyService.save(baseCompany);
 
         return CommonResponse.ok();
     }
@@ -71,10 +71,10 @@ public class IBMSSubsystemController {
     /**
      * 修改
      */
-    @RequestMapping("/update")
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
     @ApiOperation(value = "修改", notes = "修改")
-    public CommonResponse update(@RequestBody IBMSSubsystemEntity ibmsSubsystem) {
-        ibmsSubsystemService.update(ibmsSubsystem);
+    public CommonResponse update(@RequestBody BaseCompanyEntity baseCompany) {
+        baseCompanyService.update(baseCompany);
 
         return CommonResponse.ok();
     }
@@ -83,9 +83,9 @@ public class IBMSSubsystemController {
      * 删除
      */
     @RequestMapping(value = "/delete", method = RequestMethod.GET)
-    @ApiOperation(value = "删除", notes = "删除")
+    @ApiOperation(value = "修改", notes = "修改")
     public CommonResponse delete(@RequestBody Integer[] ids) {
-        ibmsSubsystemService.deleteBatch(ids);
+        baseCompanyService.deleteBatch(ids);
 
         return CommonResponse.ok();
     }
