@@ -56,6 +56,19 @@
 		</dependency>
 		
 	</dependencies>
+	<distributionManagement>
+		<repository>
+			<id>releases</id>
+			<name>chris-releases</name>
+			<url>http://47.99.125.173:8081/nexus/content/repositories/releases/</url>
+		</repository>
+		<snapshotRepository>
+			<id>snapshots</id>
+			<name>chris-snapshots</name>
+			<url>http://47.99.125.173:8081/nexus/content/repositories/snapshots/</url>
+		</snapshotRepository>
+	</distributionManagement>
+
 	<build>
 		<resources>
 			<resource>
@@ -72,4 +85,37 @@
 			</resource>
 		</resources>
 	</build>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>public</id>
+			<name>Team Maven Repository</name>
+			<url>http://47.99.125.173:8081/nexus/content/groups/public/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories>
+
+	<repositories>
+		<!--<repository>
+			<id>public</id>
+			<name>Team Maven Repository</name>
+			<url>http://47.99.125.173:8081/nexus/content/groups/public/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>-->
+		<repository>
+			<id>aliyun</id>
+			<name>aliyun</name>
+			<url>http://maven.aliyun.com/nexus/content/groups/public</url>
+		</repository>
+	</repositories>
 </project>
