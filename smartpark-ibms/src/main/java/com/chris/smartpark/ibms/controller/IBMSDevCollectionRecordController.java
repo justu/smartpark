@@ -3,7 +3,10 @@ package com.chris.smartpark.ibms.controller;
 import com.chris.base.common.utils.CommonResponse;
 import com.chris.base.common.utils.PageUtils;
 import com.chris.base.common.utils.Query;
+import com.chris.smartpark.ibms.entity.CountElectricityEntity;
+import com.chris.smartpark.ibms.entity.EnvInfoEntity;
 import com.chris.smartpark.ibms.entity.IBMSDevCollectionRecordEntity;
+import com.chris.smartpark.ibms.entity.MonthElectricityEntity;
 import com.chris.smartpark.ibms.service.IBMSDevCollectionRecordService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -23,11 +26,42 @@ import java.util.Map;
  * @since Oct 16.18
  */
 @RestController
-@RequestMapping("/app/ibms/devcollectionrecord")
+@RequestMapping("/app/ibms/collection/record")
 @Api("设备采集记录接口")
 public class IBMSDevCollectionRecordController {
     @Autowired
     private IBMSDevCollectionRecordService ibmsDevCollectionRecordService;
+
+    /**
+     * 当月用电量详情
+     */
+    @RequestMapping(value = "/queryElectricityInMonth", method = RequestMethod.GET)
+    @ApiOperation(value = "当月用电量详情", notes = "当月用电量详情")
+    public CommonResponse queryElectricityInMonth() {
+        List<MonthElectricityEntity> monthElectricityEntities = ibmsDevCollectionRecordService.queryElectricityInMonth();
+        return CommonResponse.ok().setData(monthElectricityEntities);
+    }
+
+    /**
+     * 统计用电量
+     */
+    @RequestMapping(value = "/countElectricity", method = RequestMethod.GET)
+    @ApiOperation(value = "统计用电量", notes = "统计用电量")
+    public CommonResponse countElectricity() {
+        CountElectricityEntity countElectricityEntity = ibmsDevCollectionRecordService.countElectricity();
+        return CommonResponse.ok().setData(countElectricityEntity);
+    }
+
+    /**
+     *  查询温度,湿度以及二氧化碳浓度
+     */
+    @RequestMapping(value = "/queryEnvInfo", method = RequestMethod.GET)
+    @ApiOperation(value = "查询温度,湿度以及二氧化碳浓度", notes = "查询温度,湿度以及二氧化碳浓度")
+    public CommonResponse queryEnvInfo() {
+        List<EnvInfoEntity> envInfoEntities = ibmsDevCollectionRecordService.queryEnvInfo();
+        return CommonResponse.ok().setData(envInfoEntities);
+    }
+
 
     /**
      * 列表

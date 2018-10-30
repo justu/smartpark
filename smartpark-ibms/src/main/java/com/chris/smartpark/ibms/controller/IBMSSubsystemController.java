@@ -1,18 +1,15 @@
 package com.chris.smartpark.ibms.controller;
 
 import com.chris.base.common.utils.CommonResponse;
-import com.chris.base.common.utils.PageUtils;
-import com.chris.base.common.utils.Query;
 import com.chris.smartpark.ibms.entity.IBMSSubsystemEntity;
+import com.chris.smartpark.ibms.entity.IBMSSubsystemStateEntity;
 import com.chris.smartpark.ibms.service.IBMSSubsystemService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -34,16 +31,21 @@ public class IBMSSubsystemController {
      */
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     @ApiOperation(value = "查询列表", notes = "查询列表")
-    public CommonResponse list(@RequestParam Map<String, Object> params) {
-        //查询列表数据
-        Query query = new Query(params);
+    public CommonResponse list() {
 
-        List<IBMSSubsystemEntity> ibmsSubsystemList = ibmsSubsystemService.queryList(query);
-        int total = ibmsSubsystemService.queryTotal(query);
+        List<IBMSSubsystemEntity> ibmsSubsystemList = ibmsSubsystemService.queryList(null);
 
-        PageUtils pageUtil = new PageUtils(ibmsSubsystemList, total, query.getLimit(), query.getPage());
+        return CommonResponse.ok().setData(ibmsSubsystemList);
+    }
 
-        return CommonResponse.ok().put("page", pageUtil);
+    /**
+     * 列表
+     */
+    @RequestMapping(value = "/listState", method = RequestMethod.GET)
+    @ApiOperation(value = "查询列表", notes = "查询列表")
+    public CommonResponse listState() {
+        List<IBMSSubsystemStateEntity> ibmsSubsystemStateList = ibmsSubsystemService.queryListState();
+        return CommonResponse.ok().setData(ibmsSubsystemStateList);
     }
 
 
@@ -71,7 +73,7 @@ public class IBMSSubsystemController {
     /**
      * 修改
      */
-    @RequestMapping("/update")
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
     @ApiOperation(value = "修改", notes = "修改")
     public CommonResponse update(@RequestBody IBMSSubsystemEntity ibmsSubsystem) {
         ibmsSubsystemService.update(ibmsSubsystem);

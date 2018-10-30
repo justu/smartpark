@@ -1,5 +1,8 @@
 package com.chris.smartpark.ibms.service.impl;
 
+import com.chris.smartpark.ibms.entity.CountElectricityEntity;
+import com.chris.smartpark.ibms.entity.EnvInfoEntity;
+import com.chris.smartpark.ibms.entity.MonthElectricityEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +19,7 @@ import com.chris.smartpark.ibms.service.IBMSDevCollectionRecordService;
 public class IBMSDevCollectionRecordServiceImpl implements IBMSDevCollectionRecordService {
 	@Autowired
 	private IBMSDevCollectionRecordDao ibmsDevCollectionRecordDao;
-	
+
 	@Override
 	public IBMSDevCollectionRecordEntity queryObject(Integer id){
 		return ibmsDevCollectionRecordDao.queryObject(id);
@@ -51,5 +54,24 @@ public class IBMSDevCollectionRecordServiceImpl implements IBMSDevCollectionReco
 	public void deleteBatch(Integer[] ids){
 		ibmsDevCollectionRecordDao.deleteBatch(ids);
 	}
-	
+
+	@Override
+	public List<MonthElectricityEntity> queryElectricityInMonth() {
+		return ibmsDevCollectionRecordDao.queryElectricityInMonth() ;
+	}
+
+	@Override
+	public CountElectricityEntity countElectricity() {
+        CountElectricityEntity countElectricityEntity = new CountElectricityEntity();
+        countElectricityEntity.setYesterday(ibmsDevCollectionRecordDao.countElectricityInYesterday());
+        countElectricityEntity.setLastMonth(ibmsDevCollectionRecordDao.countElectricityInLastMonth());
+        countElectricityEntity.setCurrentMonth(ibmsDevCollectionRecordDao.countElectricityInMonth());
+		return countElectricityEntity;
+	}
+
+    @Override
+    public List<EnvInfoEntity> queryEnvInfo() {
+        return ibmsDevCollectionRecordDao.queryEnvInfo();
+    }
+
 }

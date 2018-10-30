@@ -1,6 +1,9 @@
 package com.chris.smartpark.ibms.service;
 
+import com.chris.smartpark.ibms.entity.CountElectricityEntity;
+import com.chris.smartpark.ibms.entity.EnvInfoEntity;
 import com.chris.smartpark.ibms.entity.IBMSDevCollectionRecordEntity;
+import com.chris.smartpark.ibms.entity.MonthElectricityEntity;
 
 import java.util.List;
 import java.util.Map;
@@ -27,4 +30,10 @@ public interface IBMSDevCollectionRecordService {
 	void delete(Integer id);
 	
 	void deleteBatch(Integer[] ids);
+
+	List<MonthElectricityEntity> queryElectricityInMonth();
+
+	CountElectricityEntity countElectricity();
+
+	List<EnvInfoEntity> queryEnvInfo();
 }
