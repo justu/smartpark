@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.chris.smartpark.busi.dao.VisitorInfoDao">
+<mapper namespace="com.chris.smartpark.busi.dao.VisitorInfoHisDao">
 
 	<!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.chris.smartpark.busi.entity.VisitorInfoEntity" id="visitorInfoMap">
+    <resultMap type="com.chris.smartpark.busi.entity.VisitorInfoHisEntity" id="visitorInfoHisMap">
         <result property="id" column="id"/>
-        <result property="name" column="name"/>
-        <result property="gender" column="gender"/>
+        <result property="visitorId" column="visitor_id"/>
         <result property="nation" column="nation"/>
         <result property="birthday" column="birthday"/>
+        <result property="name" column="name"/>
+        <result property="gender" column="gender"/>
         <result property="idcardNo" column="idcard_no"/>
         <result property="phone" column="phone"/>
         <result property="type" column="type"/>
@@ -27,26 +28,29 @@
         <result property="updateUserId" column="update_user_id"/>
     </resultMap>
 
-	<select id="queryObject" resultType="com.chris.smartpark.busi.entity.VisitorInfoEntity">
-		select * from sp_visitor_info where id = #{value}
+	<select id="queryObject" resultType="com.chris.smartpark.busi.entity.VisitorInfoHisEntity">
+		select * from sp_visitor_info_his where id = #{value}
 	</select>
 
-	<select id="queryList" resultType="com.chris.smartpark.busi.entity.VisitorInfoEntity">
-		select * from sp_visitor_info where 1=1
+	<select id="queryList" resultType="com.chris.smartpark.busi.entity.VisitorInfoHisEntity">
+		select * from sp_visitor_info_his where 1=1
 			<if test="id != null and id !='' ">
 				AND id = #{id}
 			</if>
-				<if test="name != null and name !='' ">
-				AND name = #{name}
-			</if>
-				<if test="gender != null and gender !='' ">
-				AND gender = #{gender}
+				<if test="visitorId != null and visitorId !='' ">
+				AND visitor_id = #{visitorId}
 			</if>
 				<if test="nation != null and nation !='' ">
 				AND nation = #{nation}
 			</if>
 				<if test="birthday != null and birthday !='' ">
 				AND birthday = #{birthday}
+			</if>
+				<if test="name != null and name !='' ">
+				AND name = #{name}
+			</if>
+				<if test="gender != null and gender !='' ">
+				AND gender = #{gender}
 			</if>
 				<if test="idcardNo != null and idcardNo !='' ">
 				AND idcard_no = #{idcardNo}
@@ -95,21 +99,24 @@
 	</select>
 	
  	<select id="queryTotal" resultType="int">
-		select count(*) from sp_visitor_info where 1=1
+		select count(*) from sp_visitor_info_his where 1=1
 			<if test="id != null and id !='' ">
                 AND id = #{id}
             </if>
-				<if test="name != null and name !='' ">
-                AND name = #{name}
-            </if>
-				<if test="gender != null and gender !='' ">
-                AND gender = #{gender}
+				<if test="visitorId != null and visitorId !='' ">
+                AND visitor_id = #{visitorId}
             </if>
 				<if test="nation != null and nation !='' ">
                 AND nation = #{nation}
             </if>
 				<if test="birthday != null and birthday !='' ">
                 AND birthday = #{birthday}
+            </if>
+				<if test="name != null and name !='' ">
+                AND name = #{name}
+            </if>
+				<if test="gender != null and gender !='' ">
+                AND gender = #{gender}
             </if>
 				<if test="idcardNo != null and idcardNo !='' ">
                 AND idcard_no = #{idcardNo}
@@ -146,13 +153,14 @@
             </if>
 			</select>
 	 
-	<insert id="save" parameterType="com.chris.smartpark.busi.entity.VisitorInfoEntity" useGeneratedKeys="true" keyProperty="id">
-		insert into sp_visitor_info
+	<insert id="save" parameterType="com.chris.smartpark.busi.entity.VisitorInfoHisEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into sp_visitor_info_his
 		(
-			`name`, 
-			`gender`, 
+			`visitor_id`, 
 			`nation`, 
 			`birthday`, 
+			`name`, 
+			`gender`, 
 			`idcard_no`, 
 			`phone`, 
 			`type`, 
@@ -171,10 +179,11 @@
 		)
 		values
 		(
-			#{name}, 
-			#{gender}, 
+			#{visitorId}, 
 			#{nation}, 
 			#{birthday}, 
+			#{name}, 
+			#{gender}, 
 			#{idcardNo}, 
 			#{phone}, 
 			#{type}, 
@@ -193,13 +202,14 @@
 		)
 	</insert>
 	 
-	<update id="update" parameterType="com.chris.smartpark.busi.entity.VisitorInfoEntity">
-		update sp_visitor_info 
+	<update id="update" parameterType="com.chris.smartpark.busi.entity.VisitorInfoHisEntity">
+		update sp_visitor_info_his 
 		<set>
-			<if test="name != null">`name` = #{name}, </if>
-			<if test="gender != null">`gender` = #{gender}, </if>
+			<if test="visitorId != null">`visitor_id` = #{visitorId}, </if>
 			<if test="nation != null">`nation` = #{nation}, </if>
 			<if test="birthday != null">`birthday` = #{birthday}, </if>
+			<if test="name != null">`name` = #{name}, </if>
+			<if test="gender != null">`gender` = #{gender}, </if>
 			<if test="idcardNo != null">`idcard_no` = #{idcardNo}, </if>
 			<if test="phone != null">`phone` = #{phone}, </if>
 			<if test="type != null">`type` = #{type}, </if>
@@ -220,11 +230,11 @@
 	</update>
 	
 	<delete id="delete">
-		delete from sp_visitor_info where id = #{value}
+		delete from sp_visitor_info_his where id = #{value}
 	</delete>
 	
 	<delete id="deleteBatch">
-		delete from sp_visitor_info where id in 
+		delete from sp_visitor_info_his where id in 
 		<foreach item="id" collection="array" open="(" separator="," close=")">
 			#{id}
 		</foreach>

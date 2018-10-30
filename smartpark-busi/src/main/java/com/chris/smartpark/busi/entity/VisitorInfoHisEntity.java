@@ -6,25 +6,27 @@ import com.chris.base.common.model.SysUpdateInfo;
 
 
 /**
- * 访客信息表
+ * 访客信息历史表
  * 
  * @author chris
  * @email 258321511@qq.com
  * @since Oct 30.18
  */
-public class VisitorInfoEntity  extends SysUpdateInfo  implements Serializable {
+public class VisitorInfoHisEntity  extends SysUpdateInfo  implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
-	//访客id
+	//
 	private Integer id;
-	//姓名
-	private String name;
-	//性别
-	private String gender;
+	//访客id
+	private Integer visitorId;
 	//民族
 	private String nation;
 	//生日
 	private Date birthday;
+	//姓名
+	private String name;
+	//性别
+	private String gender;
 	//身份证号
 	private String idcardNo;
 	//手机号
@@ -55,19 +57,12 @@ public class VisitorInfoEntity  extends SysUpdateInfo  implements Serializable {
 	public Integer getId() {
 		return id;
 	}
-	public void setName(String name) {
-		this.name = name;
+	public void setVisitorId(Integer visitorId) {
+		this.visitorId = visitorId;
 	}
 
-	public String getName() {
-		return name;
-	}
-	public void setGender(String gender) {
-		this.gender = gender;
-	}
-
-	public String getGender() {
-		return gender;
+	public Integer getVisitorId() {
+		return visitorId;
 	}
 	public void setNation(String nation) {
 		this.nation = nation;
@@ -82,6 +77,20 @@ public class VisitorInfoEntity  extends SysUpdateInfo  implements Serializable {
 
 	public Date getBirthday() {
 		return birthday;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getName() {
+		return name;
+	}
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
+	public String getGender() {
+		return gender;
 	}
 	public void setIdcardNo(String idcardNo) {
 		this.idcardNo = idcardNo;

@@ -1,23 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.chris.smartpark.busi.dao.VisitorInfoDao">
+<mapper namespace="com.chris.smartpark.busi.dao.CompanionsDao">
 
 	<!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.chris.smartpark.busi.entity.VisitorInfoEntity" id="visitorInfoMap">
+    <resultMap type="com.chris.smartpark.busi.entity.CompanionsEntity" id="companionsMap">
         <result property="id" column="id"/>
+        <result property="reservationId" column="reservation_id"/>
         <result property="name" column="name"/>
-        <result property="gender" column="gender"/>
-        <result property="nation" column="nation"/>
-        <result property="birthday" column="birthday"/>
         <result property="idcardNo" column="idcard_no"/>
         <result property="phone" column="phone"/>
-        <result property="type" column="type"/>
-        <result property="photoUrl" column="photo_url"/>
         <result property="carNo" column="car_no"/>
-        <result property="company" column="company"/>
-        <result property="uuid" column="uuid"/>
-        <result property="remark" column="remark"/>
+        <result property="photoUrl" column="photo_url"/>
         <result property="ext1" column="ext1"/>
         <result property="ext2" column="ext2"/>
         <result property="ext3" column="ext3"/>
@@ -27,26 +21,20 @@
         <result property="updateUserId" column="update_user_id"/>
     </resultMap>
 
-	<select id="queryObject" resultType="com.chris.smartpark.busi.entity.VisitorInfoEntity">
-		select * from sp_visitor_info where id = #{value}
+	<select id="queryObject" resultType="com.chris.smartpark.busi.entity.CompanionsEntity">
+		select * from sp_companions where id = #{value}
 	</select>
 
-	<select id="queryList" resultType="com.chris.smartpark.busi.entity.VisitorInfoEntity">
-		select * from sp_visitor_info where 1=1
+	<select id="queryList" resultType="com.chris.smartpark.busi.entity.CompanionsEntity">
+		select * from sp_companions where 1=1
 			<if test="id != null and id !='' ">
 				AND id = #{id}
 			</if>
+				<if test="reservationId != null and reservationId !='' ">
+				AND reservation_id = #{reservationId}
+			</if>
 				<if test="name != null and name !='' ">
 				AND name = #{name}
-			</if>
-				<if test="gender != null and gender !='' ">
-				AND gender = #{gender}
-			</if>
-				<if test="nation != null and nation !='' ">
-				AND nation = #{nation}
-			</if>
-				<if test="birthday != null and birthday !='' ">
-				AND birthday = #{birthday}
 			</if>
 				<if test="idcardNo != null and idcardNo !='' ">
 				AND idcard_no = #{idcardNo}
@@ -54,23 +42,11 @@
 				<if test="phone != null and phone !='' ">
 				AND phone = #{phone}
 			</if>
-				<if test="type != null and type !='' ">
-				AND type = #{type}
-			</if>
-				<if test="photoUrl != null and photoUrl !='' ">
-				AND photo_url = #{photoUrl}
-			</if>
 				<if test="carNo != null and carNo !='' ">
 				AND car_no = #{carNo}
 			</if>
-				<if test="company != null and company !='' ">
-				AND company = #{company}
-			</if>
-				<if test="uuid != null and uuid !='' ">
-				AND uuid = #{uuid}
-			</if>
-				<if test="remark != null and remark !='' ">
-				AND remark = #{remark}
+				<if test="photoUrl != null and photoUrl !='' ">
+				AND photo_url = #{photoUrl}
 			</if>
 				<if test="ext1 != null and ext1 !='' ">
 				AND ext1 = #{ext1}
@@ -95,21 +71,15 @@
 	</select>
 	
  	<select id="queryTotal" resultType="int">
-		select count(*) from sp_visitor_info where 1=1
+		select count(*) from sp_companions where 1=1
 			<if test="id != null and id !='' ">
                 AND id = #{id}
             </if>
+				<if test="reservationId != null and reservationId !='' ">
+                AND reservation_id = #{reservationId}
+            </if>
 				<if test="name != null and name !='' ">
                 AND name = #{name}
-            </if>
-				<if test="gender != null and gender !='' ">
-                AND gender = #{gender}
-            </if>
-				<if test="nation != null and nation !='' ">
-                AND nation = #{nation}
-            </if>
-				<if test="birthday != null and birthday !='' ">
-                AND birthday = #{birthday}
             </if>
 				<if test="idcardNo != null and idcardNo !='' ">
                 AND idcard_no = #{idcardNo}
@@ -117,23 +87,11 @@
 				<if test="phone != null and phone !='' ">
                 AND phone = #{phone}
             </if>
-				<if test="type != null and type !='' ">
-                AND type = #{type}
-            </if>
-				<if test="photoUrl != null and photoUrl !='' ">
-                AND photo_url = #{photoUrl}
-            </if>
 				<if test="carNo != null and carNo !='' ">
                 AND car_no = #{carNo}
             </if>
-				<if test="company != null and company !='' ">
-                AND company = #{company}
-            </if>
-				<if test="uuid != null and uuid !='' ">
-                AND uuid = #{uuid}
-            </if>
-				<if test="remark != null and remark !='' ">
-                AND remark = #{remark}
+				<if test="photoUrl != null and photoUrl !='' ">
+                AND photo_url = #{photoUrl}
             </if>
 				<if test="ext1 != null and ext1 !='' ">
                 AND ext1 = #{ext1}
@@ -146,21 +104,15 @@
             </if>
 			</select>
 	 
-	<insert id="save" parameterType="com.chris.smartpark.busi.entity.VisitorInfoEntity" useGeneratedKeys="true" keyProperty="id">
-		insert into sp_visitor_info
+	<insert id="save" parameterType="com.chris.smartpark.busi.entity.CompanionsEntity" useGeneratedKeys="true" keyProperty="id">
+		insert into sp_companions
 		(
+			`reservation_id`, 
 			`name`, 
-			`gender`, 
-			`nation`, 
-			`birthday`, 
 			`idcard_no`, 
 			`phone`, 
-			`type`, 
-			`photo_url`, 
 			`car_no`, 
-			`company`, 
-			`uuid`, 
-			`remark`, 
+			`photo_url`, 
 			`ext1`, 
 			`ext2`, 
 			`ext3`, 
@@ -171,18 +123,12 @@
 		)
 		values
 		(
+			#{reservationId}, 
 			#{name}, 
-			#{gender}, 
-			#{nation}, 
-			#{birthday}, 
 			#{idcardNo}, 
 			#{phone}, 
-			#{type}, 
-			#{photoUrl}, 
 			#{carNo}, 
-			#{company}, 
-			#{uuid}, 
-			#{remark}, 
+			#{photoUrl}, 
 			#{ext1}, 
 			#{ext2}, 
 			#{ext3}, 
@@ -193,21 +139,15 @@
 		)
 	</insert>
 	 
-	<update id="update" parameterType="com.chris.smartpark.busi.entity.VisitorInfoEntity">
-		update sp_visitor_info 
+	<update id="update" parameterType="com.chris.smartpark.busi.entity.CompanionsEntity">
+		update sp_companions 
 		<set>
+			<if test="reservationId != null">`reservation_id` = #{reservationId}, </if>
 			<if test="name != null">`name` = #{name}, </if>
-			<if test="gender != null">`gender` = #{gender}, </if>
-			<if test="nation != null">`nation` = #{nation}, </if>
-			<if test="birthday != null">`birthday` = #{birthday}, </if>
 			<if test="idcardNo != null">`idcard_no` = #{idcardNo}, </if>
 			<if test="phone != null">`phone` = #{phone}, </if>
-			<if test="type != null">`type` = #{type}, </if>
-			<if test="photoUrl != null">`photo_url` = #{photoUrl}, </if>
 			<if test="carNo != null">`car_no` = #{carNo}, </if>
-			<if test="company != null">`company` = #{company}, </if>
-			<if test="uuid != null">`uuid` = #{uuid}, </if>
-			<if test="remark != null">`remark` = #{remark}, </if>
+			<if test="photoUrl != null">`photo_url` = #{photoUrl}, </if>
 			<if test="ext1 != null">`ext1` = #{ext1}, </if>
 			<if test="ext2 != null">`ext2` = #{ext2}, </if>
 			<if test="ext3 != null">`ext3` = #{ext3}, </if>
@@ -220,11 +160,11 @@
 	</update>
 	
 	<delete id="delete">
-		delete from sp_visitor_info where id = #{value}
+		delete from sp_companions where id = #{value}
 	</delete>
 	
 	<delete id="deleteBatch">
-		delete from sp_visitor_info where id in 
+		delete from sp_companions where id in 
 		<foreach item="id" collection="array" open="(" separator="," close=")">
 			#{id}
 		</foreach>

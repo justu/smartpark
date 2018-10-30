@@ -6,11 +6,11 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 访客表
+ * 访客信息表
  * 
  * @author chris
  * @email 258321511@qq.com
- * @since Oct 07.18
+ * @since Oct 30.18
  */
 public interface VisitorInfoService {
 	

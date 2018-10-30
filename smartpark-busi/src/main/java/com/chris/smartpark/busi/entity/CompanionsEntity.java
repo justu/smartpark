@@ -1,46 +1,33 @@
 package com.chris.smartpark.busi.entity;
 
 import java.io.Serializable;
-import java.util.Date;
 import com.chris.base.common.model.SysUpdateInfo;
 
 
 /**
- * 访客信息表
+ * 同行人员信息表
  * 
  * @author chris
  * @email 258321511@qq.com
  * @since Oct 30.18
  */
-public class VisitorInfoEntity  extends SysUpdateInfo  implements Serializable {
+public class CompanionsEntity  extends SysUpdateInfo  implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
-	//访客id
+	//
 	private Integer id;
+	//预约单id
+	private Integer reservationId;
 	//姓名
 	private String name;
-	//性别
-	private String gender;
-	//民族
-	private String nation;
-	//生日
-	private Date birthday;
 	//身份证号
 	private String idcardNo;
 	//手机号
 	private String phone;
-	//访客类型
-	private Integer type;
-	//访客照片
-	private String photoUrl;
 	//车牌号
 	private String carNo;
-	//单位名称
-	private String company;
-	//第三方平台关联id
-	private String uuid;
-	//备注
-	private String remark;
+	//访客照片
+	private String photoUrl;
 	//扩展字段1
 	private String ext1;
 	//扩展字段2
@@ -55,33 +42,19 @@ public class VisitorInfoEntity  extends SysUpdateInfo  implements Serializable {
 	public Integer getId() {
 		return id;
 	}
+	public void setReservationId(Integer reservationId) {
+		this.reservationId = reservationId;
+	}
+
+	public Integer getReservationId() {
+		return reservationId;
+	}
 	public void setName(String name) {
 		this.name = name;
 	}
 
 	public String getName() {
 		return name;
-	}
-	public void setGender(String gender) {
-		this.gender = gender;
-	}
-
-	public String getGender() {
-		return gender;
-	}
-	public void setNation(String nation) {
-		this.nation = nation;
-	}
-
-	public String getNation() {
-		return nation;
-	}
-	public void setBirthday(Date birthday) {
-		this.birthday = birthday;
-	}
-
-	public Date getBirthday() {
-		return birthday;
 	}
 	public void setIdcardNo(String idcardNo) {
 		this.idcardNo = idcardNo;
@@ -97,20 +70,6 @@ public class VisitorInfoEntity  extends SysUpdateInfo  implements Serializable {
 	public String getPhone() {
 		return phone;
 	}
-	public void setType(Integer type) {
-		this.type = type;
-	}
-
-	public Integer getType() {
-		return type;
-	}
-	public void setPhotoUrl(String photoUrl) {
-		this.photoUrl = photoUrl;
-	}
-
-	public String getPhotoUrl() {
-		return photoUrl;
-	}
 	public void setCarNo(String carNo) {
 		this.carNo = carNo;
 	}
@@ -118,26 +77,12 @@ public class VisitorInfoEntity  extends SysUpdateInfo  implements Serializable {
 	public String getCarNo() {
 		return carNo;
 	}
-	public void setCompany(String company) {
-		this.company = company;
+	public void setPhotoUrl(String photoUrl) {
+		this.photoUrl = photoUrl;
 	}
 
-	public String getCompany() {
-		return company;
-	}
-	public void setUuid(String uuid) {
-		this.uuid = uuid;
-	}
-
-	public String getUuid() {
-		return uuid;
-	}
-	public void setRemark(String remark) {
-		this.remark = remark;
-	}
-
-	public String getRemark() {
-		return remark;
+	public String getPhotoUrl() {
+		return photoUrl;
 	}
 	public void setExt1(String ext1) {
 		this.ext1 = ext1;

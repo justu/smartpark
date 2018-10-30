@@ -1,4 +1,4 @@
-package com.chris.smartpark.busi.controller;
+package com.chris.smartpark.base.controller;
 
 import java.util.List;
 import java.util.Map;
@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.chris.smartpark.busi.entity.VisitorInfoEntity;
-import com.chris.smartpark.busi.service.VisitorInfoService;
+import com.chris.smartpark.base.entity.BaseStaffEntity;
+import com.chris.smartpark.base.service.BaseStaffService;
 import com.chris.base.common.utils.PageUtils;
 import com.chris.base.common.utils.Query;
 import com.chris.base.common.utils.CommonResponse;
@@ -21,31 +21,31 @@ import com.chris.base.common.utils.CommonResponse;
 
 
 /**
- * 访客信息表
+ * 园区员工表
  * 
  * @author chris
  * @email 258321511@qq.com
  * @since Oct 30.18
  */
 @RestController
-@RequestMapping("/busi/visitorinfo")
-public class VisitorInfoController {
+@RequestMapping("/base/basestaff")
+public class BaseStaffController {
 	@Autowired
-	private VisitorInfoService visitorInfoService;
+	private BaseStaffService baseStaffService;
 	
 	/**
 	 * 列表
 	 */
 	@RequestMapping("/list")
-	@RequiresPermissions("busi:visitorinfo:list")
+	@RequiresPermissions("base:basestaff:list")
 	public CommonResponse list(@RequestParam Map<String, Object> params){
 		//查询列表数据
         Query query = new Query(params);
 
-		List<VisitorInfoEntity> visitorInfoList = visitorInfoService.queryList(query);
-		int total = visitorInfoService.queryTotal(query);
+		List<BaseStaffEntity> baseStaffList = baseStaffService.queryList(query);
+		int total = baseStaffService.queryTotal(query);
 		
-		PageUtils pageUtil = new PageUtils(visitorInfoList, total, query.getLimit(), query.getPage());
+		PageUtils pageUtil = new PageUtils(baseStaffList, total, query.getLimit(), query.getPage());
 		
 		return CommonResponse.ok().put("page", pageUtil);
 	}
@@ -55,20 +55,20 @@ public class VisitorInfoController {
 	 * 信息
 	 */
 	@RequestMapping("/info/{id}")
-	@RequiresPermissions("busi:visitorinfo:info")
+	@RequiresPermissions("base:basestaff:info")
 	public CommonResponse info(@PathVariable("id") Integer id){
-		VisitorInfoEntity visitorInfo = visitorInfoService.queryObject(id);
+		BaseStaffEntity baseStaff = baseStaffService.queryObject(id);
 		
-		return CommonResponse.ok().put("visitorInfo", visitorInfo);
+		return CommonResponse.ok().put("baseStaff", baseStaff);
 	}
 	
 	/**
 	 * 保存
 	 */
 	@RequestMapping("/save")
-	@RequiresPermissions("busi:visitorinfo:save")
-	public CommonResponse save(@RequestBody VisitorInfoEntity visitorInfo){
-		visitorInfoService.save(visitorInfo);
+	@RequiresPermissions("base:basestaff:save")
+	public CommonResponse save(@RequestBody BaseStaffEntity baseStaff){
+		baseStaffService.save(baseStaff);
 		
 		return CommonResponse.ok();
 	}
@@ -77,9 +77,9 @@ public class VisitorInfoController {
 	 * 修改
 	 */
 	@RequestMapping("/update")
-	@RequiresPermissions("busi:visitorinfo:update")
-	public CommonResponse update(@RequestBody VisitorInfoEntity visitorInfo){
-		visitorInfoService.update(visitorInfo);
+	@RequiresPermissions("base:basestaff:update")
+	public CommonResponse update(@RequestBody BaseStaffEntity baseStaff){
+		baseStaffService.update(baseStaff);
 		
 		return CommonResponse.ok();
 	}
@@ -88,9 +88,9 @@ public class VisitorInfoController {
 	 * 删除
 	 */
 	@RequestMapping("/delete")
-	@RequiresPermissions("busi:visitorinfo:delete")
+	@RequiresPermissions("base:basestaff:delete")
 	public CommonResponse delete(@RequestBody Integer[] ids){
-		visitorInfoService.deleteBatch(ids);
+		baseStaffService.deleteBatch(ids);
 		
 		return CommonResponse.ok();
 	}
