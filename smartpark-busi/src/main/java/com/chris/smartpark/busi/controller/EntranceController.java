@@ -1,6 +1,7 @@
 package com.chris.smartpark.busi.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.chris.base.common.utils.CommonResponse;
 import com.chris.base.common.utils.PageUtils;
@@ -27,17 +28,17 @@ public class EntranceController {
      * 用户门禁权限列表
      */
     @RequestMapping(value= "/userDoors" , method = RequestMethod.POST)
-    @RequiresPermissions("busi:entrance:userDoors")
+    //@RequiresPermissions("busi:entrance:userDoors")
     public CommonResponse userDoors(@RequestParam Map<String, Object> params){
         //查询列表数据
-        Query query = new Query(params);
+        //Query query = new Query(params);
         JSONObject paramJo = new JSONObject();
         paramJo = JSONObject.parseObject(JSONObject.toJSONString(params));
         JSONObject returnJo=entranceService.queryUserDoors(paramJo);
         if("1".equals(returnJo.getString("returnCode"))){
-            return CommonResponse.ok().put("userDoors", returnJo.getJSONObject("returnData"));
+            return CommonResponse.ok().setData( returnJo.getJSONArray("returnData"));
         }else{
-            return CommonResponse.error(returnJo.getString("returnMessage")).put("userDoors", new JSONObject());
+            return CommonResponse.error(returnJo.getString("returnMessage")).setData(new JSONArray());
         }
 
     }
@@ -46,15 +47,15 @@ public class EntranceController {
      * 远程开门
      */
     @RequestMapping("/openDoor/{doorId}")
-    @RequiresPermissions("busi:entrance:openDoor")
+    //@RequiresPermissions("busi:entrance:openDoor")
     public CommonResponse openDoor(@PathVariable("doorId") Integer doorId){
         JSONObject paramJo = new JSONObject();
         paramJo.put("doorId",doorId);
         JSONObject returnJo=entranceService.openDoor(paramJo);
         if("1".equals(returnJo.getString("returnCode"))){ //1成功 0 失败
-            return CommonResponse.ok().put("userDoors", returnJo.getJSONObject("returnData"));
+            return CommonResponse.ok().setData(returnJo.getJSONObject("returnData"));
         }else{
-            return CommonResponse.error(returnJo.getString("returnMessage")).put("userDoors", new JSONObject());
+            return CommonResponse.error(returnJo.getString("returnMessage")).setData(new JSONObject());
         }
     }
 }

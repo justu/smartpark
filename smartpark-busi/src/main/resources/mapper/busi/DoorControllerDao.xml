@@ -190,4 +190,13 @@
 		</foreach>
 	</delete>
 
+	<!-- 根据门禁id查询门禁控制器信息 -->
+	<select id="queryDoorControllerByDoorId" resultMap="doorControllerMap" parameterType="java.util.Map" >
+		select *
+		from sp_door_controller
+		where door_id =#{doorId,jdbcType=INTEGER}
+		<if test="status != null and status != ''">
+			and status =#{status,jdbcType=VARCHAR}
+		</if>
+	</select>
 </mapper>

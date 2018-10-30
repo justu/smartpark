@@ -83,10 +83,10 @@ public class EntranceServiceImpl implements EntranceService {
                 return returnJo;
             }
             //1.获取门禁控制信息
-            DoorControllerEntity entity = new DoorControllerEntity();
-            entity.setDoorId(doorId);
-            entity.setStatus("1");//1有效  0 失效
-            List<DoorControllerEntity> doorControllerList=doorControllerDao.queryList(entity);
+            Map<String,Object> params = new HashMap<String,Object>();
+            params.put("doorId",doorId);
+            params.put("status","1");//1有效  0 失效
+            List<DoorControllerEntity> doorControllerList=doorControllerDao.queryDoorControllerByDoorId(params);
 
             if(doorControllerList == null || doorControllerList.isEmpty()){
                 returnJo.put("returnCode","0");
@@ -117,6 +117,7 @@ public class EntranceServiceImpl implements EntranceService {
 
         returnJo.put("returnCode","1");
         returnJo.put("returnMessage","开门成功!");
+        returnJo.put("returnData",new JSONObject());
         return returnJo;
     }
 }
