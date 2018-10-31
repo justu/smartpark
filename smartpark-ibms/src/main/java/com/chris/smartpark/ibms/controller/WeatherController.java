@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @date Created in 0:52 2018/10/23
  */
 @RestController
-@RequestMapping("/app/ibms/weather")
+@RequestMapping("/ibms/weather")
 @Api("天气接口")
 public class WeatherController {
 
@@ -27,7 +27,7 @@ public class WeatherController {
     /**
      * 查询天气
      */
-    @RequestMapping(value = "/getWeatherInfo", method = RequestMethod.GET)
+    @RequestMapping(value = "/getWeatherInfo.notoken", method = RequestMethod.POST)
     @ApiOperation(value = "查询天气", notes = "查询天气")
     public CommonResponse getWeatherInfo(String cityId) {
         if (ValidateUtils.isEmpty(cityId)) {

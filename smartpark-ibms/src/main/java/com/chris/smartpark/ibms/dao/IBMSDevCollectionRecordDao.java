@@ -1,13 +1,15 @@
 package com.chris.smartpark.ibms.dao;
 
 import com.chris.base.modules.sys.dao.BaseDao;
+import com.chris.smartpark.ibms.entity.ElectricityEntity;
 import com.chris.smartpark.ibms.entity.EnvInfoEntity;
 import com.chris.smartpark.ibms.entity.IBMSDevCollectionRecordEntity;
-import com.chris.smartpark.ibms.entity.MonthElectricityEntity;
+import com.chris.smartpark.ibms.entity.WaterTemperaturePeriodEntity;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 设备采集记录表
@@ -20,14 +22,12 @@ import java.util.List;
 @Component
 public interface IBMSDevCollectionRecordDao extends BaseDao<IBMSDevCollectionRecordEntity> {
 
-    List<MonthElectricityEntity> queryElectricityInMonth();
+    List<ElectricityEntity> queryElectricity(Map<String, Object> map);
 
-    Double countElectricityInYesterday();
+    Double countElectricity(Map<String, Object> map);
 
-    Double countElectricityInLastMonth();
+    List<EnvInfoEntity> queryEnvInfo(Map<String, Object> map);
 
-    Double countElectricityInMonth();
-
-    List<EnvInfoEntity> queryEnvInfo();
+    List<WaterTemperaturePeriodEntity> queryWaterTemperature(Map<String, Object> map);
 
 }

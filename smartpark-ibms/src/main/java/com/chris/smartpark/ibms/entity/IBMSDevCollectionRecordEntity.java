@@ -6,76 +6,97 @@ import java.util.Date;
 
 /**
  * 设备采集记录表
- * 
+ *
  * @author chris
  * @email 258321511@qq.com
  * @since Oct 16.18
  */
-public class IBMSDevCollectionRecordEntity  implements Serializable {
-	private static final long serialVersionUID = 1L;
-	
-	//记录ID
-	private Integer id;
-	//设备ID
-	private Integer deviceId;
-	//子系统ID
-	private Integer subsystemId;
-	//属性ID
-	private Integer attrId;
-	//采集值
-	private String value;
-	//采集日期，如：2018-10-12
-	private String collectionDate;
-	//采集时间
-	private Date createTime;
+public class IBMSDevCollectionRecordEntity implements Serializable {
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
+    private static final long serialVersionUID = 1L;
 
-	public Integer getId() {
-		return id;
-	}
-	public void setDeviceId(Integer deviceId) {
-		this.deviceId = deviceId;
-	}
+    /**
+     * 记录ID
+     */
+    private Integer id;
+    /**
+     * 设备ID
+     */
+    private Integer deviceId;
+    /**
+     * 子系统ID
+     */
+    private Integer subsystemId;
+    /**
+     * 属性ID
+     */
+    private Integer attrId;
+    /**
+     * 采集值
+     */
+    private String value;
+    /**
+     * 采集日期，如：2018-10-12
+     */
+    private Date collectionDate;
+    /**
+     * 采集时间
+     */
+    private Date createTime;
 
-	public Integer getDeviceId() {
-		return deviceId;
-	}
-	public void setSubsystemId(Integer subsystemId) {
-		this.subsystemId = subsystemId;
-	}
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-	public Integer getSubsystemId() {
-		return subsystemId;
-	}
-	public void setAttrId(Integer attrId) {
-		this.attrId = attrId;
-	}
+    public Integer getId() {
+        return id;
+    }
 
-	public Integer getAttrId() {
-		return attrId;
-	}
-	public void setValue(String value) {
-		this.value = value;
-	}
+    public void setDeviceId(Integer deviceId) {
+        this.deviceId = deviceId;
+    }
 
-	public String getValue() {
-		return value;
-	}
-	public void setCollectionDate(String collectionDate) {
-		this.collectionDate = collectionDate;
-	}
+    public Integer getDeviceId() {
+        return deviceId;
+    }
 
-	public String getCollectionDate() {
-		return collectionDate;
-	}
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
-	}
+    public void setSubsystemId(Integer subsystemId) {
+        this.subsystemId = subsystemId;
+    }
 
-	public Date getCreateTime() {
-		return createTime;
-	}
+    public Integer getSubsystemId() {
+        return subsystemId;
+    }
+
+    public void setAttrId(Integer attrId) {
+        this.attrId = attrId;
+    }
+
+    public Integer getAttrId() {
+        return attrId;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setCollectionDate(Date collectionDate) {
+        this.collectionDate = collectionDate;
+    }
+
+    public Date getCollectionDate() {
+        return collectionDate;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
 }

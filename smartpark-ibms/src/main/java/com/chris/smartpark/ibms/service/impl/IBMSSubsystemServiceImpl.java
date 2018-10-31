@@ -4,6 +4,7 @@ import com.chris.smartpark.ibms.dao.IBMSDevAlarmRecordDao;
 import com.chris.smartpark.ibms.dao.IBMSDevConnectRecordDao;
 import com.chris.smartpark.ibms.entity.IBMSSubsystemStateEntity;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -62,7 +63,10 @@ public class IBMSSubsystemServiceImpl implements IBMSSubsystemService {
 
 	@Override
 	public List<IBMSSubsystemStateEntity> queryListState() {
-		List<IBMSSubsystemEntity> ibmsSubsystemEntities = ibmsSubsystemDao.queryList(null);
+		Map<String,Object> params = Maps.newHashMap();
+		params.put("sidx","id");
+		params.put("order","asc");
+		List<IBMSSubsystemEntity> ibmsSubsystemEntities = ibmsSubsystemDao.queryList(params);
 		List<IBMSSubsystemStateEntity> ibmsSubsystemStateEntities = Lists.newArrayList();
 		for (IBMSSubsystemEntity ibmsSubsystemEntity : ibmsSubsystemEntities){
 			IBMSSubsystemStateEntity ibmsSubsystemStateEntity = new IBMSSubsystemStateEntity();

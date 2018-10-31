@@ -5,7 +5,7 @@ package com.chris.smartpark.ibms.entity;
  * @version V.1.0.0
  * @date Created in 20:18 2018/10/22
  */
-public class MonthElectricityEntity {
+public class ElectricityEntity {
 
     private String date;
 

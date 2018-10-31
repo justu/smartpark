@@ -25,8 +25,6 @@ CREATE TABLE IF NOT EXISTS `ibms_dev_alarm_record` (
   `device_id` int(10) DEFAULT NULL COMMENT '设备ID',
   `subsystem_id` int(10) DEFAULT NULL COMMENT '子系统ID',
   `alarm` tinyint(1) DEFAULT NULL COMMENT '是否告警',
-  `alarm_level` int(1) DEFAULT NULL COMMENT '告警级别',
-  `reason` varchar(128) DEFAULT NULL COMMENT '告警原因',
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='设备报警记录表';
@@ -39,7 +37,7 @@ CREATE TABLE IF NOT EXISTS `ibms_dev_collection_record` (
   `subsystem_id` int(10) DEFAULT NULL COMMENT '子系统ID',
   `attr_id` int(10) DEFAULT NULL COMMENT '属性ID',
   `value` varchar(32) DEFAULT NULL COMMENT '采集值',
-  `collection_date` varchar(10) DEFAULT NULL COMMENT '采集日期，如：2018-10-12',
+  `collection_date` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '采集日期，如：2018-10-12',
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '采集时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='设备采集记录表';

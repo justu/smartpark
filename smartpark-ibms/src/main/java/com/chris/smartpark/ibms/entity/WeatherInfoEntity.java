@@ -7,8 +7,6 @@ package com.chris.smartpark.ibms.entity;
  */
 public class WeatherInfoEntity {
 
-    //{"weatherinfo":{"city":"长沙","cityid":"101250101",
-    // "temp1":"18℃","temp2":"21℃","weather":"中雨","img1":"n8.gif","img2":"d8.gif","ptime":"18:00"}}
     private String city;
 
     private String cityid;
@@ -89,17 +87,4 @@ public class WeatherInfoEntity {
         this.ptime = ptime;
     }
 
-    @Override
-    public String toString() {
-        return "WeatherInfoEntity{" +
-                "city='" + city + '\'' +
-                ", cityid='" + cityid + '\'' +
-                ", temp1='" + temp1 + '\'' +
-                ", temp2='" + temp2 + '\'' +
-                ", weather='" + weather + '\'' +
-                ", img1='" + img1 + '\'' +
-                ", img2='" + img2 + '\'' +
-                ", ptime='" + ptime + '\'' +
-                '}';
-    }
 }
