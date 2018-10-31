@@ -26,7 +26,7 @@ import java.util.Map;
  * @since Oct 16.18
  */
 @RestController
-@RequestMapping("/base/park")
+@RequestMapping("/basepark")
 @Api("园区信息接口")
 public class BaseParkController {
 
@@ -43,7 +43,7 @@ public class BaseParkController {
     /**
      * 列表
      */
-    @RequestMapping(value = "/list", method = RequestMethod.GET)
+    @RequestMapping(value = "/list", method = RequestMethod.POST)
     @ApiOperation(value = "查询列表数据", notes = "查询列表数据")
     public CommonResponse list(@RequestParam Map<String, Object> params) {
         //查询列表数据
@@ -61,7 +61,7 @@ public class BaseParkController {
     /**
      * 信息
      */
-    @RequestMapping(value = "/info", method = RequestMethod.GET)
+    @RequestMapping(value = "/info.notoken", method = RequestMethod.POST)
     @ApiOperation(value = "根据ID查询园区", notes = "根据ID查询园区")
     public CommonResponse info(Integer id) {
         if(ValidateUtils.isEmpty(id)){
@@ -97,7 +97,7 @@ public class BaseParkController {
     /**
      * 删除
      */
-    @RequestMapping(value = "/delete", method = RequestMethod.GET)
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
     @ApiOperation(value = "删除", notes = "删除")
     public CommonResponse delete(@RequestBody Integer[] ids) {
         baseParkService.deleteBatch(ids);

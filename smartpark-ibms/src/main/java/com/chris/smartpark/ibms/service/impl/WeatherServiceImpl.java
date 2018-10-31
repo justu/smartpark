@@ -30,8 +30,8 @@ public class WeatherServiceImpl implements WeatherService {
             String json = HttpClientUtils.get(url);
             LOGGER.info("getWeatherInfo : {}", json);
             JSONObject jsonObject = JSONObject.parseObject(json);
-            String weatherinfo = jsonObject.get("weatherinfo").toString();
-            weatherInfoEntity = JSONObject.parseObject(weatherinfo, WeatherInfoEntity.class);
+            String weatherInfo = jsonObject.get("weatherinfo").toString();
+            weatherInfoEntity = JSONObject.parseObject(weatherInfo, WeatherInfoEntity.class);
             LOGGER.info("weatherInfoEntity : {}", weatherInfoEntity.toString());
             weatherInfoEntity.setImg1(prefix + weatherInfoEntity.getImg1());
             weatherInfoEntity.setImg2(prefix + weatherInfoEntity.getImg2());

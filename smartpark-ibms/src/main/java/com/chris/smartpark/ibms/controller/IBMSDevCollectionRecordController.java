@@ -3,14 +3,12 @@ package com.chris.smartpark.ibms.controller;
 import com.chris.base.common.utils.CommonResponse;
 import com.chris.base.common.utils.PageUtils;
 import com.chris.base.common.utils.Query;
-import com.chris.smartpark.ibms.entity.CountElectricityEntity;
+import com.chris.smartpark.ibms.entity.ElectricityEntity;
 import com.chris.smartpark.ibms.entity.EnvInfoEntity;
 import com.chris.smartpark.ibms.entity.IBMSDevCollectionRecordEntity;
-import com.chris.smartpark.ibms.entity.MonthElectricityEntity;
 import com.chris.smartpark.ibms.service.IBMSDevCollectionRecordService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,34 +24,34 @@ import java.util.Map;
  * @since Oct 16.18
  */
 @RestController
-@RequestMapping("/app/ibms/collection/record")
+@RequestMapping("/ibms/collection/record")
 @Api("设备采集记录接口")
 public class IBMSDevCollectionRecordController {
     @Autowired
     private IBMSDevCollectionRecordService ibmsDevCollectionRecordService;
 
     /**
-     * 当月用电量详情
+     * 根据日期查询用电量详情
      */
-    @RequestMapping(value = "/queryElectricityInMonth", method = RequestMethod.GET)
+    @RequestMapping(value = "/queryElectricity.notoken", method = RequestMethod.POST)
     @ApiOperation(value = "当月用电量详情", notes = "当月用电量详情")
-    public CommonResponse queryElectricityInMonth() {
-        List<MonthElectricityEntity> monthElectricityEntities = ibmsDevCollectionRecordService.queryElectricityInMonth();
+    public CommonResponse queryElectricity(@RequestParam Map<String, Object> params) {
+        List<ElectricityEntity> monthElectricityEntities = ibmsDevCollectionRecordService.queryElectricity(params);
         return CommonResponse.ok().setData(monthElectricityEntities);
     }
 
     /**
      * 统计用电量
      */
-    @RequestMapping(value = "/countElectricity", method = RequestMethod.GET)
+    @RequestMapping(value = "/countElectricity.notoken", method = RequestMethod.POST)
     @ApiOperation(value = "统计用电量", notes = "统计用电量")
-    public CommonResponse countElectricity() {
-        CountElectricityEntity countElectricityEntity = ibmsDevCollectionRecordService.countElectricity();
-        return CommonResponse.ok().setData(countElectricityEntity);
+    public CommonResponse countElectricity(@RequestParam Map<String, Object> params) {
+        Double electricity = ibmsDevCollectionRecordService.countElectricity(params);
+        return CommonResponse.ok().setData(electricity);
     }
 
     /**
-     *  查询温度,湿度以及二氧化碳浓度
+     * 查询温度,湿度以及二氧化碳浓度
      */
     @RequestMapping(value = "/queryEnvInfo", method = RequestMethod.GET)
     @ApiOperation(value = "查询温度,湿度以及二氧化碳浓度", notes = "查询温度,湿度以及二氧化碳浓度")
