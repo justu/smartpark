@@ -1,16 +1,12 @@
 package com.chris.smartpark.base.controller;
 
-import com.alibaba.fastjson.JSONObject;
 import com.chris.base.common.utils.CommonResponse;
 import com.chris.base.common.utils.PageUtils;
 import com.chris.base.common.utils.Query;
-import com.chris.base.common.utils.ValidateUtils;
-import com.chris.smartpark.base.entity.BaseParkEntity;
-import com.chris.smartpark.base.service.BaseParkService;
+import com.chris.smartpark.base.entity.BaseBuildingEntity;
+import com.chris.smartpark.base.service.BaseBuildingService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,26 +15,18 @@ import java.util.Map;
 
 
 /**
- * 园区信息表
+ * 园区楼宇信息表
  *
  * @author chris
  * @email 258321511@qq.com
  * @since Oct 16.18
  */
 @RestController
-@RequestMapping("/base/park")
-@Api("园区信息接口")
-public class BaseParkController {
-
-    /**
-     * 日志打印
-     */
-    private static final Logger LOGGER = LoggerFactory.getLogger(BaseParkController.class);
-
-    private static final Integer DEFAULT_PARK = 1;
-
+@RequestMapping("/app/base/building")
+@Api("园区楼宇信息接口")
+public class BaseBuildingController {
     @Autowired
-    private BaseParkService baseParkService;
+    private BaseBuildingService baseBuildingService;
 
     /**
      * 列表
@@ -49,10 +37,10 @@ public class BaseParkController {
         //查询列表数据
         Query query = new Query(params);
 
-        List<BaseParkEntity> baseParkList = baseParkService.queryList(query);
-        int total = baseParkService.queryTotal(query);
+        List<BaseBuildingEntity> baseBuildingList = baseBuildingService.queryList(query);
+        int total = baseBuildingService.queryTotal(query);
 
-        PageUtils pageUtil = new PageUtils(baseParkList, total, query.getLimit(), query.getPage());
+        PageUtils pageUtil = new PageUtils(baseBuildingList, total, query.getLimit(), query.getPage());
 
         return CommonResponse.ok().put("page", pageUtil);
     }
@@ -61,15 +49,12 @@ public class BaseParkController {
     /**
      * 信息
      */
-    @RequestMapping(value = "/info", method = RequestMethod.GET)
-    @ApiOperation(value = "根据ID查询园区", notes = "根据ID查询园区")
-    public CommonResponse info(Integer id) {
-        if(ValidateUtils.isEmpty(id)){
-            id = DEFAULT_PARK;
-        }
-        BaseParkEntity basePark = baseParkService.queryObject(id);
-        LOGGER.info("park info :{}", JSONObject.toJSONString(basePark));
-        return CommonResponse.ok().setData(basePark);
+    @RequestMapping(value = "/info/{id}", method = RequestMethod.GET)
+    @ApiOperation(value = "根据ID查询子系统", notes = "根据ID查询子系统")
+    public CommonResponse info(@PathVariable("id") Integer id) {
+        BaseBuildingEntity baseBuilding = baseBuildingService.queryObject(id);
+
+        return CommonResponse.ok().put("baseBuilding", baseBuilding);
     }
 
     /**
@@ -77,8 +62,8 @@ public class BaseParkController {
      */
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     @ApiOperation(value = "保存", notes = "保存")
-    public CommonResponse save(@RequestBody BaseParkEntity basePark) {
-        baseParkService.save(basePark);
+    public CommonResponse save(@RequestBody BaseBuildingEntity baseBuilding) {
+        baseBuildingService.save(baseBuilding);
 
         return CommonResponse.ok();
     }
@@ -88,8 +73,8 @@ public class BaseParkController {
      */
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     @ApiOperation(value = "修改", notes = "修改")
-    public CommonResponse update(@RequestBody BaseParkEntity basePark) {
-        baseParkService.update(basePark);
+    public CommonResponse update(@RequestBody BaseBuildingEntity baseBuilding) {
+        baseBuildingService.update(baseBuilding);
 
         return CommonResponse.ok();
     }
@@ -100,7 +85,7 @@ public class BaseParkController {
     @RequestMapping(value = "/delete", method = RequestMethod.GET)
     @ApiOperation(value = "删除", notes = "删除")
     public CommonResponse delete(@RequestBody Integer[] ids) {
-        baseParkService.deleteBatch(ids);
+        baseBuildingService.deleteBatch(ids);
 
         return CommonResponse.ok();
     }

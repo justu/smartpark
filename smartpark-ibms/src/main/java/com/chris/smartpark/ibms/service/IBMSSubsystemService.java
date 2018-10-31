@@ -1,6 +1,7 @@
 package com.chris.smartpark.ibms.service;
 
 import com.chris.smartpark.ibms.entity.IBMSSubsystemEntity;
+import com.chris.smartpark.ibms.entity.IBMSSubsystemStateEntity;
 
 import java.util.List;
 import java.util.Map;
@@ -27,4 +28,6 @@ public interface IBMSSubsystemService {
 	void delete(Integer id);
 	
 	void deleteBatch(Integer[] ids);
+
+	List<IBMSSubsystemStateEntity> queryListState();
 }
