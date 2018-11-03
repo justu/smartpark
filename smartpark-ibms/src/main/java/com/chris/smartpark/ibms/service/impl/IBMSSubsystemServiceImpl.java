@@ -1,5 +1,10 @@
 package com.chris.smartpark.ibms.service.impl;
 
+import com.chris.smartpark.ibms.dao.IBMSDevAlarmRecordDao;
+import com.chris.smartpark.ibms.dao.IBMSDevConnectRecordDao;
+import com.chris.smartpark.ibms.entity.IBMSSubsystemStateEntity;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +21,10 @@ import com.chris.smartpark.ibms.service.IBMSSubsystemService;
 public class IBMSSubsystemServiceImpl implements IBMSSubsystemService {
 	@Autowired
 	private IBMSSubsystemDao ibmsSubsystemDao;
+	@Autowired
+	private IBMSDevAlarmRecordDao ibmsDevAlarmRecordDao;
+	@Autowired
+	private IBMSDevConnectRecordDao ibmsDevConnectRecordDao;
 	
 	@Override
 	public IBMSSubsystemEntity queryObject(Integer id){
@@ -51,5 +60,23 @@ public class IBMSSubsystemServiceImpl implements IBMSSubsystemService {
 	public void deleteBatch(Integer[] ids){
 		ibmsSubsystemDao.deleteBatch(ids);
 	}
-	
+
+	@Override
+	public List<IBMSSubsystemStateEntity> queryListState() {
+		Map<String,Object> params = Maps.newHashMap();
+		params.put("sidx","id");
+		params.put("order","asc");
+		List<IBMSSubsystemEntity> ibmsSubsystemEntities = ibmsSubsystemDao.queryList(params);
+		List<IBMSSubsystemStateEntity> ibmsSubsystemStateEntities = Lists.newArrayList();
+		for (IBMSSubsystemEntity ibmsSubsystemEntity : ibmsSubsystemEntities){
+			IBMSSubsystemStateEntity ibmsSubsystemStateEntity = new IBMSSubsystemStateEntity();
+			ibmsSubsystemStateEntity.setId(ibmsSubsystemEntity.getId());
+			ibmsSubsystemStateEntity.setName(ibmsSubsystemEntity.getName());
+			ibmsSubsystemStateEntity.setAlarm(ibmsDevAlarmRecordDao.queryStateBySubsystem(ibmsSubsystemEntity.getId()));
+			ibmsSubsystemStateEntity.setConnectStatus(ibmsDevConnectRecordDao.queryStateBySubsystem(ibmsSubsystemEntity.getId()));
+			ibmsSubsystemStateEntities.add(ibmsSubsystemStateEntity);
+		}
+		return ibmsSubsystemStateEntities;
+	}
+
 }

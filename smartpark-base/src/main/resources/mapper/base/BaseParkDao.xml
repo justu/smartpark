@@ -13,8 +13,10 @@
         <result property="detailAddress" column="detail_address"/>
         <result property="longitude" column="longitude"/>
         <result property="latitude" column="latitude"/>
-        <result property="remark" column="remark"/>
+        <result property="buildingTime" column="building_time"/>
         <result property="buildingArea" column="building_area"/>
+        <result property="remark" column="remark"/>
+        <result property="parkPicUrl" column="park_pic_url"/>
         <result property="status" column="status"/>
         <result property="createTime" column="create_time"/>
         <result property="createUserId" column="create_user_id"/>
@@ -52,11 +54,17 @@
 				<if test="latitude != null and latitude !='' ">
 				AND latitude = #{latitude}
 			</if>
-				<if test="remark != null and remark !='' ">
-				AND remark = #{remark}
+				<if test="buildingTime != null and buildingTime !='' ">
+				AND building_time = #{buildingTime}
 			</if>
 				<if test="buildingArea != null and buildingArea !='' ">
 				AND building_area = #{buildingArea}
+			</if>
+				<if test="remark != null and remark !='' ">
+				AND remark = #{remark}
+			</if>
+				<if test="parkPicUrl != null and parkPicUrl !='' ">
+				AND park_pic_url = #{parkPicUrl}
 			</if>
 				<if test="status != null and status !='' ">
 				AND status = #{status}
@@ -100,11 +108,17 @@
 				<if test="latitude != null and latitude !='' ">
                 AND latitude = #{latitude}
             </if>
-				<if test="remark != null and remark !='' ">
-                AND remark = #{remark}
+				<if test="buildingTime != null and buildingTime !='' ">
+                AND building_time = #{buildingTime}
             </if>
 				<if test="buildingArea != null and buildingArea !='' ">
                 AND building_area = #{buildingArea}
+            </if>
+				<if test="remark != null and remark !='' ">
+                AND remark = #{remark}
+            </if>
+				<if test="parkPicUrl != null and parkPicUrl !='' ">
+                AND park_pic_url = #{parkPicUrl}
             </if>
 				<if test="status != null and status !='' ">
                 AND status = #{status}
@@ -121,8 +135,10 @@
 			`detail_address`, 
 			`longitude`, 
 			`latitude`, 
-			`remark`, 
+			`building_time`, 
 			`building_area`, 
+			`remark`, 
+			`park_pic_url`, 
 			`status`, 
 			`create_time`, 
 			`create_user_id`, 
@@ -138,8 +154,10 @@
 			#{detailAddress}, 
 			#{longitude}, 
 			#{latitude}, 
-			#{remark}, 
+			#{buildingTime}, 
 			#{buildingArea}, 
+			#{remark}, 
+			#{parkPicUrl}, 
 			#{status}, 
 			#{createTime}, 
 			#{createUserId}, 
@@ -158,8 +176,10 @@
 			<if test="detailAddress != null">`detail_address` = #{detailAddress}, </if>
 			<if test="longitude != null">`longitude` = #{longitude}, </if>
 			<if test="latitude != null">`latitude` = #{latitude}, </if>
-			<if test="remark != null">`remark` = #{remark}, </if>
+			<if test="buildingTime != null">`building_time` = #{buildingTime}, </if>
 			<if test="buildingArea != null">`building_area` = #{buildingArea}, </if>
+			<if test="remark != null">`remark` = #{remark}, </if>
+			<if test="parkPicUrl != null">`park_pic_url` = #{parkPicUrl}, </if>
 			<if test="status != null">`status` = #{status}, </if>
 			<if test="createTime != null">`create_time` = #{createTime}, </if>
 			<if test="createUserId != null">`create_user_id` = #{createUserId}, </if>

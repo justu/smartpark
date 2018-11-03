@@ -1,19 +1,21 @@
 package com.chris.smartpark.ibms.dao;
 
-import com.chris.smartpark.ibms.entity.IBMSSubsystemEntity;
+import com.chris.smartpark.ibms.entity.IBMSDevAlarmRecordEntity;
 import com.chris.base.modules.sys.dao.BaseDao;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Component;
 
 /**
- * ibms子系统表
+ * 设备报警记录表
  * 
  * @author chris
  * @email 258321511@qq.com
- * @since Oct 06.18
+ * @since Oct 16.18
  */
 @Mapper
 @Component
-public interface IBMSSubsystemDao extends BaseDao<IBMSSubsystemEntity> {
+public interface IBMSDevAlarmRecordDao extends BaseDao<IBMSDevAlarmRecordEntity> {
+
+    Integer queryStateBySubsystem(Integer subsystemId);
 	
 }

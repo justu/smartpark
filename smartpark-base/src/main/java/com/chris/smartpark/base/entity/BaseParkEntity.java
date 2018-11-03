@@ -1,6 +1,7 @@
 package com.chris.smartpark.base.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 import com.chris.base.common.model.SysUpdateInfo;
 
 
@@ -9,7 +10,7 @@ import com.chris.base.common.model.SysUpdateInfo;
  * 
  * @author chris
  * @email 258321511@qq.com
- * @since Oct 06.18
+ * @since Oct 16.18
  */
 public class BaseParkEntity  extends SysUpdateInfo  implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -30,10 +31,14 @@ public class BaseParkEntity  extends SysUpdateInfo  implements Serializable {
 	private String longitude;
 	//纬度
 	private String latitude;
-	//园区描述
-	private String remark;
+	//始建时间
+	private Date buildingTime;
 	//建筑面积
 	private String buildingArea;
+	//园区简介
+	private String remark;
+	//园区图片
+	private String parkPicUrl;
 	//状态，1：有效 0：无效
 	private String status;
 
@@ -93,12 +98,12 @@ public class BaseParkEntity  extends SysUpdateInfo  implements Serializable {
 	public String getLatitude() {
 		return latitude;
 	}
-	public void setRemark(String remark) {
-		this.remark = remark;
+	public void setBuildingTime(Date buildingTime) {
+		this.buildingTime = buildingTime;
 	}
 
-	public String getRemark() {
-		return remark;
+	public Date getBuildingTime() {
+		return buildingTime;
 	}
 	public void setBuildingArea(String buildingArea) {
 		this.buildingArea = buildingArea;
@@ -106,6 +111,20 @@ public class BaseParkEntity  extends SysUpdateInfo  implements Serializable {
 
 	public String getBuildingArea() {
 		return buildingArea;
+	}
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+	public void setParkPicUrl(String parkPicUrl) {
+		this.parkPicUrl = parkPicUrl;
+	}
+
+	public String getParkPicUrl() {
+		return parkPicUrl;
 	}
 	public void setStatus(String status) {
 		this.status = status;
