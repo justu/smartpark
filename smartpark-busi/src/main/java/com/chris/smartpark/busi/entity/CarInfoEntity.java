@@ -5,35 +5,33 @@ import com.chris.base.common.model.SysUpdateInfo;
 
 
 /**
- * 同行人员信息表
+ * 车辆信息表
  * 
  * @author chris
  * @email 258321511@qq.com
  * @since Nov 04.18
  */
-public class CompanionsEntity  extends SysUpdateInfo  implements Serializable {
+public class CarInfoEntity  extends SysUpdateInfo  implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
-	//
+	//id
 	private Long id;
-	//预约单id
-	private Integer reservationId;
-	//姓名
-	private String name;
-	//身份证号
-	private String idcardNo;
-	//手机号
-	private String phone;
 	//车牌号
 	private String carNo;
-	//访客照片
-	private String photoUrl;
+	//驾驶员姓名
+	private String name;
+	//手机号
+	private String phone;
+	//预约单id
+	private Integer reservationId;
 	//扩展字段1
 	private String ext1;
 	//扩展字段2
 	private String ext2;
 	//扩展字段3
 	private String ext3;
+	//备注
+	private String remark;
 
 	public void setId(Long id) {
 		this.id = id;
@@ -42,12 +40,12 @@ public class CompanionsEntity  extends SysUpdateInfo  implements Serializable {
 	public Long getId() {
 		return id;
 	}
-	public void setReservationId(Integer reservationId) {
-		this.reservationId = reservationId;
+	public void setCarNo(String carNo) {
+		this.carNo = carNo;
 	}
 
-	public Integer getReservationId() {
-		return reservationId;
+	public String getCarNo() {
+		return carNo;
 	}
 	public void setName(String name) {
 		this.name = name;
@@ -56,13 +54,6 @@ public class CompanionsEntity  extends SysUpdateInfo  implements Serializable {
 	public String getName() {
 		return name;
 	}
-	public void setIdcardNo(String idcardNo) {
-		this.idcardNo = idcardNo;
-	}
-
-	public String getIdcardNo() {
-		return idcardNo;
-	}
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
@@ -70,19 +61,12 @@ public class CompanionsEntity  extends SysUpdateInfo  implements Serializable {
 	public String getPhone() {
 		return phone;
 	}
-	public void setCarNo(String carNo) {
-		this.carNo = carNo;
+	public void setReservationId(Integer reservationId) {
+		this.reservationId = reservationId;
 	}
 
-	public String getCarNo() {
-		return carNo;
-	}
-	public void setPhotoUrl(String photoUrl) {
-		this.photoUrl = photoUrl;
-	}
-
-	public String getPhotoUrl() {
-		return photoUrl;
+	public Integer getReservationId() {
+		return reservationId;
 	}
 	public void setExt1(String ext1) {
 		this.ext1 = ext1;
@@ -104,5 +88,12 @@ public class CompanionsEntity  extends SysUpdateInfo  implements Serializable {
 
 	public String getExt3() {
 		return ext3;
+	}
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+	public String getRemark() {
+		return remark;
 	}
 }

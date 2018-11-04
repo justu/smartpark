@@ -25,7 +25,7 @@ import com.chris.base.common.utils.CommonResponse;
  * 
  * @author chris
  * @email 258321511@qq.com
- * @since Oct 30.18
+ * @since Nov 04.18
  */
 @RestController
 @RequestMapping("/busi/visitorinfohis")
@@ -56,7 +56,7 @@ public class VisitorInfoHisController {
 	 */
 	@RequestMapping("/info/{id}")
 	@RequiresPermissions("busi:visitorinfohis:info")
-	public CommonResponse info(@PathVariable("id") Integer id){
+	public CommonResponse info(@PathVariable("id") Long id){
 		VisitorInfoHisEntity visitorInfoHis = visitorInfoHisService.queryObject(id);
 		
 		return CommonResponse.ok().put("visitorInfoHis", visitorInfoHis);
@@ -89,7 +89,7 @@ public class VisitorInfoHisController {
 	 */
 	@RequestMapping("/delete")
 	@RequiresPermissions("busi:visitorinfohis:delete")
-	public CommonResponse delete(@RequestBody Integer[] ids){
+	public CommonResponse delete(@RequestBody Long[] ids){
 		visitorInfoHisService.deleteBatch(ids);
 		
 		return CommonResponse.ok();

@@ -10,13 +10,13 @@ import com.chris.base.common.model.SysUpdateInfo;
  * 
  * @author chris
  * @email 258321511@qq.com
- * @since Oct 30.18
+ * @since Nov 04.18
  */
 public class VisitorReservationEntity  extends SysUpdateInfo  implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	//订单id
-	private Integer id;
+	private Long id;
 	//访客手机号
 	private String phone;
 	//访客照片
@@ -48,11 +48,11 @@ public class VisitorReservationEntity  extends SysUpdateInfo  implements Seriali
 	//扩展字段3
 	private String ext3;
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 	public void setPhone(String phone) {

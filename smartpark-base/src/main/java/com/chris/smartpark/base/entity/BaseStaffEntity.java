@@ -10,13 +10,13 @@ import com.chris.base.common.model.SysUpdateInfo;
  * 
  * @author chris
  * @email 258321511@qq.com
- * @since Oct 30.18
+ * @since Nov 04.18
  */
 public class BaseStaffEntity  extends SysUpdateInfo  implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	//员工ID
-	private Integer id;
+	private Long id;
 	//员工姓名
 	private String name;
 	//员工工号
@@ -38,11 +38,11 @@ public class BaseStaffEntity  extends SysUpdateInfo  implements Serializable {
 	//状态
 	private String status;
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 	public void setName(String name) {

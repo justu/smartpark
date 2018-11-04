@@ -18,7 +18,7 @@ public class CompanionsServiceImpl implements CompanionsService {
 	private CompanionsDao companionsDao;
 	
 	@Override
-	public CompanionsEntity queryObject(Integer id){
+	public CompanionsEntity queryObject(Long id){
 		return companionsDao.queryObject(id);
 	}
 	
@@ -43,12 +43,12 @@ public class CompanionsServiceImpl implements CompanionsService {
 	}
 	
 	@Override
-	public void delete(Integer id){
+	public void delete(Long id){
 		companionsDao.delete(id);
 	}
 	
 	@Override
-	public void deleteBatch(Integer[] ids){
+	public void deleteBatch(Long[] ids){
 		companionsDao.deleteBatch(ids);
 	}
 	

@@ -18,7 +18,7 @@ public class BaseStaffServiceImpl implements BaseStaffService {
 	private BaseStaffDao baseStaffDao;
 	
 	@Override
-	public BaseStaffEntity queryObject(Integer id){
+	public BaseStaffEntity queryObject(Long id){
 		return baseStaffDao.queryObject(id);
 	}
 	
@@ -43,12 +43,12 @@ public class BaseStaffServiceImpl implements BaseStaffService {
 	}
 	
 	@Override
-	public void delete(Integer id){
+	public void delete(Long id){
 		baseStaffDao.delete(id);
 	}
 	
 	@Override
-	public void deleteBatch(Integer[] ids){
+	public void deleteBatch(Long[] ids){
 		baseStaffDao.deleteBatch(ids);
 	}
 	

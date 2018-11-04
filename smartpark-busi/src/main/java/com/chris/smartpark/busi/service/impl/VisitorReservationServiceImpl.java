@@ -18,7 +18,7 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
 	private VisitorReservationDao visitorReservationDao;
 	
 	@Override
-	public VisitorReservationEntity queryObject(Integer id){
+	public VisitorReservationEntity queryObject(Long id){
 		return visitorReservationDao.queryObject(id);
 	}
 	
@@ -43,12 +43,12 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
 	}
 	
 	@Override
-	public void delete(Integer id){
+	public void delete(Long id){
 		visitorReservationDao.delete(id);
 	}
 	
 	@Override
-	public void deleteBatch(Integer[] ids){
+	public void deleteBatch(Long[] ids){
 		visitorReservationDao.deleteBatch(ids);
 	}
 	

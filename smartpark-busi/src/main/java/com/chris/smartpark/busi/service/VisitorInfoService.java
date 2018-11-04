@@ -10,11 +10,11 @@ import java.util.Map;
  * 
  * @author chris
  * @email 258321511@qq.com
- * @since Oct 30.18
+ * @since Nov 04.18
  */
 public interface VisitorInfoService {
 	
-	VisitorInfoEntity queryObject(Integer id);
+	VisitorInfoEntity queryObject(Long id);
 	
 	List<VisitorInfoEntity> queryList(Map<String, Object> map);
 	
@@ -24,7 +24,7 @@ public interface VisitorInfoService {
 	
 	void update(VisitorInfoEntity visitorInfo);
 	
-	void delete(Integer id);
+	void delete(Long id);
 	
-	void deleteBatch(Integer[] ids);
+	void deleteBatch(Long[] ids);
 }

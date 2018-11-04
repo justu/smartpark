@@ -18,7 +18,7 @@ public class VisitorInfoServiceImpl implements VisitorInfoService {
 	private VisitorInfoDao visitorInfoDao;
 	
 	@Override
-	public VisitorInfoEntity queryObject(Integer id){
+	public VisitorInfoEntity queryObject(Long id){
 		return visitorInfoDao.queryObject(id);
 	}
 	
@@ -43,12 +43,12 @@ public class VisitorInfoServiceImpl implements VisitorInfoService {
 	}
 	
 	@Override
-	public void delete(Integer id){
+	public void delete(Long id){
 		visitorInfoDao.delete(id);
 	}
 	
 	@Override
-	public void deleteBatch(Integer[] ids){
+	public void deleteBatch(Long[] ids){
 		visitorInfoDao.deleteBatch(ids);
 	}
 	

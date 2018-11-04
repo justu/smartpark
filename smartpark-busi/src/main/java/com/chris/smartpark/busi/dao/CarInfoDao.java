@@ -1,17 +1,17 @@
-package com.chris.smartpark.base.dao;
+package com.chris.smartpark.busi.dao;
 
-import com.chris.smartpark.base.entity.BaseStaffEntity;
+import com.chris.smartpark.busi.entity.CarInfoEntity;
 import com.chris.base.modules.sys.dao.BaseDao;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
- * 园区员工表
+ * 车辆信息表
  * 
  * @author chris
  * @email 258321511@qq.com
  * @since Nov 04.18
  */
 @Mapper
-public interface BaseStaffDao extends BaseDao<BaseStaffEntity> {
+public interface CarInfoDao extends BaseDao<CarInfoEntity> {
 	
 }

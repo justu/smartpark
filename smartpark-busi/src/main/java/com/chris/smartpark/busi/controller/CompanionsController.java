@@ -25,7 +25,7 @@ import com.chris.base.common.utils.CommonResponse;
  * 
  * @author chris
  * @email 258321511@qq.com
- * @since Oct 30.18
+ * @since Nov 04.18
  */
 @RestController
 @RequestMapping("/busi/companions")
@@ -56,7 +56,7 @@ public class CompanionsController {
 	 */
 	@RequestMapping("/info/{id}")
 	@RequiresPermissions("busi:companions:info")
-	public CommonResponse info(@PathVariable("id") Integer id){
+	public CommonResponse info(@PathVariable("id") Long id){
 		CompanionsEntity companions = companionsService.queryObject(id);
 		
 		return CommonResponse.ok().put("companions", companions);
@@ -89,7 +89,7 @@ public class CompanionsController {
 	 */
 	@RequestMapping("/delete")
 	@RequiresPermissions("busi:companions:delete")
-	public CommonResponse delete(@RequestBody Integer[] ids){
+	public CommonResponse delete(@RequestBody Long[] ids){
 		companionsService.deleteBatch(ids);
 		
 		return CommonResponse.ok();

@@ -1,18 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.chris.smartpark.busi.dao.VisitorInfoHisDao">
+<mapper namespace="com.chris.smartpark.busi.dao.CarInfoDao">
 
 	<!-- 可根据自己的需求，是否要使用 -->
-    <resultMap type="com.chris.smartpark.busi.entity.VisitorInfoHisEntity" id="visitorInfoHisMap">
+    <resultMap type="com.chris.smartpark.busi.entity.CarInfoEntity" id="carInfoMap">
         <result property="id" column="id"/>
-        <result property="visitorId" column="visitor_id"/>
+        <result property="carNo" column="car_no"/>
         <result property="name" column="name"/>
-        <result property="idcardNo" column="idcard_no"/>
         <result property="phone" column="phone"/>
-        <result property="type" column="type"/>
-        <result property="photoUrl" column="photo_url"/>
-        <result property="company" column="company"/>
+        <result property="reservationId" column="reservation_id"/>
         <result property="ext1" column="ext1"/>
         <result property="ext2" column="ext2"/>
         <result property="ext3" column="ext3"/>
@@ -23,35 +20,26 @@
         <result property="remark" column="remark"/>
     </resultMap>
 
-	<select id="queryObject" resultType="com.chris.smartpark.busi.entity.VisitorInfoHisEntity">
-		select * from sp_visitor_info_his where id = #{value}
+	<select id="queryObject" resultType="com.chris.smartpark.busi.entity.CarInfoEntity">
+		select * from sp_car_info where id = #{value}
 	</select>
 
-	<select id="queryList" resultType="com.chris.smartpark.busi.entity.VisitorInfoHisEntity">
-		select * from sp_visitor_info_his where 1=1
+	<select id="queryList" resultType="com.chris.smartpark.busi.entity.CarInfoEntity">
+		select * from sp_car_info where 1=1
 			<if test="id != null and id !='' ">
 				AND id = #{id}
 			</if>
-				<if test="visitorId != null and visitorId !='' ">
-				AND visitor_id = #{visitorId}
+				<if test="carNo != null and carNo !='' ">
+				AND car_no = #{carNo}
 			</if>
 				<if test="name != null and name !='' ">
 				AND name = #{name}
 			</if>
-				<if test="idcardNo != null and idcardNo !='' ">
-				AND idcard_no = #{idcardNo}
-			</if>
 				<if test="phone != null and phone !='' ">
 				AND phone = #{phone}
 			</if>
-				<if test="type != null and type !='' ">
-				AND type = #{type}
-			</if>
-				<if test="photoUrl != null and photoUrl !='' ">
-				AND photo_url = #{photoUrl}
-			</if>
-				<if test="company != null and company !='' ">
-				AND company = #{company}
+				<if test="reservationId != null and reservationId !='' ">
+				AND reservation_id = #{reservationId}
 			</if>
 				<if test="ext1 != null and ext1 !='' ">
 				AND ext1 = #{ext1}
@@ -79,30 +67,21 @@
 	</select>
 	
  	<select id="queryTotal" resultType="int">
-		select count(*) from sp_visitor_info_his where 1=1
+		select count(*) from sp_car_info where 1=1
 			<if test="id != null and id !='' ">
                 AND id = #{id}
             </if>
-				<if test="visitorId != null and visitorId !='' ">
-                AND visitor_id = #{visitorId}
+				<if test="carNo != null and carNo !='' ">
+                AND car_no = #{carNo}
             </if>
 				<if test="name != null and name !='' ">
                 AND name = #{name}
             </if>
-				<if test="idcardNo != null and idcardNo !='' ">
-                AND idcard_no = #{idcardNo}
-            </if>
 				<if test="phone != null and phone !='' ">
                 AND phone = #{phone}
             </if>
-				<if test="type != null and type !='' ">
-                AND type = #{type}
-            </if>
-				<if test="photoUrl != null and photoUrl !='' ">
-                AND photo_url = #{photoUrl}
-            </if>
-				<if test="company != null and company !='' ">
-                AND company = #{company}
+				<if test="reservationId != null and reservationId !='' ">
+                AND reservation_id = #{reservationId}
             </if>
 				<if test="ext1 != null and ext1 !='' ">
                 AND ext1 = #{ext1}
@@ -118,16 +97,14 @@
             </if>
 			</select>
 	 
-	<insert id="save" parameterType="com.chris.smartpark.busi.entity.VisitorInfoHisEntity" useGeneratedKeys="true" keyProperty="id">
-		insert into sp_visitor_info_his
+	<insert id="save" parameterType="com.chris.smartpark.busi.entity.CarInfoEntity">
+		insert into sp_car_info
 		(
-			`visitor_id`, 
+			`id`, 
+			`car_no`, 
 			`name`, 
-			`idcard_no`, 
 			`phone`, 
-			`type`, 
-			`photo_url`, 
-			`company`, 
+			`reservation_id`, 
 			`ext1`, 
 			`ext2`, 
 			`ext3`, 
@@ -139,13 +116,11 @@
 		)
 		values
 		(
-			#{visitorId}, 
+			#{id}, 
+			#{carNo}, 
 			#{name}, 
-			#{idcardNo}, 
 			#{phone}, 
-			#{type}, 
-			#{photoUrl}, 
-			#{company}, 
+			#{reservationId}, 
 			#{ext1}, 
 			#{ext2}, 
 			#{ext3}, 
@@ -157,16 +132,13 @@
 		)
 	</insert>
 	 
-	<update id="update" parameterType="com.chris.smartpark.busi.entity.VisitorInfoHisEntity">
-		update sp_visitor_info_his 
+	<update id="update" parameterType="com.chris.smartpark.busi.entity.CarInfoEntity">
+		update sp_car_info 
 		<set>
-			<if test="visitorId != null">`visitor_id` = #{visitorId}, </if>
+			<if test="carNo != null">`car_no` = #{carNo}, </if>
 			<if test="name != null">`name` = #{name}, </if>
-			<if test="idcardNo != null">`idcard_no` = #{idcardNo}, </if>
 			<if test="phone != null">`phone` = #{phone}, </if>
-			<if test="type != null">`type` = #{type}, </if>
-			<if test="photoUrl != null">`photo_url` = #{photoUrl}, </if>
-			<if test="company != null">`company` = #{company}, </if>
+			<if test="reservationId != null">`reservation_id` = #{reservationId}, </if>
 			<if test="ext1 != null">`ext1` = #{ext1}, </if>
 			<if test="ext2 != null">`ext2` = #{ext2}, </if>
 			<if test="ext3 != null">`ext3` = #{ext3}, </if>
@@ -180,11 +152,11 @@
 	</update>
 	
 	<delete id="delete">
-		delete from sp_visitor_info_his where id = #{value}
+		delete from sp_car_info where id = #{value}
 	</delete>
 	
 	<delete id="deleteBatch">
-		delete from sp_visitor_info_his where id in 
+		delete from sp_car_info where id in 
 		<foreach item="id" collection="array" open="(" separator="," close=")">
 			#{id}
 		</foreach>

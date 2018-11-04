@@ -10,11 +10,11 @@ import java.util.Map;
  * 
  * @author chris
  * @email 258321511@qq.com
- * @since Oct 30.18
+ * @since Nov 04.18
  */
 public interface VisitorReservationService {
 	
-	VisitorReservationEntity queryObject(Integer id);
+	VisitorReservationEntity queryObject(Long id);
 	
 	List<VisitorReservationEntity> queryList(Map<String, Object> map);
 	
@@ -24,7 +24,7 @@ public interface VisitorReservationService {
 	
 	void update(VisitorReservationEntity visitorReservation);
 	
-	void delete(Integer id);
+	void delete(Long id);
 	
-	void deleteBatch(Integer[] ids);
+	void deleteBatch(Long[] ids);
 }
