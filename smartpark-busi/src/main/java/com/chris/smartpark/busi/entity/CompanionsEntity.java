@@ -20,12 +20,12 @@ public class CompanionsEntity  extends SysUpdateInfo  implements Serializable {
 	private Integer reservationId;
 	//姓名
 	private String name;
+	//
+	private String physicalCardId;
 	//身份证号
 	private String idcardNo;
 	//手机号
 	private String phone;
-	//车牌号
-	private String carNo;
 	//访客照片
 	private String photoUrl;
 	//扩展字段1
@@ -56,6 +56,13 @@ public class CompanionsEntity  extends SysUpdateInfo  implements Serializable {
 	public String getName() {
 		return name;
 	}
+	public void setPhysicalCardId(String physicalCardId) {
+		this.physicalCardId = physicalCardId;
+	}
+
+	public String getPhysicalCardId() {
+		return physicalCardId;
+	}
 	public void setIdcardNo(String idcardNo) {
 		this.idcardNo = idcardNo;
 	}
@@ -69,13 +76,6 @@ public class CompanionsEntity  extends SysUpdateInfo  implements Serializable {
 
 	public String getPhone() {
 		return phone;
-	}
-	public void setCarNo(String carNo) {
-		this.carNo = carNo;
-	}
-
-	public String getCarNo() {
-		return carNo;
 	}
 	public void setPhotoUrl(String photoUrl) {
 		this.photoUrl = photoUrl;

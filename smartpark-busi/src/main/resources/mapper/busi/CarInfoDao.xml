@@ -97,10 +97,9 @@
             </if>
 			</select>
 	 
-	<insert id="save" parameterType="com.chris.smartpark.busi.entity.CarInfoEntity">
+	<insert id="save" parameterType="com.chris.smartpark.busi.entity.CarInfoEntity" useGeneratedKeys="true" keyProperty="id">
 		insert into sp_car_info
 		(
-			`id`, 
 			`car_no`, 
 			`name`, 
 			`phone`, 
@@ -116,7 +115,6 @@
 		)
 		values
 		(
-			#{id}, 
 			#{carNo}, 
 			#{name}, 
 			#{phone}, 

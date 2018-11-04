@@ -18,7 +18,7 @@ public class VisitorTest {
 
 	@Test
 	public void queryVisitorInfo() {
-		VisitorInfoEntity visitorInfo = this.visitorInfoService.queryObject(1);
+		VisitorInfoEntity visitorInfo = this.visitorInfoService.queryObject(Long.parseLong("1"));
 		System.out.println("查询访客信息：" + JSONObject.toJSONString(visitorInfo));
 	}
 

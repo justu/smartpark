@@ -23,7 +23,7 @@ public class CarInfoEntity  extends SysUpdateInfo  implements Serializable {
 	//手机号
 	private String phone;
 	//预约单id
-	private Integer reservationId;
+	private Long reservationId;
 	//扩展字段1
 	private String ext1;
 	//扩展字段2
@@ -61,11 +61,11 @@ public class CarInfoEntity  extends SysUpdateInfo  implements Serializable {
 	public String getPhone() {
 		return phone;
 	}
-	public void setReservationId(Integer reservationId) {
+	public void setReservationId(Long reservationId) {
 		this.reservationId = reservationId;
 	}
 
-	public Integer getReservationId() {
+	public Long getReservationId() {
 		return reservationId;
 	}
 	public void setExt1(String ext1) {

@@ -28,7 +28,7 @@ import com.chris.base.common.utils.CommonResponse;
  * @since Nov 04.18
  */
 @RestController
-@RequestMapping("/busi/carinfo")
+@RequestMapping("app/carinfo")
 public class CarInfoController {
 	@Autowired
 	private CarInfoService carInfoService;
@@ -37,8 +37,7 @@ public class CarInfoController {
 	 * 列表
 	 */
 	@RequestMapping("/list")
-	@RequiresPermissions("busi:carinfo:list")
-	public CommonResponse list(@RequestParam Map<String, Object> params){
+	public CommonResponse list(@RequestBody Map<String, Object> params){
 		//查询列表数据
         Query query = new Query(params);
 

@@ -22,11 +22,11 @@ public class BaseStaffEntity  extends SysUpdateInfo  implements Serializable {
 	//员工工号
 	private String workNo;
 	//部门ID
-	private Integer deptId;
+	private Long deptId;
 	//公司IDv
-	private Integer companyId;
+	private Long companyId;
 	//园区ID
-	private Integer parkId;
+	private Long parkId;
 	//身份证
 	private String idCard;
 	//职务
@@ -59,25 +59,25 @@ public class BaseStaffEntity  extends SysUpdateInfo  implements Serializable {
 	public String getWorkNo() {
 		return workNo;
 	}
-	public void setDeptId(Integer deptId) {
+	public void setDeptId(Long deptId) {
 		this.deptId = deptId;
 	}
 
-	public Integer getDeptId() {
+	public Long getDeptId() {
 		return deptId;
 	}
-	public void setCompanyId(Integer companyId) {
+	public void setCompanyId(Long companyId) {
 		this.companyId = companyId;
 	}
 
-	public Integer getCompanyId() {
+	public Long getCompanyId() {
 		return companyId;
 	}
-	public void setParkId(Integer parkId) {
+	public void setParkId(Long parkId) {
 		this.parkId = parkId;
 	}
 
-	public Integer getParkId() {
+	public Long getParkId() {
 		return parkId;
 	}
 	public void setIdCard(String idCard) {

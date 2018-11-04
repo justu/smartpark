@@ -22,9 +22,9 @@ public class VisitorReservationEntity  extends SysUpdateInfo  implements Seriali
 	//访客照片
 	private String photoUrl;
 	//访客id
-	private Integer visitorId;
+	private Long visitorId;
 	//受访者id
-	private Integer intervieweeId;
+	private Long intervieweeId;
 	//订单状态
 	private String status;
 	//预约开始时间
@@ -34,7 +34,7 @@ public class VisitorReservationEntity  extends SysUpdateInfo  implements Seriali
 	//实际开始时间
 	private Date actStartTime;
 	//实际结束时间
-	private Date actEndTime2;
+	private Date actEndTime;
 	//预约单类型
 	private String type;
 	//备注(来访目的)
@@ -69,18 +69,18 @@ public class VisitorReservationEntity  extends SysUpdateInfo  implements Seriali
 	public String getPhotoUrl() {
 		return photoUrl;
 	}
-	public void setVisitorId(Integer visitorId) {
+	public void setVisitorId(Long visitorId) {
 		this.visitorId = visitorId;
 	}
 
-	public Integer getVisitorId() {
+	public Long getVisitorId() {
 		return visitorId;
 	}
-	public void setIntervieweeId(Integer intervieweeId) {
+	public void setIntervieweeId(Long intervieweeId) {
 		this.intervieweeId = intervieweeId;
 	}
 
-	public Integer getIntervieweeId() {
+	public Long getIntervieweeId() {
 		return intervieweeId;
 	}
 	public void setStatus(String status) {
@@ -111,12 +111,12 @@ public class VisitorReservationEntity  extends SysUpdateInfo  implements Seriali
 	public Date getActStartTime() {
 		return actStartTime;
 	}
-	public void setActEndTime2(Date actEndTime2) {
-		this.actEndTime2 = actEndTime2;
+	public void setActEndTime(Date actEndTime) {
+		this.actEndTime = actEndTime;
 	}
 
-	public Date getActEndTime2() {
-		return actEndTime2;
+	public Date getActEndTime() {
+		return actEndTime;
 	}
 	public void setType(String type) {
 		this.type = type;

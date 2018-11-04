@@ -14,7 +14,7 @@
         <result property="appointStartTime" column="appoint_start_time"/>
         <result property="appointEndTime" column="appoint_end_time"/>
         <result property="actStartTime" column="act_start_time"/>
-        <result property="actEndTime2" column="act_end_time2"/>
+        <result property="actEndTime" column="act_end_time"/>
         <result property="type" column="type"/>
         <result property="remark" column="remark"/>
         <result property="companions" column="companions"/>
@@ -60,8 +60,8 @@
 				<if test="actStartTime != null and actStartTime !='' ">
 				AND act_start_time = #{actStartTime}
 			</if>
-				<if test="actEndTime2 != null and actEndTime2 !='' ">
-				AND act_end_time2 = #{actEndTime2}
+				<if test="actEndTime != null and actEndTime !='' ">
+				AND act_end_time = #{actEndTime}
 			</if>
 				<if test="type != null and type !='' ">
 				AND type = #{type}
@@ -123,8 +123,8 @@
 				<if test="actStartTime != null and actStartTime !='' ">
                 AND act_start_time = #{actStartTime}
             </if>
-				<if test="actEndTime2 != null and actEndTime2 !='' ">
-                AND act_end_time2 = #{actEndTime2}
+				<if test="actEndTime != null and actEndTime !='' ">
+                AND act_end_time = #{actEndTime}
             </if>
 				<if test="type != null and type !='' ">
                 AND type = #{type}
@@ -157,7 +157,7 @@
 			`appoint_start_time`, 
 			`appoint_end_time`, 
 			`act_start_time`, 
-			`act_end_time2`, 
+			`act_end_time`, 
 			`type`, 
 			`remark`, 
 			`companions`, 
@@ -179,7 +179,7 @@
 			#{appointStartTime}, 
 			#{appointEndTime}, 
 			#{actStartTime}, 
-			#{actEndTime2}, 
+			#{actEndTime}, 
 			#{type}, 
 			#{remark}, 
 			#{companions}, 
@@ -204,7 +204,7 @@
 			<if test="appointStartTime != null">`appoint_start_time` = #{appointStartTime}, </if>
 			<if test="appointEndTime != null">`appoint_end_time` = #{appointEndTime}, </if>
 			<if test="actStartTime != null">`act_start_time` = #{actStartTime}, </if>
-			<if test="actEndTime2 != null">`act_end_time2` = #{actEndTime2}, </if>
+			<if test="actEndTime != null">`act_end_time` = #{actEndTime}, </if>
 			<if test="type != null">`type` = #{type}, </if>
 			<if test="remark != null">`remark` = #{remark}, </if>
 			<if test="companions != null">`companions` = #{companions}, </if>

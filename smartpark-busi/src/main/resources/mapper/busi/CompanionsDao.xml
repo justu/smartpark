@@ -8,9 +8,9 @@
         <result property="id" column="id"/>
         <result property="reservationId" column="reservation_id"/>
         <result property="name" column="name"/>
+        <result property="physicalCardId" column="physical_card_id"/>
         <result property="idcardNo" column="idcard_no"/>
         <result property="phone" column="phone"/>
-        <result property="carNo" column="car_no"/>
         <result property="photoUrl" column="photo_url"/>
         <result property="ext1" column="ext1"/>
         <result property="ext2" column="ext2"/>
@@ -36,14 +36,14 @@
 				<if test="name != null and name !='' ">
 				AND name = #{name}
 			</if>
+				<if test="physicalCardId != null and physicalCardId !='' ">
+				AND physical_card_id = #{physicalCardId}
+			</if>
 				<if test="idcardNo != null and idcardNo !='' ">
 				AND idcard_no = #{idcardNo}
 			</if>
 				<if test="phone != null and phone !='' ">
 				AND phone = #{phone}
-			</if>
-				<if test="carNo != null and carNo !='' ">
-				AND car_no = #{carNo}
 			</if>
 				<if test="photoUrl != null and photoUrl !='' ">
 				AND photo_url = #{photoUrl}
@@ -81,14 +81,14 @@
 				<if test="name != null and name !='' ">
                 AND name = #{name}
             </if>
+				<if test="physicalCardId != null and physicalCardId !='' ">
+                AND physical_card_id = #{physicalCardId}
+            </if>
 				<if test="idcardNo != null and idcardNo !='' ">
                 AND idcard_no = #{idcardNo}
             </if>
 				<if test="phone != null and phone !='' ">
                 AND phone = #{phone}
-            </if>
-				<if test="carNo != null and carNo !='' ">
-                AND car_no = #{carNo}
             </if>
 				<if test="photoUrl != null and photoUrl !='' ">
                 AND photo_url = #{photoUrl}
@@ -109,9 +109,9 @@
 		(
 			`reservation_id`, 
 			`name`, 
+			`physical_card_id`, 
 			`idcard_no`, 
 			`phone`, 
-			`car_no`, 
 			`photo_url`, 
 			`ext1`, 
 			`ext2`, 
@@ -125,9 +125,9 @@
 		(
 			#{reservationId}, 
 			#{name}, 
+			#{physicalCardId}, 
 			#{idcardNo}, 
 			#{phone}, 
-			#{carNo}, 
 			#{photoUrl}, 
 			#{ext1}, 
 			#{ext2}, 
@@ -144,9 +144,9 @@
 		<set>
 			<if test="reservationId != null">`reservation_id` = #{reservationId}, </if>
 			<if test="name != null">`name` = #{name}, </if>
+			<if test="physicalCardId != null">`physical_card_id` = #{physicalCardId}, </if>
 			<if test="idcardNo != null">`idcard_no` = #{idcardNo}, </if>
 			<if test="phone != null">`phone` = #{phone}, </if>
-			<if test="carNo != null">`car_no` = #{carNo}, </if>
 			<if test="photoUrl != null">`photo_url` = #{photoUrl}, </if>
 			<if test="ext1 != null">`ext1` = #{ext1}, </if>
 			<if test="ext2 != null">`ext2` = #{ext2}, </if>

@@ -8,6 +8,7 @@
         <result property="id" column="id"/>
         <result property="visitorId" column="visitor_id"/>
         <result property="name" column="name"/>
+        <result property="physicalCardId" column="physical_card_id"/>
         <result property="idcardNo" column="idcard_no"/>
         <result property="phone" column="phone"/>
         <result property="type" column="type"/>
@@ -37,6 +38,9 @@
 			</if>
 				<if test="name != null and name !='' ">
 				AND name = #{name}
+			</if>
+				<if test="physicalCardId != null and physicalCardId !='' ">
+				AND physical_card_id = #{physicalCardId}
 			</if>
 				<if test="idcardNo != null and idcardNo !='' ">
 				AND idcard_no = #{idcardNo}
@@ -89,6 +93,9 @@
 				<if test="name != null and name !='' ">
                 AND name = #{name}
             </if>
+				<if test="physicalCardId != null and physicalCardId !='' ">
+                AND physical_card_id = #{physicalCardId}
+            </if>
 				<if test="idcardNo != null and idcardNo !='' ">
                 AND idcard_no = #{idcardNo}
             </if>
@@ -123,6 +130,7 @@
 		(
 			`visitor_id`, 
 			`name`, 
+			`physical_card_id`, 
 			`idcard_no`, 
 			`phone`, 
 			`type`, 
@@ -141,6 +149,7 @@
 		(
 			#{visitorId}, 
 			#{name}, 
+			#{physicalCardId}, 
 			#{idcardNo}, 
 			#{phone}, 
 			#{type}, 
@@ -162,6 +171,7 @@
 		<set>
 			<if test="visitorId != null">`visitor_id` = #{visitorId}, </if>
 			<if test="name != null">`name` = #{name}, </if>
+			<if test="physicalCardId != null">`physical_card_id` = #{physicalCardId}, </if>
 			<if test="idcardNo != null">`idcard_no` = #{idcardNo}, </if>
 			<if test="phone != null">`phone` = #{phone}, </if>
 			<if test="type != null">`type` = #{type}, </if>
