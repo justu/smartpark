@@ -28,7 +28,7 @@ import com.chris.base.common.utils.CommonResponse;
  * @since Nov 04.18
  */
 @RestController
-@RequestMapping("/busi/visitorreservation")
+@RequestMapping("/app/visitorreservation")
 public class VisitorReservationController {
 	@Autowired
 	private VisitorReservationService visitorReservationService;
@@ -37,7 +37,6 @@ public class VisitorReservationController {
 	 * 列表
 	 */
 	@RequestMapping("/list")
-	@RequiresPermissions("busi:visitorreservation:list")
 	public CommonResponse list(@RequestParam Map<String, Object> params){
 		//查询列表数据
         Query query = new Query(params);

@@ -28,7 +28,7 @@ import com.chris.base.common.utils.CommonResponse;
  * @since Nov 04.18
  */
 @RestController
-@RequestMapping("app/carinfo")
+@RequestMapping("/app/carinfo")
 public class CarInfoController {
 	@Autowired
 	private CarInfoService carInfoService;
