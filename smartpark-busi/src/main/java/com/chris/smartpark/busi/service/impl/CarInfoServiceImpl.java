@@ -31,6 +31,10 @@ public class CarInfoServiceImpl implements CarInfoService {
 	public int queryTotal(Map<String, Object> map){
 		return carInfoDao.queryTotal(map);
 	}
+	@Override
+	public void batchInsert(List<CarInfoEntity> list){
+		carInfoDao.batchInsert(list);
+	}
 	
 	@Override
 	public void save(CarInfoEntity carInfo){

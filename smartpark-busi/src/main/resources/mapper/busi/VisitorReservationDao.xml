@@ -9,7 +9,7 @@
         <result property="phone" column="phone"/>
         <result property="photoUrl" column="photo_url"/>
         <result property="visitorId" column="visitor_id"/>
-        <result property="intervieweeId" column="interviewee_id"/>
+        <result property="staffId" column="staff_id"/>
         <result property="status" column="status"/>
         <result property="appointStartTime" column="appoint_start_time"/>
         <result property="appointEndTime" column="appoint_end_time"/>
@@ -45,8 +45,8 @@
 				<if test="visitorId != null and visitorId !='' ">
 				AND visitor_id = #{visitorId}
 			</if>
-				<if test="intervieweeId != null and intervieweeId !='' ">
-				AND interviewee_id = #{intervieweeId}
+				<if test="staffId != null and staffId !='' ">
+				AND staff_id = #{staffId}
 			</if>
 				<if test="status != null and status !='' ">
 				AND status = #{status}
@@ -108,8 +108,8 @@
 				<if test="visitorId != null and visitorId !='' ">
                 AND visitor_id = #{visitorId}
             </if>
-				<if test="intervieweeId != null and intervieweeId !='' ">
-                AND interviewee_id = #{intervieweeId}
+				<if test="staffId != null and staffId !='' ">
+                AND staff_id = #{staffId}
             </if>
 				<if test="status != null and status !='' ">
                 AND status = #{status}
@@ -152,7 +152,7 @@
 			`phone`, 
 			`photo_url`, 
 			`visitor_id`, 
-			`interviewee_id`, 
+			`staff_id`,
 			`status`, 
 			`appoint_start_time`, 
 			`appoint_end_time`, 
@@ -174,7 +174,7 @@
 			#{phone}, 
 			#{photoUrl}, 
 			#{visitorId}, 
-			#{intervieweeId}, 
+			#{staffId},
 			#{status}, 
 			#{appointStartTime}, 
 			#{appointEndTime}, 
@@ -199,7 +199,7 @@
 			<if test="phone != null">`phone` = #{phone}, </if>
 			<if test="photoUrl != null">`photo_url` = #{photoUrl}, </if>
 			<if test="visitorId != null">`visitor_id` = #{visitorId}, </if>
-			<if test="intervieweeId != null">`interviewee_id` = #{intervieweeId}, </if>
+			<if test="staffId != null">`staff_id` = #{staffId}, </if>
 			<if test="status != null">`status` = #{status}, </if>
 			<if test="appointStartTime != null">`appoint_start_time` = #{appointStartTime}, </if>
 			<if test="appointEndTime != null">`appoint_end_time` = #{appointEndTime}, </if>

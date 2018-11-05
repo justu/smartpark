@@ -37,8 +37,7 @@ public class CompanionsController {
 	 * 列表
 	 */
 	@RequestMapping("/list")
-	@RequiresPermissions("busi:companions:list")
-	public CommonResponse list(@RequestParam Map<String, Object> params){
+	public CommonResponse list(@RequestBody Map<String, Object> params){
 		//查询列表数据
         Query query = new Query(params);
 
@@ -55,7 +54,6 @@ public class CompanionsController {
 	 * 信息
 	 */
 	@RequestMapping("/info/{id}")
-	@RequiresPermissions("busi:companions:info")
 	public CommonResponse info(@PathVariable("id") Long id){
 		CompanionsEntity companions = companionsService.queryObject(id);
 		
@@ -66,7 +64,6 @@ public class CompanionsController {
 	 * 保存
 	 */
 	@RequestMapping("/save")
-	@RequiresPermissions("busi:companions:save")
 	public CommonResponse save(@RequestBody CompanionsEntity companions){
 		companionsService.save(companions);
 		
@@ -77,7 +74,6 @@ public class CompanionsController {
 	 * 修改
 	 */
 	@RequestMapping("/update")
-	@RequiresPermissions("busi:companions:update")
 	public CommonResponse update(@RequestBody CompanionsEntity companions){
 		companionsService.update(companions);
 		
@@ -88,7 +84,6 @@ public class CompanionsController {
 	 * 删除
 	 */
 	@RequestMapping("/delete")
-	@RequiresPermissions("busi:companions:delete")
 	public CommonResponse delete(@RequestBody Long[] ids){
 		companionsService.deleteBatch(ids);
 		

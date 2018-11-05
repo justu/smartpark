@@ -129,6 +129,16 @@
 			#{remark}
 		)
 	</insert>
+
+	<insert id="batchInsert" parameterType="java.util.List" >
+		INSERT INTO sp_car_info
+		( `id`, `car_no`, `name`, `phone`, `reservation_id`, `ext1`, `ext2`, `ext3`, `create_time`, `create_user_id`, `update_time`, `update_user_id`, `remark`)
+		VALUES
+		<foreach collection="list" item="item" index="index" separator="," >
+			(#{item.id},#{item.carNo},#{item.name},#{item.phone},#{item.reservationId},#{item.ext1},#{item.ext2},#{item.ext3},
+			#{item.createTime},#{item.createUserId},#{item.updateTime},#{item.updateUserId},#{item.remark})
+		</foreach>
+	</insert>
 	 
 	<update id="update" parameterType="com.chris.smartpark.busi.entity.CarInfoEntity">
 		update sp_car_info 

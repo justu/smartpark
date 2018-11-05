@@ -24,7 +24,7 @@ public class VisitorReservationEntity  extends SysUpdateInfo  implements Seriali
 	//访客id
 	private Long visitorId;
 	//受访者id
-	private Long intervieweeId;
+	private Long staffId;
 	//订单状态
 	private String status;
 	//预约开始时间
@@ -76,12 +76,12 @@ public class VisitorReservationEntity  extends SysUpdateInfo  implements Seriali
 	public Long getVisitorId() {
 		return visitorId;
 	}
-	public void setIntervieweeId(Long intervieweeId) {
-		this.intervieweeId = intervieweeId;
+	public void setstaffId(Long staffId) {
+		this.staffId = staffId;
 	}
 
-	public Long getIntervieweeId() {
-		return intervieweeId;
+	public Long getstaffId() {
+		return staffId;
 	}
 	public void setStatus(String status) {
 		this.status = status;

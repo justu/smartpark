@@ -21,6 +21,8 @@ public interface CarInfoService {
 	int queryTotal(Map<String, Object> map);
 	
 	void save(CarInfoEntity carInfo);
+
+	void batchInsert(List<CarInfoEntity> list);
 	
 	void update(CarInfoEntity carInfo);
 	

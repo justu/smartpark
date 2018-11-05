@@ -28,7 +28,7 @@ import com.chris.base.common.utils.CommonResponse;
  * @since Nov 04.18
  */
 @RestController
-@RequestMapping("/busi/visitorinfo")
+@RequestMapping("/app/visitorinfo")
 public class VisitorInfoController {
 	@Autowired
 	private VisitorInfoService visitorInfoService;
@@ -37,8 +37,7 @@ public class VisitorInfoController {
 	 * 列表
 	 */
 	@RequestMapping("/list")
-	@RequiresPermissions("busi:visitorinfo:list")
-	public CommonResponse list(@RequestParam Map<String, Object> params){
+	public CommonResponse list(@RequestBody Map<String, Object> params){
 		//查询列表数据
         Query query = new Query(params);
 
@@ -55,7 +54,6 @@ public class VisitorInfoController {
 	 * 信息
 	 */
 	@RequestMapping("/info/{id}")
-	@RequiresPermissions("busi:visitorinfo:info")
 	public CommonResponse info(@PathVariable("id") Long id){
 		VisitorInfoEntity visitorInfo = visitorInfoService.queryObject(id);
 		
@@ -66,7 +64,6 @@ public class VisitorInfoController {
 	 * 保存
 	 */
 	@RequestMapping("/save")
-	@RequiresPermissions("busi:visitorinfo:save")
 	public CommonResponse save(@RequestBody VisitorInfoEntity visitorInfo){
 		visitorInfoService.save(visitorInfo);
 		
@@ -77,7 +74,6 @@ public class VisitorInfoController {
 	 * 修改
 	 */
 	@RequestMapping("/update")
-	@RequiresPermissions("busi:visitorinfo:update")
 	public CommonResponse update(@RequestBody VisitorInfoEntity visitorInfo){
 		visitorInfoService.update(visitorInfo);
 		
@@ -88,7 +84,6 @@ public class VisitorInfoController {
 	 * 删除
 	 */
 	@RequestMapping("/delete")
-	@RequiresPermissions("busi:visitorinfo:delete")
 	public CommonResponse delete(@RequestBody Long[] ids){
 		visitorInfoService.deleteBatch(ids);
 		

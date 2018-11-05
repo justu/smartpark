@@ -38,7 +38,7 @@ public class CarInfoController {
 	 */
 	@RequestMapping("/list")
 	public CommonResponse list(@RequestBody Map<String, Object> params){
-		//查询列表数据
+		//分页查询列表数据
         Query query = new Query(params);
 
 		List<CarInfoEntity> carInfoList = carInfoService.queryList(query);
@@ -54,7 +54,6 @@ public class CarInfoController {
 	 * 信息
 	 */
 	@RequestMapping("/info/{id}")
-	@RequiresPermissions("busi:carinfo:info")
 	public CommonResponse info(@PathVariable("id") Long id){
 		CarInfoEntity carInfo = carInfoService.queryObject(id);
 		
@@ -65,7 +64,6 @@ public class CarInfoController {
 	 * 保存
 	 */
 	@RequestMapping("/save")
-	@RequiresPermissions("busi:carinfo:save")
 	public CommonResponse save(@RequestBody CarInfoEntity carInfo){
 		carInfoService.save(carInfo);
 		
@@ -76,7 +74,6 @@ public class CarInfoController {
 	 * 修改
 	 */
 	@RequestMapping("/update")
-	@RequiresPermissions("busi:carinfo:update")
 	public CommonResponse update(@RequestBody CarInfoEntity carInfo){
 		carInfoService.update(carInfo);
 		
@@ -87,7 +84,7 @@ public class CarInfoController {
 	 * 删除
 	 */
 	@RequestMapping("/delete")
-	@RequiresPermissions("busi:carinfo:delete")
+	//@RequiresPermissions("busi:carinfo:delete")
 	public CommonResponse delete(@RequestBody Long[] ids){
 		carInfoService.deleteBatch(ids);
 		

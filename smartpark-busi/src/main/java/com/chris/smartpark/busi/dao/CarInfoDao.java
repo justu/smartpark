@@ -4,6 +4,8 @@ import com.chris.smartpark.busi.entity.CarInfoEntity;
 import com.chris.base.modules.sys.dao.BaseDao;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 /**
  * 车辆信息表
  * 
@@ -13,5 +15,6 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface CarInfoDao extends BaseDao<CarInfoEntity> {
-	
+
+    void batchInsert(List<CarInfoEntity> list);
 }
