@@ -119,7 +119,7 @@ alter table sp_visitor_info comment '访客信息表';
 create table sp_visitor_info_his
 (
    id                   bigint not null auto_increment,
-   visitor_id           int(10) comment '访客id',
+   visitor_id           bigint comment '访客id',
    name                 varchar(20) comment '姓名',
    physical_card_id     varchar(32),
    idcard_no            varchar(20) comment '身份证号',

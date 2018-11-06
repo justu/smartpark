@@ -1,17 +1,19 @@
 package com.chris.smartpark.busi.controller;
 
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.alibaba.fastjson.JSON;
 import com.chris.base.common.utils.*;
 import com.chris.smartpark.busi.common.BeanUtil;
-import com.chris.smartpark.busi.entity.CarInfoEntity;
-import com.chris.smartpark.busi.entity.ReservationDto;
-import com.chris.smartpark.busi.entity.VisitorInfoEntity;
+import com.chris.smartpark.busi.entity.*;
 import com.chris.smartpark.busi.service.CarInfoService;
+import com.chris.smartpark.busi.service.VisitorInfoHisService;
 import com.chris.smartpark.busi.service.VisitorInfoService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.map.HashedMap;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +24,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.chris.smartpark.busi.entity.VisitorReservationEntity;
 import com.chris.smartpark.busi.service.VisitorReservationService;
 
 
@@ -41,6 +42,8 @@ public class VisitorReservationController {
 	private VisitorReservationService visitorReservationService;
 	@Autowired
 	private VisitorInfoService visitorInfoService;
+	@Autowired
+	private VisitorInfoHisService visitorInfoHisService;
 	@Autowired
 	private CarInfoService carInfoService;
 	/**
@@ -70,6 +73,46 @@ public class VisitorReservationController {
 		
 		return CommonResponse.ok().put("visitorReservation", visitorReservation);
 	}
+
+	/**
+	 * 信息
+	 */
+	@RequestMapping("/authentication")
+	//@RequiresPermissions("busi:visitorreservation:info")重要操作前可加入权限校验
+	public CommonResponse authentication(@RequestBody @Validated(AuthenticationDto.ValidateIdentity.class)AuthenticationDto authenticationDto){
+		CommonResponse commonResponse = new CommonResponse();
+		log.info("========身份证识别开始并同步信息到门禁系统=====");
+		try {
+	/*	Map<String, Object> map = new HashMap<String, Object>();
+		map.put("idcardNo",authenticationDto.getIdcardNo());*/
+		//验证有无有效预约单
+		List<VisitorReservationEntity> list = visitorReservationService.queryEffectRecord(authenticationDto);
+			if(CollectionUtils.isEmpty(list)){
+				commonResponse = CommonResponse.ok().put("result", "Invalidation");
+			}else{
+				//调用门禁接口授权
+				for(VisitorReservationEntity VisitorReservation : list){
+					String physicalCardId = authenticationDto.getPhysicalCardId();
+					String idcardNo = authenticationDto.getIdcardNo();
+					Date startTime = VisitorReservation.getAppointStartTime();
+					Date endTime = VisitorReservation.getAppointEndTime();
+					//保存物理卡id到访客表中
+					VisitorInfoEntity visitorInfo = new VisitorInfoEntity();
+					visitorInfo.setPhysicalCardId(physicalCardId);
+					visitorInfo.setId(VisitorReservation.getVisitorId());
+					visitorInfoService.update(visitorInfo);
+					log.info("========调用门禁接口授权成功=====");
+
+				}
+				commonResponse = CommonResponse.ok().put("result", "Effective");
+			}
+		}catch (Exception e){
+			commonResponse = CommonResponse.error();
+			log.error(e.getMessage());
+			e.printStackTrace();
+		}
+		return commonResponse;
+	}
 	
 	/**
 	 * 预约单保存
@@ -82,9 +125,21 @@ public class VisitorReservationController {
 			//查询系统配置判断是否配置了同行人详细信息(需要抽掉一个字典查询公共方法) 暂时放到第二阶段
 			//1.保存访客信息（历史信息）
 			VisitorInfoEntity visitorInfo = new VisitorInfoEntity();
+			visitorInfo.setIdcardNo(reservationDto.getIdcardNo());
+			VisitorInfoEntity rcd = visitorInfoService.selectByIdcardNo(visitorInfo);
+			if(null!=rcd){
+				//删除现有记录并记录到历史记录表
+				VisitorInfoHisEntity visitorInfoHis = new VisitorInfoHisEntity();
+				BeanUtil.copyProperties(rcd,visitorInfoHis);
+				visitorInfoHis.setCreateTime(DateUtils.currentDate());
+				visitorInfoHis.setVisitorId(rcd.getId());
+				visitorInfoHis.setId(null);
+				visitorInfoHisService.save(visitorInfoHis);
+				visitorInfoService.delete(rcd.getId());
+				visitorInfo.setId(rcd.getId());
+			}
 			visitorInfo.setName(reservationDto.getName());
 			visitorInfo.setPhone(reservationDto.getPhone());
-			visitorInfo.setIdcardNo(reservationDto.getIdcardNo());
 			visitorInfo.setCreateTime(DateUtils.currentDate());
 			visitorInfoService.save(visitorInfo);//此处可获取到visitorid = visitorInfo.getId()
 			//2.保存预约单信息
@@ -92,6 +147,7 @@ public class VisitorReservationController {
 			BeanUtil.copyProperties(reservationDto, visitorReservation);
 			visitorReservation.setVisitorId(visitorInfo.getId());
 			visitorReservation.setCreateTime(DateUtils.currentDate());
+			visitorReservation.setStatus("1");
 			visitorReservationService.save(visitorReservation);
 			//3.保存车牌信息
 			if(1==reservationDto.getIsAddCarInfo()){

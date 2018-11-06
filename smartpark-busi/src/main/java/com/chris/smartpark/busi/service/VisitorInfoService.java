@@ -19,7 +19,9 @@ public interface VisitorInfoService {
 	List<VisitorInfoEntity> queryList(Map<String, Object> map);
 	
 	int queryTotal(Map<String, Object> map);
-	
+
+	VisitorInfoEntity selectByIdcardNo(VisitorInfoEntity visitorInfo);
+
 	void save(VisitorInfoEntity visitorInfo);
 	
 	void update(VisitorInfoEntity visitorInfo);
