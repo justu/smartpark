@@ -1,7 +1,10 @@
 package com.chris.smartpark;
 
 import com.alibaba.fastjson.JSONObject;
+import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
 import com.chris.IBMSApplication;
+import com.chris.base.common.utils.CommonResponse;
+import com.chris.base.modules.sms.service.SendSMSService;
 import com.chris.smartpark.common.Attribute;
 import com.chris.smartpark.ibms.controller.IBMSDevConnectRecordController;
 import com.chris.smartpark.ibms.dao.IBMSDevCollectionRecordDao;
@@ -37,6 +40,8 @@ public class IBMSDevCollectionTest {
     private IBMSDevCollectionRecordDao ibmsDevCollectionRecordDao;
     @Autowired
     private IBMSService ibmsService;
+    @Autowired
+    private SendSMSService sendSMSService;
 
     @Test
     public void countElectricity() {
@@ -116,4 +121,11 @@ public class IBMSDevCollectionTest {
             }
         }
     }
+
+    @Test
+    public void sendSms(){
+        SendSmsResponse sendSmsResponse = sendSMSService.sendSms("18874023514", null, "SMS_150172100");
+        System.out.println(JSONObject.toJSONString(sendSmsResponse));
+    }
+
 }
