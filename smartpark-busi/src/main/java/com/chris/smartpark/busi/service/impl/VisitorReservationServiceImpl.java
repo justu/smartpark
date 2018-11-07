@@ -1,6 +1,6 @@
 package com.chris.smartpark.busi.service.impl;
 
-import com.chris.smartpark.busi.entity.AuthenticationDto;
+import com.chris.smartpark.busi.dto.AuthenticationDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

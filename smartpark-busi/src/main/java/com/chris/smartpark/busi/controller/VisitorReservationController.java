@@ -1,20 +1,19 @@
 package com.chris.smartpark.busi.controller;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.alibaba.fastjson.JSON;
 import com.chris.base.common.utils.*;
 import com.chris.smartpark.busi.common.BeanUtil;
+import com.chris.smartpark.busi.dto.AuthenticationDto;
+import com.chris.smartpark.busi.dto.ReservationDto;
 import com.chris.smartpark.busi.entity.*;
 import com.chris.smartpark.busi.service.CarInfoService;
 import com.chris.smartpark.busi.service.VisitorInfoHisService;
 import com.chris.smartpark.busi.service.VisitorInfoService;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections.map.HashedMap;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;

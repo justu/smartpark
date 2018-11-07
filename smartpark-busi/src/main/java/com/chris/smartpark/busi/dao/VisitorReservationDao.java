@@ -1,6 +1,6 @@
 package com.chris.smartpark.busi.dao;
 
-import com.chris.smartpark.busi.entity.AuthenticationDto;
+import com.chris.smartpark.busi.dto.AuthenticationDto;
 import com.chris.smartpark.busi.entity.VisitorReservationEntity;
 import com.chris.base.modules.sys.dao.BaseDao;
 import org.apache.ibatis.annotations.Mapper;

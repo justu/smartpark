@@ -1,6 +1,8 @@
-package com.chris.smartpark.busi.entity;
+package com.chris.smartpark.busi.dto;
 
 import com.chris.base.common.model.SysUpdateInfo;
+import com.chris.smartpark.busi.entity.CarInfoEntity;
+import com.chris.smartpark.busi.entity.CompanionsEntity;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;

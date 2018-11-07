@@ -1,4 +1,4 @@
-package com.chris.smartpark.busi.entity;
+package com.chris.smartpark.busi.dto;
 
 import javax.validation.constraints.NotNull;
 

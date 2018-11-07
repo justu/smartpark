@@ -1,6 +1,6 @@
 package com.chris.smartpark.busi.service;
 
-import com.chris.smartpark.busi.entity.AuthenticationDto;
+import com.chris.smartpark.busi.dto.AuthenticationDto;
 import com.chris.smartpark.busi.entity.VisitorReservationEntity;
 
 import java.util.List;
