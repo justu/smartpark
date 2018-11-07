@@ -3,9 +3,9 @@ package com.chris.smartpark.busi.dto;
 import com.chris.base.common.model.SysUpdateInfo;
 import com.chris.smartpark.busi.entity.CarInfoEntity;
 import com.chris.smartpark.busi.entity.CompanionsEntity;
+import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.List;
 
@@ -15,25 +15,25 @@ import java.util.List;
 public class ReservationDto  extends SysUpdateInfo {
 
     //姓名
-    @NotNull(message = "姓名必填", groups = {ValidateSaveReservation.class})
+    @NotBlank(message = "姓名必填", groups = {ValidateSaveReservation.class})
     private String name;
     //身份证号
-    @NotNull(message = "身份证必填", groups = {ValidateSaveReservation.class})
+    @NotBlank(message = "身份证必填", groups = {ValidateSaveReservation.class})
     private String idcardNo;
     //手机号
-    @NotNull(message = "手机号必填", groups = {ValidateSaveReservation.class})
+    @NotBlank(message = "手机号必填", groups = {ValidateSaveReservation.class})
     private String phone;
     //验证码
-    @NotNull(message = "验证码必填", groups = {ValidateSaveReservation.class})
+    @NotBlank(message = "验证码必填", groups = {ValidateSaveReservation.class})
     private String verifiCode;
     //受访者id
     @NotNull(message = "受访者id必填", groups = {ValidateSaveReservation.class})
     private Long staffId;
     //受访者姓名
-    @NotNull(message = "受访者姓名必填", groups = {ValidateSaveReservation.class})
+    @NotBlank(message = "受访者姓名必填", groups = {ValidateSaveReservation.class})
     private String staffName;
     //受访者手机号
-    @NotNull(message = "受访者手机号必填", groups = {ValidateSaveReservation.class})
+    @NotBlank(message = "受访者手机号必填", groups = {ValidateSaveReservation.class})
     private String staffPhone;
     //预约开始时间
     @NotNull(message = "预约开始时间必填", groups = {ValidateSaveReservation.class})

@@ -1,19 +1,19 @@
 package com.chris.smartpark.busi.dto;
 
-import javax.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.NotBlank;
 
 /**
  * Created by lisen on 2018/11/7.
  */
 public class AuthenticationDto {
     //姓名
-    @NotNull(message = "姓名必填", groups = {AuthenticationDto.ValidateIdentity.class})
+    @NotBlank(message = "姓名必填", groups = {AuthenticationDto.ValidateIdentity.class})
     private String name;
     //物理卡id
-    @NotNull(message = "物理卡id必填", groups = {AuthenticationDto.ValidateIdentity.class})
+    @NotBlank(message = "物理卡id必填", groups = {AuthenticationDto.ValidateIdentity.class})
     private String physicalCardId;
     //身份证号
-    @NotNull(message = "身份证号必填", groups = {AuthenticationDto.ValidateIdentity.class})
+    @NotBlank(message = "身份证号必填", groups = {AuthenticationDto.ValidateIdentity.class})
     private String idcardNo;
 
     public String getName() {

@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.Map;
 
 import com.alibaba.fastjson.JSON;
+import com.chris.base.common.exception.CommonException;
 import com.chris.base.common.utils.*;
+import com.chris.base.common.validator.ValidatorUtils;
 import com.chris.smartpark.busi.common.BeanUtil;
 import com.chris.smartpark.busi.dto.AuthenticationDto;
 import com.chris.smartpark.busi.dto.ReservationDto;
@@ -16,6 +18,7 @@ import com.chris.smartpark.busi.service.VisitorInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -78,10 +81,11 @@ public class VisitorReservationController {
 	 */
 	@RequestMapping("/authentication")
 	//@RequiresPermissions("busi:visitorreservation:info")重要操作前可加入权限校验
-	public CommonResponse authentication(@RequestBody @Validated(AuthenticationDto.ValidateIdentity.class)AuthenticationDto authenticationDto){
+	public CommonResponse authentication(@RequestBody @Validated(AuthenticationDto.ValidateIdentity.class)AuthenticationDto authenticationDto,BindingResult result){
 		CommonResponse commonResponse = new CommonResponse();
 		log.info("========身份证识别开始并同步信息到门禁系统=====");
 		try {
+            ValidateUtils.validatedParams(result);
 	/*	Map<String, Object> map = new HashMap<String, Object>();
 		map.put("idcardNo",authenticationDto.getIdcardNo());*/
 		//验证有无有效预约单
@@ -105,6 +109,10 @@ public class VisitorReservationController {
 				}
 				commonResponse = CommonResponse.ok().put("result", "Effective");
 			}
+        }catch (CommonException e){
+            log.error(e.getMessage());
+            e.printStackTrace();
+            commonResponse = CommonResponse.error(e.getMsg());
 		}catch (Exception e){
 			commonResponse = CommonResponse.error();
 			log.error(e.getMessage());
@@ -117,10 +125,11 @@ public class VisitorReservationController {
 	 * 预约单保存
 	 */
 	@RequestMapping("/save")
-	public CommonResponse save(@RequestBody  @Validated(ReservationDto.ValidateSaveReservation.class)ReservationDto reservationDto){
+	public CommonResponse save(@RequestBody  @Validated(ReservationDto.ValidateSaveReservation.class)ReservationDto reservationDto,BindingResult result){
 		log.info("预约单生成入参"+ JSON.toJSONString(reservationDto));
 		CommonResponse commonResponse = new CommonResponse();
 		try {
+			ValidateUtils.validatedParams(result);
 			//查询系统配置判断是否配置了同行人详细信息(需要抽掉一个字典查询公共方法) 暂时放到第二阶段
 			//1.保存访客信息（历史信息）
 			VisitorInfoEntity visitorInfo = new VisitorInfoEntity();
@@ -162,6 +171,10 @@ public class VisitorReservationController {
 			commonResponse = CommonResponse.ok();
 			//4.保存同行人信息（暂缓）
 			//校验参数自定义捕捉ValidatedUtil.validatedParams(result);
+		}catch (CommonException e){
+			log.error(e.getMessage());
+			e.printStackTrace();
+			commonResponse = CommonResponse.error(e.getMsg());
 		}catch (Exception e){
 			commonResponse = CommonResponse.error();
 			log.error(e.getMessage());
