@@ -24,6 +24,7 @@ create table base_staff
    id                   bigint comment '员工ID',
    name                 varchar(10) comment '员工姓名',
    work_no              varchar(10) comment '员工工号',
+   mobile              varchar(20) comment '手机号',
    dept_id              bigint comment '部门ID',
    company_id           bigint comment '公司IDv',
    park_id              bigint comment '园区ID',
