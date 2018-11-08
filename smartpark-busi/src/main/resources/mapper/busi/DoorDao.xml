@@ -8,11 +8,11 @@
         <result property="id" column="id"/>
         <result property="doorName" column="door_name"/>
         <result property="doorNo" column="door_no"/>
-        <result property="deviceType" column="device_type"/>
+        <result property="doorType" column="door_type"/>
         <result property="roomId" column="room_id"/>
         <result property="floorId" column="floor_id"/>
         <result property="companyId" column="company_id"/>
-        <result property="departId" column="depart_id"/>
+        <result property="deptId" column="dept_id"/>
         <result property="status" column="status"/>
         <result property="remark" column="remark"/>
         <result property="ext1" column="ext1"/>
@@ -39,8 +39,8 @@
 				<if test="doorNo != null and doorNo !='' ">
 				AND door_no = #{doorNo}
 			</if>
-				<if test="deviceType != null and deviceType !='' ">
-				AND device_type = #{deviceType}
+				<if test="doorType != null and doorType !='' ">
+				AND door_type = #{doorType}
 			</if>
 				<if test="roomId != null and roomId !='' ">
 				AND room_id = #{roomId}
@@ -51,8 +51,8 @@
 				<if test="companyId != null and companyId !='' ">
 				AND company_id = #{companyId}
 			</if>
-				<if test="departId != null and departId !='' ">
-				AND depart_id = #{departId}
+				<if test="deptId != null and deptId !='' ">
+				AND dept_id = #{deptId}
 			</if>
 				<if test="status != null and status !='' ">
 				AND status = #{status}
@@ -93,8 +93,8 @@
 				<if test="doorNo != null and doorNo !='' ">
                 AND door_no = #{doorNo}
             </if>
-				<if test="deviceType != null and deviceType !='' ">
-                AND device_type = #{deviceType}
+				<if test="doorType != null and doorType !='' ">
+                AND door_type = #{doorType}
             </if>
 				<if test="roomId != null and roomId !='' ">
                 AND room_id = #{roomId}
@@ -105,8 +105,8 @@
 				<if test="companyId != null and companyId !='' ">
                 AND company_id = #{companyId}
             </if>
-				<if test="departId != null and departId !='' ">
-                AND depart_id = #{departId}
+				<if test="deptId != null and deptId !='' ">
+                AND dept_id = #{deptId}
             </if>
 				<if test="status != null and status !='' ">
                 AND status = #{status}
@@ -130,11 +130,11 @@
 		(
 			`door_name`, 
 			`door_no`, 
-			`device_type`, 
+			`door_type`, 
 			`room_id`, 
 			`floor_id`, 
 			`company_id`, 
-			`depart_id`, 
+			`dept_id`, 
 			`status`, 
 			`remark`, 
 			`ext1`, 
@@ -149,11 +149,11 @@
 		(
 			#{doorName}, 
 			#{doorNo}, 
-			#{deviceType}, 
+			#{doorType}, 
 			#{roomId}, 
 			#{floorId}, 
 			#{companyId}, 
-			#{departId}, 
+			#{deptId}, 
 			#{status}, 
 			#{remark}, 
 			#{ext1}, 
@@ -171,11 +171,11 @@
 		<set>
 			<if test="doorName != null">`door_name` = #{doorName}, </if>
 			<if test="doorNo != null">`door_no` = #{doorNo}, </if>
-			<if test="deviceType != null">`device_type` = #{deviceType}, </if>
+			<if test="doorType != null">`door_type` = #{doorType}, </if>
 			<if test="roomId != null">`room_id` = #{roomId}, </if>
 			<if test="floorId != null">`floor_id` = #{floorId}, </if>
 			<if test="companyId != null">`company_id` = #{companyId}, </if>
-			<if test="departId != null">`depart_id` = #{departId}, </if>
+			<if test="deptId != null">`dept_id` = #{deptId}, </if>
 			<if test="status != null">`status` = #{status}, </if>
 			<if test="remark != null">`remark` = #{remark}, </if>
 			<if test="ext1 != null">`ext1` = #{ext1}, </if>
@@ -200,13 +200,13 @@
 		</foreach>
 	</delete>
 	<!-- 查询用户门禁权限 -->
-	<select id="queryUserDoor" resultMap="doorMap" parameterType="java.util.Map" >
+	<select id="queryUserDoor" resultMap="doorMap" parameterType="com.chris.smartpark.busi.entity.DoorEntity" >
 		select c.*
-		from sp_user_station a,sp_station_door b,sp_door c
+		from sp_user_station a,sp_station_door b,sp_door c,tb_user d,base_staff e
 		<trim prefix="WHERE" prefixOverrides="AND|OR">
-			 a.id=b.station_id and b.door_id=c.id
-			<if test="userId != null and userId != ''">
-				and a.user_id =#{userId,jdbcType=INTEGER}
+			 a.id=b.station_id and b.door_id=c.id and d.mobile = e.mobile and e.work_no=a.work_no
+			<if test="id != null and id != ''">
+				and d.user_id =#{id,jdbcType=BIGINT}
 			</if>
 			<if test="floorId != null and floorId != ''">
 				and c.floor_id =#{floorId,jdbcType=INTEGER}

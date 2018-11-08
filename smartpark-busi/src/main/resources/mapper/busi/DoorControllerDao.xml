@@ -194,7 +194,7 @@
 	<select id="queryDoorControllerByDoorId" resultMap="doorControllerMap" parameterType="java.util.Map" >
 		select *
 		from sp_door_controller
-		where door_id =#{doorId,jdbcType=INTEGER}
+		where door_id =#{doorId,jdbcType=BIGINT}
 		<if test="status != null and status != ''">
 			and status =#{status,jdbcType=VARCHAR}
 		</if>

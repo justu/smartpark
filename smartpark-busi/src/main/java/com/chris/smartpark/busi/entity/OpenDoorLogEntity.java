@@ -16,11 +16,11 @@ public class OpenDoorLogEntity  extends SysUpdateInfo  implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	//id
-	private Integer id;
+	private Long id;
 	//门号
-	private Integer doorId;
+	private Long doorId;
 	//开门用户id
-	private Integer userId;
+	private Long userId;
 	//用户类型
 	private String userType;
 	//开门时间
@@ -34,7 +34,7 @@ public class OpenDoorLogEntity  extends SysUpdateInfo  implements Serializable {
 	//进出门标识 1进 2出
 	private String inOutFlag;
 	//关联id
-	private Integer relId;
+	private Long relId;
 	//备注
 	private String remark;
 	//扩展字段1
@@ -44,25 +44,25 @@ public class OpenDoorLogEntity  extends SysUpdateInfo  implements Serializable {
 	//扩展字段3
 	private String ext3;
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
-	public void setDoorId(Integer doorId) {
+	public void setDoorId(Long doorId) {
 		this.doorId = doorId;
 	}
 
-	public Integer getDoorId() {
+	public Long getDoorId() {
 		return doorId;
 	}
-	public void setUserId(Integer userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 
-	public Integer getUserId() {
+	public Long getUserId() {
 		return userId;
 	}
 	public void setUserType(String userType) {
@@ -107,11 +107,11 @@ public class OpenDoorLogEntity  extends SysUpdateInfo  implements Serializable {
 	public String getInOutFlag() {
 		return inOutFlag;
 	}
-	public void setRelId(Integer relId) {
+	public void setRelId(Long relId) {
 		this.relId = relId;
 	}
 
-	public Integer getRelId() {
+	public Long getRelId() {
 		return relId;
 	}
 	public void setRemark(String remark) {

@@ -6,7 +6,7 @@
 	<!-- 可根据自己的需求，是否要使用 -->
     <resultMap type="com.chris.smartpark.busi.entity.UserStationEntity" id="userStationMap">
         <result property="id" column="id"/>
-        <result property="userId" column="user_id"/>
+        <result property="workNo" column="work_no"/>
         <result property="stationId" column="station_id"/>
         <result property="status" column="status"/>
         <result property="ip" column="ip"/>
@@ -16,9 +16,9 @@
         <result property="ext2" column="ext2"/>
         <result property="ext3" column="ext3"/>
         <result property="createTime" column="create_time"/>
-        <result property="createUserId" column="create_user_id"/>
+        <result property="createworkNo" column="create_user_id"/>
         <result property="updateTime" column="update_time"/>
-        <result property="updateUserId" column="update_user_id"/>
+        <result property="updateworkNo" column="update_user_id"/>
     </resultMap>
 
 	<select id="queryObject" resultType="com.chris.smartpark.busi.entity.UserStationEntity">
@@ -30,8 +30,8 @@
 			<if test="id != null and id !='' ">
 				AND id = #{id}
 			</if>
-				<if test="userId != null and userId !='' ">
-				AND user_id = #{userId}
+				<if test="workNo != null and workNo !='' ">
+				AND work_no = #{workNo}
 			</if>
 				<if test="stationId != null and stationId !='' ">
 				AND station_id = #{stationId}
@@ -75,8 +75,8 @@
 			<if test="id != null and id !='' ">
                 AND id = #{id}
             </if>
-				<if test="userId != null and userId !='' ">
-                AND user_id = #{userId}
+				<if test="workNo != null and workNo !='' ">
+                AND work_no = #{workNo}
             </if>
 				<if test="stationId != null and stationId !='' ">
                 AND station_id = #{stationId}
@@ -107,7 +107,7 @@
 	<insert id="save" parameterType="com.chris.smartpark.busi.entity.UserStationEntity" useGeneratedKeys="true" keyProperty="id">
 		insert into sp_user_station
 		(
-			`user_id`, 
+			`work_no`,
 			`station_id`, 
 			`status`, 
 			`ip`, 
@@ -123,7 +123,7 @@
 		)
 		values
 		(
-			#{userId}, 
+			#{workNo}, 
 			#{stationId}, 
 			#{status}, 
 			#{ip}, 
@@ -133,16 +133,16 @@
 			#{ext2}, 
 			#{ext3}, 
 			#{createTime}, 
-			#{createUserId}, 
+			#{createworkNo}, 
 			#{updateTime}, 
-			#{updateUserId}
+			#{updateworkNo}
 		)
 	</insert>
 	 
 	<update id="update" parameterType="com.chris.smartpark.busi.entity.UserStationEntity">
 		update sp_user_station 
 		<set>
-			<if test="userId != null">`user_id` = #{userId}, </if>
+			<if test="workNo != null">`work_no` = #{workNo}, </if>
 			<if test="stationId != null">`station_id` = #{stationId}, </if>
 			<if test="status != null">`status` = #{status}, </if>
 			<if test="ip != null">`ip` = #{ip}, </if>
@@ -152,9 +152,9 @@
 			<if test="ext2 != null">`ext2` = #{ext2}, </if>
 			<if test="ext3 != null">`ext3` = #{ext3}, </if>
 			<if test="createTime != null">`create_time` = #{createTime}, </if>
-			<if test="createUserId != null">`create_user_id` = #{createUserId}, </if>
+			<if test="createworkNo != null">`create_user_id` = #{createworkNo}, </if>
 			<if test="updateTime != null">`update_time` = #{updateTime}, </if>
-			<if test="updateUserId != null">`update_user_id` = #{updateUserId}</if>
+			<if test="updateworkNo != null">`update_user_id` = #{updateworkNo}</if>
 		</set>
 		where id = #{id}
 	</update>

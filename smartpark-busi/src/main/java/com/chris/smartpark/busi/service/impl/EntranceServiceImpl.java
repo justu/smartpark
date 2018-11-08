@@ -31,25 +31,19 @@ public class EntranceServiceImpl implements EntranceService {
     private OpenDoorLogDao openDoorLogDao;
 
     @Override
-    public JSONObject queryUserDoors(JSONObject paramJo) {
+    public JSONObject queryUserDoors(DoorEntity doorEntity) {
         JSONObject returnJo  = new JSONObject();
         try {
+            //userId 从tb_user 取mobile , 用mobile 从 base_staff 中取出员工id, 根据员工id的工位取出门禁列表
             //查询用户门禁权限
-            Map<String,Object> params = new HashMap<String,Object>();
-            Integer userId = paramJo.getInteger("userId");
+            Long userId = doorEntity.getId();
             if(userId==null || userId.intValue()==0){
                 returnJo.put("returnCode","0");
-                returnJo.put("returnMessage","参数userId不能为空!");
+                returnJo.put("returnMessage","参数id不能为空!");
                 returnJo.put("returnData",new JSONObject());
                 return returnJo;
             }
-            params.put("userId",userId);
-            //楼层id
-            Integer floorId = paramJo.getInteger("floorId");
-            if(floorId!=null && floorId.intValue()!=0){
-                params.put("floorId",floorId);
-            }
-            List<DoorEntity> userDoorList=doorDao.queryUserDoor(params);
+            List<DoorEntity> userDoorList=doorDao.queryUserDoor(doorEntity);
             if(userDoorList == null || userDoorList.isEmpty()){
                 returnJo.put("returnCode","0");
                 returnJo.put("returnMessage","未查询到数据!");
@@ -72,10 +66,10 @@ public class EntranceServiceImpl implements EntranceService {
     }
 
     @Override
-    public JSONObject openDoor(JSONObject paramJo) {
+    public JSONObject openDoor(Long doorId) {
         JSONObject returnJo  = new JSONObject();
         try {
-            Integer doorId = paramJo.getInteger("doorId");
+            //Integer doorId = paramJo.getLong("doorId");
             if(doorId==null || doorId.intValue()==0){
                 returnJo.put("returnCode","0");
                 returnJo.put("returnMessage","参数doorId不能为空!");
