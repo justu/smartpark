@@ -5,11 +5,7 @@ import java.util.Map;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.chris.smartpark.base.entity.BaseStaffEntity;
 import com.chris.smartpark.base.service.BaseStaffService;
@@ -25,7 +21,7 @@ import com.chris.base.common.utils.CommonResponse;
  * 
  * @author chris
  * @email 258321511@qq.com
- * @since Nov 04.18
+ * @since Nov 11.18
  */
 @RestController
 @RequestMapping("/base/basestaff")
@@ -36,9 +32,9 @@ public class BaseStaffController {
 	/**
 	 * 列表
 	 */
-	@RequestMapping("/list")
+	@PostMapping("/list")
 	@RequiresPermissions("base:basestaff:list")
-	public CommonResponse list(@RequestParam Map<String, Object> params){
+	public CommonResponse list(@RequestBody Map<String, Object> params){
 		//查询列表数据
         Query query = new Query(params);
 
@@ -54,7 +50,7 @@ public class BaseStaffController {
 	/**
 	 * 信息
 	 */
-	@RequestMapping("/info/{id}")
+	@GetMapping("/info/{id}")
 	@RequiresPermissions("base:basestaff:info")
 	public CommonResponse info(@PathVariable("id") Long id){
 		BaseStaffEntity baseStaff = baseStaffService.queryObject(id);
@@ -65,7 +61,7 @@ public class BaseStaffController {
 	/**
 	 * 保存
 	 */
-	@RequestMapping("/save")
+	@PostMapping("/save")
 	@RequiresPermissions("base:basestaff:save")
 	public CommonResponse save(@RequestBody BaseStaffEntity baseStaff){
 		baseStaffService.save(baseStaff);
@@ -76,7 +72,7 @@ public class BaseStaffController {
 	/**
 	 * 修改
 	 */
-	@RequestMapping("/update")
+	@PostMapping("/update")
 	@RequiresPermissions("base:basestaff:update")
 	public CommonResponse update(@RequestBody BaseStaffEntity baseStaff){
 		baseStaffService.update(baseStaff);
@@ -87,7 +83,7 @@ public class BaseStaffController {
 	/**
 	 * 删除
 	 */
-	@RequestMapping("/delete")
+	@PostMapping("/delete")
 	@RequiresPermissions("base:basestaff:delete")
 	public CommonResponse delete(@RequestBody Long[] ids){
 		baseStaffService.deleteBatch(ids);

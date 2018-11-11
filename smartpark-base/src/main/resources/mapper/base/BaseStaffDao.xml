@@ -111,10 +111,9 @@
             </if>
 			</select>
 	 
-	<insert id="save" parameterType="com.chris.smartpark.base.entity.BaseStaffEntity">
+	<insert id="save" parameterType="com.chris.smartpark.base.entity.BaseStaffEntity" useGeneratedKeys="true" keyProperty="id">
 		insert into base_staff
 		(
-			`id`, 
 			`name`, 
 			`work_no`, 
 			`dept_id`, 
@@ -132,7 +131,6 @@
 		)
 		values
 		(
-			#{id}, 
 			#{name}, 
 			#{workNo}, 
 			#{deptId}, 
