@@ -1,6 +1,7 @@
 package com.chris.smartpark.busi.service;
 
 import com.chris.smartpark.busi.dto.AuthenticationDto;
+import com.chris.smartpark.busi.dto.ReservationDto;
 import com.chris.smartpark.busi.entity.VisitorReservationEntity;
 
 import java.util.List;
@@ -14,8 +15,8 @@ import java.util.Map;
  * @since Nov 11.18
  */
 public interface VisitorReservationService {
-	
-	VisitorReservationEntity queryObject(Long id);
+
+	ReservationDto queryObject(Long id);
 	
 	List<VisitorReservationEntity> queryList(Map<String, Object> map);
 
