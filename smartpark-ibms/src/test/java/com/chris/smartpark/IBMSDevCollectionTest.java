@@ -1,16 +1,11 @@
 package com.chris.smartpark;
 
 import com.alibaba.fastjson.JSONObject;
-import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
 import com.chris.IBMSApplication;
-import com.chris.base.common.utils.CommonResponse;
-import com.chris.base.modules.sms.service.SendSMSService;
 import com.chris.smartpark.common.Attribute;
-import com.chris.smartpark.ibms.controller.IBMSDevConnectRecordController;
 import com.chris.smartpark.ibms.dao.IBMSDevCollectionRecordDao;
 import com.chris.smartpark.ibms.entity.IBMSDetailEntity;
 import com.chris.smartpark.ibms.entity.IBMSDevCollectionRecordEntity;
-import com.chris.smartpark.ibms.entity.IBMSDevConnectRecordEntity;
 import com.chris.smartpark.ibms.service.IBMSDevCollectionRecordService;
 import com.chris.smartpark.ibms.service.IBMSService;
 import com.google.common.collect.Maps;
@@ -40,8 +35,6 @@ public class IBMSDevCollectionTest {
     private IBMSDevCollectionRecordDao ibmsDevCollectionRecordDao;
     @Autowired
     private IBMSService ibmsService;
-    @Autowired
-    private SendSMSService sendSMSService;
 
     @Test
     public void countElectricity() {
@@ -83,9 +76,9 @@ public class IBMSDevCollectionTest {
     }
 
     @Test
-    public void addElectricRecord(){
+    public void addElectricRecord() {
         Calendar c = Calendar.getInstance();
-        for (int i = 1 ; i <= c.getActualMaximum(Calendar.DAY_OF_MONTH); i++){
+        for (int i = 1; i <= c.getActualMaximum(Calendar.DAY_OF_MONTH); i++) {
             IBMSDevCollectionRecordEntity ibmsDevCollectionRecordEntity = new IBMSDevCollectionRecordEntity();
             ibmsDevCollectionRecordEntity.setAttrId(Attribute.ELECTRIC.getAttrId());
             ibmsDevCollectionRecordEntity.setSubsystemId(1);
@@ -101,10 +94,10 @@ public class IBMSDevCollectionTest {
     }
 
     @Test
-    public void addWaterTemperature(){
+    public void addWaterTemperature() {
         Calendar c = Calendar.getInstance();
-        for (int i = 1 ; i <= c.getActualMaximum(Calendar.DAY_OF_MONTH); i++){
-            for (int j = 0; j <= c.getActualMaximum(Calendar.HOUR_OF_DAY); j++){
+        for (int i = 1; i <= c.getActualMaximum(Calendar.DAY_OF_MONTH); i++) {
+            for (int j = 0; j <= c.getActualMaximum(Calendar.HOUR_OF_DAY); j++) {
                 IBMSDevCollectionRecordEntity ibmsDevCollectionRecordEntity = new IBMSDevCollectionRecordEntity();
                 //ibmsDevCollectionRecordEntity.setAttrId(Attribute.SUPPLY_WATER_TEMPERATURE.getAttrId());
                 ibmsDevCollectionRecordEntity.setAttrId(Attribute.BACK_WATER_TEMPERATURE.getAttrId());
@@ -120,12 +113,6 @@ public class IBMSDevCollectionTest {
                 ibmsDevCollectionRecordDao.save(ibmsDevCollectionRecordEntity);
             }
         }
-    }
-
-    @Test
-    public void sendSms(){
-        SendSmsResponse sendSmsResponse = sendSMSService.sendSms("18874023514", null, "SMS_150172100");
-        System.out.println(JSONObject.toJSONString(sendSmsResponse));
     }
 
 }
