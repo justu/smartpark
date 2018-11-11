@@ -15,21 +15,21 @@ public class DoorEntity  extends SysUpdateInfo  implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	//id
-	private Integer id;
+	private Long id;
 	//门名称
 	private String doorName;
 	//门编号
 	private String doorNo;
 	//门类型
-	private String deviceType;
+	private String doorType;
 	//所属房间
-	private Integer roomId;
+	private Long roomId;
 	//所属楼层
-	private Integer floorId;
+	private Long floorId;
 	//所属公司
-	private Integer companyId;
+	private Long companyId;
 	//所属部门
-	private Integer departId;
+	private Long deptId;
 	//状态 0 废弃 1正常
 	private String status;
 	//备注
@@ -41,11 +41,11 @@ public class DoorEntity  extends SysUpdateInfo  implements Serializable {
 	//扩展字段3
 	private String ext3;
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 	public void setDoorName(String doorName) {
@@ -62,40 +62,40 @@ public class DoorEntity  extends SysUpdateInfo  implements Serializable {
 	public String getDoorNo() {
 		return doorNo;
 	}
-	public void setDeviceType(String deviceType) {
-		this.deviceType = deviceType;
+	public void setdoorType(String doorType) {
+		this.doorType = doorType;
 	}
 
-	public String getDeviceType() {
-		return deviceType;
+	public String getdoorType() {
+		return doorType;
 	}
-	public void setRoomId(Integer roomId) {
+	public void setRoomId(Long roomId) {
 		this.roomId = roomId;
 	}
 
-	public Integer getRoomId() {
+	public Long getRoomId() {
 		return roomId;
 	}
-	public void setFloorId(Integer floorId) {
+	public void setFloorId(Long floorId) {
 		this.floorId = floorId;
 	}
 
-	public Integer getFloorId() {
+	public Long getFloorId() {
 		return floorId;
 	}
-	public void setCompanyId(Integer companyId) {
+	public void setCompanyId(Long companyId) {
 		this.companyId = companyId;
 	}
 
-	public Integer getCompanyId() {
+	public Long getCompanyId() {
 		return companyId;
 	}
-	public void setDepartId(Integer departId) {
-		this.departId = departId;
+	public void setdeptId(Long deptId) {
+		this.deptId = deptId;
 	}
 
-	public Integer getDepartId() {
-		return departId;
+	public Long getdeptId() {
+		return deptId;
 	}
 	public void setStatus(String status) {
 		this.status = status;

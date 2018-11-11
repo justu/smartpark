@@ -15,11 +15,11 @@ public class DoorControllerEntity  extends SysUpdateInfo  implements Serializabl
 	private static final long serialVersionUID = 1L;
 	
 	//id
-	private Integer id;
+	private Long id;
 	//门id
-	private Integer doorId;
+	private Long doorId;
 	//门对应的控制器id
-	private Integer controllerId;
+	private Long controllerId;
 	//控制器名称
 	private String controllerName;
 	//控制器编号
@@ -39,25 +39,25 @@ public class DoorControllerEntity  extends SysUpdateInfo  implements Serializabl
 	//扩展字段3
 	private String ext3;
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
-	public void setDoorId(Integer doorId) {
+	public void setDoorId(Long doorId) {
 		this.doorId = doorId;
 	}
 
-	public Integer getDoorId() {
+	public Long getDoorId() {
 		return doorId;
 	}
-	public void setControllerId(Integer controllerId) {
+	public void setControllerId(Long controllerId) {
 		this.controllerId = controllerId;
 	}
 
-	public Integer getControllerId() {
+	public Long getControllerId() {
 		return controllerId;
 	}
 	public void setControllerName(String controllerName) {

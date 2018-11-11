@@ -16,5 +16,5 @@ import java.util.Map;
  */
 @Mapper
 public interface DoorDao extends BaseDao<DoorEntity> {
-    List<DoorEntity> queryUserDoor(Map<String, Object> params);
+    List<DoorEntity> queryUserDoor(DoorEntity doorEntity);
 }

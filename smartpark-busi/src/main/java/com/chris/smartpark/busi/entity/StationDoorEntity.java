@@ -15,11 +15,11 @@ public class StationDoorEntity  extends SysUpdateInfo  implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	//id
-	private Integer id;
+	private Long id;
 	//工位id
-	private Integer stationId;
+	private Long stationId;
 	//门id
-	private Integer doorId;
+	private Long doorId;
 	//状态 0 废弃 1正常
 	private String status;
 	//备注
@@ -31,25 +31,25 @@ public class StationDoorEntity  extends SysUpdateInfo  implements Serializable {
 	//扩展字段3
 	private String ext3;
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
-	public void setStationId(Integer stationId) {
+	public void setStationId(Long stationId) {
 		this.stationId = stationId;
 	}
 
-	public Integer getStationId() {
+	public Long getStationId() {
 		return stationId;
 	}
-	public void setDoorId(Integer doorId) {
+	public void setDoorId(Long doorId) {
 		this.doorId = doorId;
 	}
 
-	public Integer getDoorId() {
+	public Long getDoorId() {
 		return doorId;
 	}
 	public void setStatus(String status) {

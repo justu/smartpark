@@ -15,7 +15,7 @@ public class StationEntity  extends SysUpdateInfo  implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	//工位ID
-	private Integer id;
+	private Long id;
 	//工位名称
 	private String stationName;
 	//station_desc
@@ -23,9 +23,9 @@ public class StationEntity  extends SysUpdateInfo  implements Serializable {
 	//工位编号
 	private String stationNo;
 	//房间ID
-	private Integer roomId;
+	private Long roomId;
 	//楼层ID
-	private Integer floorId;
+	private Long floorId;
 	//状态 0 废弃 1正常
 	private String status;
 	//备注
@@ -37,11 +37,11 @@ public class StationEntity  extends SysUpdateInfo  implements Serializable {
 	//扩展字段3
 	private String ext3;
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 	public void setStationName(String stationName) {
@@ -65,18 +65,18 @@ public class StationEntity  extends SysUpdateInfo  implements Serializable {
 	public String getStationNo() {
 		return stationNo;
 	}
-	public void setRoomId(Integer roomId) {
+	public void setRoomId(Long roomId) {
 		this.roomId = roomId;
 	}
 
-	public Integer getRoomId() {
+	public Long getRoomId() {
 		return roomId;
 	}
-	public void setFloorId(Integer floorId) {
+	public void setFloorId(Long floorId) {
 		this.floorId = floorId;
 	}
 
-	public Integer getFloorId() {
+	public Long getFloorId() {
 		return floorId;
 	}
 	public void setStatus(String status) {
