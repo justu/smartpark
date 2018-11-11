@@ -24,16 +24,17 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+		<!--
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
+		</dependency>-->
 
 		<dependency>
 			<groupId>com.chris.base</groupId>
 			<artifactId>chris-base</artifactId>
-			<version>${chrisbase.version}</version>
+			<version>1.0.1-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>
