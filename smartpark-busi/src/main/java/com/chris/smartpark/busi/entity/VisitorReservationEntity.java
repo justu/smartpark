@@ -10,7 +10,7 @@ import com.chris.base.common.model.SysUpdateInfo;
  * 
  * @author chris
  * @email 258321511@qq.com
- * @since Nov 04.18
+ * @since Nov 11.18
  */
 public class VisitorReservationEntity  extends SysUpdateInfo  implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -35,8 +35,8 @@ public class VisitorReservationEntity  extends SysUpdateInfo  implements Seriali
 	private Date actStartTime;
 	//实际结束时间
 	private Date actEndTime;
-	//预约单类型
-	private String type;
+	//预约单类型  1  在线预约    2 线下预约  默认1  
+	private Integer type;
 	//备注(来访目的)
 	private String remark;
 	//同行人数
@@ -47,6 +47,8 @@ public class VisitorReservationEntity  extends SysUpdateInfo  implements Seriali
 	private String ext2;
 	//扩展字段3
 	private String ext3;
+	//访客物理卡id
+	private String physicalCardId;
 
 	public void setId(Long id) {
 		this.id = id;
@@ -76,11 +78,11 @@ public class VisitorReservationEntity  extends SysUpdateInfo  implements Seriali
 	public Long getVisitorId() {
 		return visitorId;
 	}
-	public void setstaffId(Long staffId) {
+	public void setStaffId(Long staffId) {
 		this.staffId = staffId;
 	}
 
-	public Long getstaffId() {
+	public Long getStaffId() {
 		return staffId;
 	}
 	public void setStatus(String status) {
@@ -118,11 +120,11 @@ public class VisitorReservationEntity  extends SysUpdateInfo  implements Seriali
 	public Date getActEndTime() {
 		return actEndTime;
 	}
-	public void setType(String type) {
+	public void setType(Integer type) {
 		this.type = type;
 	}
 
-	public String getType() {
+	public Integer getType() {
 		return type;
 	}
 	public void setRemark(String remark) {
@@ -159,5 +161,12 @@ public class VisitorReservationEntity  extends SysUpdateInfo  implements Seriali
 
 	public String getExt3() {
 		return ext3;
+	}
+	public void setPhysicalCardId(String physicalCardId) {
+		this.physicalCardId = physicalCardId;
+	}
+
+	public String getPhysicalCardId() {
+		return physicalCardId;
 	}
 }

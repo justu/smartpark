@@ -9,7 +9,7 @@ import com.chris.base.common.model.SysUpdateInfo;
  * 
  * @author chris
  * @email 258321511@qq.com
- * @since Nov 04.18
+ * @since Nov 11.18
  */
 public class VisitorInfoEntity  extends SysUpdateInfo  implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -18,8 +18,6 @@ public class VisitorInfoEntity  extends SysUpdateInfo  implements Serializable {
 	private Long id;
 	//姓名
 	private String name;
-	//物理卡id
-	private String physicalCardId;
 	//身份证号
 	private String idcardNo;
 	//手机号
@@ -52,13 +50,6 @@ public class VisitorInfoEntity  extends SysUpdateInfo  implements Serializable {
 
 	public String getName() {
 		return name;
-	}
-	public void setPhysicalCardId(String physicalCardId) {
-		this.physicalCardId = physicalCardId;
-	}
-
-	public String getPhysicalCardId() {
-		return physicalCardId;
 	}
 	public void setIdcardNo(String idcardNo) {
 		this.idcardNo = idcardNo;

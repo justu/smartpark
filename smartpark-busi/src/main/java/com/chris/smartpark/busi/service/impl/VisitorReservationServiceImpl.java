@@ -28,8 +28,8 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
 		return visitorReservationDao.queryList(map);
 	}
 	@Override
-	public  List<VisitorReservationEntity> queryEffectRecord(AuthenticationDto authenticationDto){
-		return visitorReservationDao.queryEffectRecord(authenticationDto);
+	public  List<VisitorReservationEntity> queryEffectRecord(String idcardNo){
+		return visitorReservationDao.queryEffectRecord(idcardNo);
 	}
 	@Override
 	public int queryTotal(Map<String, Object> map){

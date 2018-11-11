@@ -16,5 +16,5 @@ import java.util.List;
  */
 @Mapper
 public interface VisitorReservationDao extends BaseDao<VisitorReservationEntity> {
-    List<VisitorReservationEntity> queryEffectRecord(AuthenticationDto authenticationDto);
+    List<VisitorReservationEntity> queryEffectRecord(String idcardNo);
 }

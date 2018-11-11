@@ -1,17 +1,17 @@
 package com.chris.smartpark.busi.dao;
 
-import com.chris.smartpark.busi.entity.VisitorInfoEntity;
+import com.chris.smartpark.busi.entity.VisitorIdcardEntity;
 import com.chris.base.modules.sys.dao.BaseDao;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
- * 访客信息表
+ * 访客身份信息表
  * 
  * @author chris
  * @email 258321511@qq.com
  * @since Nov 11.18
  */
 @Mapper
-public interface VisitorInfoDao extends BaseDao<VisitorInfoEntity> {
-    VisitorInfoEntity selectByIdcardNo(VisitorInfoEntity visitorInfo);
+public interface VisitorIdcardDao extends BaseDao<VisitorIdcardEntity> {
+	
 }

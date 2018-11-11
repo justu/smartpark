@@ -10,7 +10,7 @@ import com.chris.base.common.model.SysUpdateInfo;
  * 
  * @author chris
  * @email 258321511@qq.com
- * @since Nov 04.18
+ * @since Nov 11.18
  */
 public class BaseStaffEntity  extends SysUpdateInfo  implements Serializable {
 	private static final long serialVersionUID = 1L;
