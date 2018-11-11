@@ -71,7 +71,6 @@ public class IBMSSendSmsTest {
     public void sendBatchSms() {
         String mobile = "13866135563,18874023514";
         SendSmsResponse sendSmsResponse = sendSMSService.sendSms(mobile, Constant.SMSType.NOTICE, null, Constant.SMSTemplateCode.RESERVATION_HANDLE);
-        String verifyCode = sendSMSService.getVerifyCode(mobile);
         LOGGER.info("sendVerifyCode sendSmsResponse :{}", JSONObject.toJSONString(sendSmsResponse));
     }
 
