@@ -3,6 +3,7 @@ package com.chris.smartpark.base.controller;
 import java.util.List;
 import java.util.Map;
 
+import com.chris.base.common.utils.ValidateUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +25,7 @@ import com.chris.base.common.utils.CommonResponse;
  * @since Nov 11.18
  */
 @RestController
-@RequestMapping("/base/basestaff")
+@RequestMapping("/app/basestaff")
 public class BaseStaffController {
 	@Autowired
 	private BaseStaffService baseStaffService;
@@ -57,7 +58,20 @@ public class BaseStaffController {
 		
 		return CommonResponse.ok().put("baseStaff", baseStaff);
 	}
-	
+
+	/**
+	 * 按条件查询受访员工信息
+	 */
+	@RequestMapping("/queryByMobile")
+	public CommonResponse queryByMobile(@RequestBody BaseStaffEntity baseStaffEntity){
+		String mobile = baseStaffEntity.getMobile();
+		if(ValidateUtils.isEmpty(mobile)){
+			return CommonResponse.error("手机号码不能为空");
+		}
+		BaseStaffEntity baseStaff = baseStaffService.queryByMobile(baseStaffEntity);
+
+		return CommonResponse.ok().put("baseStaff", baseStaff);
+	}
 	/**
 	 * 保存
 	 */

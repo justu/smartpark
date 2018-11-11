@@ -20,10 +20,15 @@
         <result property="createUserId" column="create_user_id"/>
         <result property="updateTime" column="update_time"/>
         <result property="updateUserId" column="update_user_id"/>
+        <result property="mobile" column="mobile"/>
     </resultMap>
 
 	<select id="queryObject" resultType="com.chris.smartpark.base.entity.BaseStaffEntity">
 		select * from base_staff where id = #{value}
+	</select>
+
+	<select id="queryByMobile" resultType="com.chris.smartpark.base.entity.BaseStaffEntity" parameterType="com.chris.smartpark.base.entity.BaseStaffEntity">
+		select * from base_staff where mobile = #{mobile} limit 1
 	</select>
 
 	<select id="queryList" resultType="com.chris.smartpark.base.entity.BaseStaffEntity">
@@ -60,6 +65,9 @@
 			</if>
 				<if test="status != null and status !='' ">
 				AND status = #{status}
+			</if>
+				<if test="mobile != null and mobile !='' ">
+				AND mobile = #{mobile}
 			</if>
 		        <choose>
             <when test="sidx != null and sidx.trim() != ''">
@@ -109,6 +117,9 @@
 				<if test="status != null and status !='' ">
                 AND status = #{status}
             </if>
+				<if test="mobile != null and mobile !='' ">
+                AND mobile = #{mobile}
+            </if>
 			</select>
 	 
 	<insert id="save" parameterType="com.chris.smartpark.base.entity.BaseStaffEntity" useGeneratedKeys="true" keyProperty="id">
@@ -127,7 +138,8 @@
 			`create_time`, 
 			`create_user_id`, 
 			`update_time`, 
-			`update_user_id`
+			`update_user_id`, 
+			`mobile`
 		)
 		values
 		(
@@ -144,7 +156,8 @@
 			#{createTime}, 
 			#{createUserId}, 
 			#{updateTime}, 
-			#{updateUserId}
+			#{updateUserId}, 
+			#{mobile}
 		)
 	</insert>
 	 
@@ -164,7 +177,8 @@
 			<if test="createTime != null">`create_time` = #{createTime}, </if>
 			<if test="createUserId != null">`create_user_id` = #{createUserId}, </if>
 			<if test="updateTime != null">`update_time` = #{updateTime}, </if>
-			<if test="updateUserId != null">`update_user_id` = #{updateUserId}</if>
+			<if test="updateUserId != null">`update_user_id` = #{updateUserId}, </if>
+			<if test="mobile != null">`mobile` = #{mobile}</if>
 		</set>
 		where id = #{id}
 	</update>
