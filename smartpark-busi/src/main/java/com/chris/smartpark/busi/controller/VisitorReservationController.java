@@ -89,7 +89,7 @@ public class VisitorReservationController {
 		//验证有无有效预约单
 		List<VisitorReservationEntity> list = visitorReservationService.queryEffectRecord(visitorIdcardEntity.getIdcardNo());
 			if(CollectionUtils.isEmpty(list)){
-				commonResponse = CommonResponse.error();
+				commonResponse = CommonResponse.error("该身份证没有匹配的预约单信息");
 			}else{
 				String physicalCardId = visitorIdcardEntity.getPhysicalCardId();
 				String idcardNo = visitorIdcardEntity.getIdcardNo();
