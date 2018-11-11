@@ -37,6 +37,8 @@ public class BaseStaffEntity  extends SysUpdateInfo  implements Serializable {
 	private Date bornDate;
 	//状态
 	private String status;
+	//手机号
+	private String mobile;
 
 	public void setId(Long id) {
 		this.id = id;
@@ -114,5 +116,12 @@ public class BaseStaffEntity  extends SysUpdateInfo  implements Serializable {
 
 	public String getStatus() {
 		return status;
+	}
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
+
+	public String getMobile() {
+		return mobile;
 	}
 }
