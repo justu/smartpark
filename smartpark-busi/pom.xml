@@ -10,7 +10,6 @@
 
 	<artifactId>smartpark-busi</artifactId>
 	<groupId>com.chris.smartpark</groupId>
-	<version>${chrisbase.version}</version>
 
 	<dependencies>
 		<dependency>
@@ -33,7 +32,7 @@
 		<dependency>
 			<groupId>com.chris.smartpark</groupId>
 			<artifactId>smartpark-base</artifactId>
-			<version>${chrisbase.version}</version>
+			<version>1.0.1-SNAPSHOT</version>
 			<exclusions>
 				<exclusion>
 					<artifactId>jackson-databind</artifactId>

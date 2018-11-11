@@ -21,7 +21,6 @@
 
 	<properties>
 		<java.version>1.8</java.version>		
-		<chrisbase.version>1.0.1-SNAPSHOT</chrisbase.version>		
 	</properties>
 
 	<distributionManagement>
