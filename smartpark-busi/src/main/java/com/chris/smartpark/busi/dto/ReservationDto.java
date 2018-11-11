@@ -3,6 +3,7 @@ package com.chris.smartpark.busi.dto;
 import com.chris.base.common.model.SysUpdateInfo;
 import com.chris.smartpark.busi.entity.CarInfoEntity;
 import com.chris.smartpark.busi.entity.CompanionsEntity;
+import com.chris.smartpark.busi.entity.VisitorIdcardEntity;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.NotNull;
@@ -47,6 +48,8 @@ public class ReservationDto  extends SysUpdateInfo {
     private String remark;
     //是否添加车辆 1 是 0 否
     private int isAddCarInfo = 0;
+    //访客身份信息表
+    VisitorIdcardEntity visitorIdcardEntity;
     //车辆信息
     //@Size(message = "车辆信息明细必填", groups = {ValidateSaveReservation.class}, min = 1)
     List<CarInfoEntity> carInfoEntitys;
@@ -162,6 +165,14 @@ public class ReservationDto  extends SysUpdateInfo {
 
     public void setCompanionsEntitys(List<CompanionsEntity> companionsEntitys) {
         this.companionsEntitys = companionsEntitys;
+    }
+
+    public VisitorIdcardEntity getVisitorIdcardEntity() {
+        return visitorIdcardEntity;
+    }
+
+    public void setVisitorIdcardEntity(VisitorIdcardEntity visitorIdcardEntity) {
+        this.visitorIdcardEntity = visitorIdcardEntity;
     }
 
     /* ********************** 参数校验类 *******************************/
