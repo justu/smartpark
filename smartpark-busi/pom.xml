@@ -10,6 +10,7 @@
 
 	<artifactId>smartpark-busi</artifactId>
 	<groupId>com.chris.smartpark</groupId>
+    <version>1.0.1-SNAPSHOT</version>
 
 	<dependencies>
 		<dependency>
