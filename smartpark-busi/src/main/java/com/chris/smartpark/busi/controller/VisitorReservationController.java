@@ -1,6 +1,7 @@
 package com.chris.smartpark.busi.controller;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -84,8 +85,6 @@ public class VisitorReservationController {
 		log.info("========身份证识别开始并同步信息到门禁系统=====");
 		try {
             ValidateUtils.validatedParams(result);
-	/*	Map<String, Object> map = new HashMap<String, Object>();
-		map.put("idcardNo",authenticationDto.getIdcardNo());*/
 		//验证有无有效预约单
 		List<VisitorReservationEntity> list = visitorReservationService.queryEffectRecord(visitorIdcardEntity.getIdcardNo());
 			if(CollectionUtils.isEmpty(list)){
@@ -95,8 +94,15 @@ public class VisitorReservationController {
 				String idcardNo = visitorIdcardEntity.getIdcardNo();
 				for(VisitorReservationEntity VisitorReservation : list){
 					visitorIdcardEntity.setVisitorId(VisitorReservation.getVisitorId());
-					//保存信息到访客身份信息表
-					visitorIdcardService.save(visitorIdcardEntity);
+					//保存或更新信息到访客身份信息表
+					Map<String, Object> map = new HashMap<String, Object>();
+					map.put("idcardNo",idcardNo);
+					List<VisitorIdcardEntity> idcardEntityList  = visitorIdcardService.queryList(map);
+					if(CollectionUtils.isEmpty(idcardEntityList)){
+						visitorIdcardService.save(visitorIdcardEntity);
+					}else{
+						visitorIdcardService.update(idcardEntityList.get(0));
+					}
 					//组装入参调用门禁接口授权
 					Date startTime = VisitorReservation.getAppointStartTime();
 					Date endTime = VisitorReservation.getAppointEndTime();
@@ -134,6 +140,11 @@ public class VisitorReservationController {
 			VisitorInfoEntity visitorInfo = new VisitorInfoEntity();
 			visitorInfo.setIdcardNo(reservationDto.getIdcardNo());
 			VisitorInfoEntity rcd = visitorInfoService.selectByIdcardNo(visitorInfo);
+			//保存身份信息
+			VisitorIdcardEntity idcardEntity = reservationDto.getVisitorIdcardEntity();
+			if(null!=idcardEntity){
+				visitorIdcardService.save(idcardEntity);
+			}
 			if(null!=rcd){
 				//删除现有记录并记录到历史记录表
 				VisitorInfoHisEntity visitorInfoHis = new VisitorInfoHisEntity();
