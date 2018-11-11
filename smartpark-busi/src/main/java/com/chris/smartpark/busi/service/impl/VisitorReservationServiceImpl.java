@@ -1,5 +1,6 @@
 package com.chris.smartpark.busi.service.impl;
 
+import com.chris.smartpark.busi.dto.AuthenticationDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +27,10 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
 	public List<VisitorReservationEntity> queryList(Map<String, Object> map){
 		return visitorReservationDao.queryList(map);
 	}
-	
+	@Override
+	public  List<VisitorReservationEntity> queryEffectRecord(String idcardNo){
+		return visitorReservationDao.queryEffectRecord(idcardNo);
+	}
 	@Override
 	public int queryTotal(Map<String, Object> map){
 		return visitorReservationDao.queryTotal(map);

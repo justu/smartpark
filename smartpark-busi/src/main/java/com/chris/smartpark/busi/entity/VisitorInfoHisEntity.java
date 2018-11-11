@@ -17,7 +17,7 @@ public class VisitorInfoHisEntity  extends SysUpdateInfo  implements Serializabl
 	//
 	private Long id;
 	//访客id
-	private Integer visitorId;
+	private Long visitorId;
 	//姓名
 	private String name;
 	//身份证号
@@ -46,11 +46,11 @@ public class VisitorInfoHisEntity  extends SysUpdateInfo  implements Serializabl
 	public Long getId() {
 		return id;
 	}
-	public void setVisitorId(Integer visitorId) {
+	public void setVisitorId(Long visitorId) {
 		this.visitorId = visitorId;
 	}
 
-	public Integer getVisitorId() {
+	public Long getVisitorId() {
 		return visitorId;
 	}
 	public void setName(String name) {

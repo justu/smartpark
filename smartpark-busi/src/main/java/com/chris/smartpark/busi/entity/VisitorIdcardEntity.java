@@ -3,6 +3,8 @@ package com.chris.smartpark.busi.entity;
 import java.io.Serializable;
 import java.util.Date;
 import com.chris.base.common.model.SysUpdateInfo;
+import com.chris.smartpark.busi.dto.AuthenticationDto;
+import org.hibernate.validator.constraints.NotBlank;
 
 
 /**
@@ -20,10 +22,13 @@ public class VisitorIdcardEntity  extends SysUpdateInfo  implements Serializable
 	//访客id
 	private Long visitorId;
 	//物理卡id
+	@NotBlank(message = "物理卡id必填", groups = {VisitorIdcardEntity.ValidateIdentity.class})
 	private String physicalCardId;
 	//身份证号
+	@NotBlank(message = "身份证号必填", groups = {VisitorIdcardEntity.ValidateIdentity.class})
 	private String idcardNo;
 	//姓名
+	@NotBlank(message = "姓名必填", groups = {VisitorIdcardEntity.ValidateIdentity.class})
 	private String name;
 	//人脸识别照片
 	private String facePhotoUrl;
@@ -159,5 +164,9 @@ public class VisitorIdcardEntity  extends SysUpdateInfo  implements Serializable
 
 	public String getExt3() {
 		return ext3;
+	}
+	/* ********************** 参数校验类 *******************************/
+	public interface ValidateIdentity{
+
 	}
 }

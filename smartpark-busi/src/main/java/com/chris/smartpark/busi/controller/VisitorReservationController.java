@@ -12,9 +12,7 @@ import com.chris.smartpark.busi.common.BeanUtil;
 import com.chris.smartpark.busi.dto.AuthenticationDto;
 import com.chris.smartpark.busi.dto.ReservationDto;
 import com.chris.smartpark.busi.entity.*;
-import com.chris.smartpark.busi.service.CarInfoService;
-import com.chris.smartpark.busi.service.VisitorInfoHisService;
-import com.chris.smartpark.busi.service.VisitorInfoService;
+import com.chris.smartpark.busi.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +23,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.chris.smartpark.busi.service.VisitorReservationService;
 
 
 /**
@@ -48,6 +44,8 @@ public class VisitorReservationController {
 	private VisitorInfoHisService visitorInfoHisService;
 	@Autowired
 	private CarInfoService carInfoService;
+	@Autowired
+	private VisitorIdcardService visitorIdcardService;
 	/**
 	 * 列表
 	 */
@@ -81,7 +79,7 @@ public class VisitorReservationController {
 	 */
 	@RequestMapping("/authentication")
 	//@RequiresPermissions("busi:visitorreservation:info")重要操作前可加入权限校验
-	public CommonResponse authentication(@RequestBody @Validated(AuthenticationDto.ValidateIdentity.class)AuthenticationDto authenticationDto,BindingResult result){
+	public CommonResponse authentication(@RequestBody @Validated(VisitorIdcardEntity.ValidateIdentity.class)VisitorIdcardEntity visitorIdcardEntity,BindingResult result){
 		CommonResponse commonResponse = new CommonResponse();
 		log.info("========身份证识别开始并同步信息到门禁系统=====");
 		try {
@@ -89,25 +87,26 @@ public class VisitorReservationController {
 	/*	Map<String, Object> map = new HashMap<String, Object>();
 		map.put("idcardNo",authenticationDto.getIdcardNo());*/
 		//验证有无有效预约单
-		List<VisitorReservationEntity> list = visitorReservationService.queryEffectRecord(authenticationDto);
+		List<VisitorReservationEntity> list = visitorReservationService.queryEffectRecord(visitorIdcardEntity.getIdcardNo());
 			if(CollectionUtils.isEmpty(list)){
-				commonResponse = CommonResponse.ok().put("result", "Invalidation");
+				commonResponse = CommonResponse.error();
 			}else{
-				//调用门禁接口授权
+				String physicalCardId = visitorIdcardEntity.getPhysicalCardId();
+				String idcardNo = visitorIdcardEntity.getIdcardNo();
 				for(VisitorReservationEntity VisitorReservation : list){
-					String physicalCardId = authenticationDto.getPhysicalCardId();
-					String idcardNo = authenticationDto.getIdcardNo();
+					visitorIdcardEntity.setVisitorId(VisitorReservation.getVisitorId());
+					//保存信息到访客身份信息表
+					visitorIdcardService.save(visitorIdcardEntity);
+					//组装入参调用门禁接口授权
 					Date startTime = VisitorReservation.getAppointStartTime();
 					Date endTime = VisitorReservation.getAppointEndTime();
-					//保存物理卡id到访客表中
-					VisitorInfoEntity visitorInfo = new VisitorInfoEntity();
-					visitorInfo.setPhysicalCardId(physicalCardId);
-					visitorInfo.setId(VisitorReservation.getVisitorId());
-					visitorInfoService.update(visitorInfo);
+					//保存身份证信息到身份信息表中
 					log.info("========调用门禁接口授权成功=====");
-
+					//更改预约单状态
+					VisitorReservation.setStatus("5");
+					visitorReservationService.update(VisitorReservation);
 				}
-				commonResponse = CommonResponse.ok().put("result", "Effective");
+				commonResponse = CommonResponse.ok();
 			}
         }catch (CommonException e){
             log.error(e.getMessage());

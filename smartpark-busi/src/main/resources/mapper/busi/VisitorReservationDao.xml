@@ -32,6 +32,10 @@
 		select * from sp_visitor_reservation where id = #{value}
 	</select>
 
+	<select id="queryEffectRecord" resultType="com.chris.smartpark.busi.entity.VisitorReservationEntity">
+		select * from sp_visitor_reservation a LEFT JOIN sp_visitor_info b on a.visitor_id=b.id where  a.`status` = 4  and b.idcard_no = #{idcardNo};
+	</select>
+
 	<select id="queryList" resultType="com.chris.smartpark.busi.entity.VisitorReservationEntity">
 		select * from sp_visitor_reservation where 1=1
 			<if test="id != null and id !='' ">

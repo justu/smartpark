@@ -36,7 +36,11 @@ public class VisitorInfoServiceImpl implements VisitorInfoService {
 	public void save(VisitorInfoEntity visitorInfo){
 		visitorInfoDao.save(visitorInfo);
 	}
-	
+	@Override
+	public VisitorInfoEntity selectByIdcardNo(VisitorInfoEntity visitorInfo){
+		return visitorInfoDao.selectByIdcardNo(visitorInfo);
+	}
+
 	@Override
 	public void update(VisitorInfoEntity visitorInfo){
 		visitorInfoDao.update(visitorInfo);
