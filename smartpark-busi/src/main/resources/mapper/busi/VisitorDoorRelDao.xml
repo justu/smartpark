@@ -160,4 +160,41 @@
 		</foreach>
 	</delete>
 
+	<insert id="saveBatch" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
+		insert into sp_visitor_door_rel
+		(
+		`visitor_id`,
+		`reservation_id`,
+		`door_id`,
+		`status`,
+		`remark`,
+		`ext1`,
+		`ext2`,
+		`ext3`,
+		`create_time`,
+		`create_user_id`,
+		`update_time`,
+		`update_user_id`
+		)
+		values
+		<foreach collection="list" item="item" index="index" separator="," >
+			(
+			#{item.visitorId},
+			#{item.reservationId},
+			#{item.doorId},
+			#{item.status},
+			#{item.remark},
+			#{item.ext1},
+			#{item.ext2},
+			#{item.ext3},
+			#{item.createTime},
+			#{item.createUserId},
+			#{item.updateTime},
+			#{item.updateUserId}
+			)
+		</foreach>
+
+	</insert>
+
+
 </mapper>

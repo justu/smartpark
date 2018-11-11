@@ -10,7 +10,7 @@ import com.chris.base.common.model.SysUpdateInfo;
  * 
  * @author chris
  * @email 258321511@qq.com
- * @since Nov 09.18
+ * @since Nov 11.18
  */
 public class AuthenticationRecordEntity  extends SysUpdateInfo  implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -21,6 +21,10 @@ public class AuthenticationRecordEntity  extends SysUpdateInfo  implements Seria
 	private Long reservationId;
 	//访客id
 	private Long visitorId;
+	//申请开始时间
+	private Date applyBeginTime;
+	//申请结束时间
+	private Date applyEndTime;
 	//授权开始时间
 	private Date authBeginTime;
 	//授权结束时间
@@ -62,6 +66,20 @@ public class AuthenticationRecordEntity  extends SysUpdateInfo  implements Seria
 
 	public Long getVisitorId() {
 		return visitorId;
+	}
+	public void setApplyBeginTime(Date applyBeginTime) {
+		this.applyBeginTime = applyBeginTime;
+	}
+
+	public Date getApplyBeginTime() {
+		return applyBeginTime;
+	}
+	public void setApplyEndTime(Date applyEndTime) {
+		this.applyEndTime = applyEndTime;
+	}
+
+	public Date getApplyEndTime() {
+		return applyEndTime;
 	}
 	public void setAuthBeginTime(Date authBeginTime) {
 		this.authBeginTime = authBeginTime;

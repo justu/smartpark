@@ -4,6 +4,8 @@ import com.chris.smartpark.busi.entity.VisitorDoorRelEntity;
 import com.chris.base.modules.sys.dao.BaseDao;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 /**
  * 访客门禁关系表
  * 
@@ -13,5 +15,5 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface VisitorDoorRelDao extends BaseDao<VisitorDoorRelEntity> {
-	
+	void saveBatch(List<VisitorDoorRelEntity> list);
 }
