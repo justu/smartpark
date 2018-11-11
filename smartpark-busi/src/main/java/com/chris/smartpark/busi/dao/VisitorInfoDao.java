@@ -9,9 +9,9 @@ import org.apache.ibatis.annotations.Mapper;
  * 
  * @author chris
  * @email 258321511@qq.com
- * @since Nov 04.18
+ * @since Nov 11.18
  */
 @Mapper
 public interface VisitorInfoDao extends BaseDao<VisitorInfoEntity> {
-    VisitorInfoEntity selectByIdcardNo(VisitorInfoEntity visitorInfo);
+	
 }

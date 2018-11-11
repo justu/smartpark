@@ -10,7 +10,7 @@ import java.util.Map;
  * 
  * @author chris
  * @email 258321511@qq.com
- * @since Nov 04.18
+ * @since Nov 11.18
  */
 public interface VisitorInfoService {
 	
@@ -19,9 +19,7 @@ public interface VisitorInfoService {
 	List<VisitorInfoEntity> queryList(Map<String, Object> map);
 	
 	int queryTotal(Map<String, Object> map);
-
-	VisitorInfoEntity selectByIdcardNo(VisitorInfoEntity visitorInfo);
-
+	
 	void save(VisitorInfoEntity visitorInfo);
 	
 	void update(VisitorInfoEntity visitorInfo);

@@ -7,7 +7,6 @@
     <resultMap type="com.chris.smartpark.busi.entity.VisitorInfoEntity" id="visitorInfoMap">
         <result property="id" column="id"/>
         <result property="name" column="name"/>
-        <result property="physicalCardId" column="physical_card_id"/>
         <result property="idcardNo" column="idcard_no"/>
         <result property="phone" column="phone"/>
         <result property="type" column="type"/>
@@ -26,9 +25,6 @@
 	<select id="queryObject" resultType="com.chris.smartpark.busi.entity.VisitorInfoEntity">
 		select * from sp_visitor_info where id = #{value}
 	</select>
-	<select id="selectByIdcardNo" resultType="com.chris.smartpark.busi.entity.VisitorInfoEntity" parameterType="com.chris.smartpark.busi.entity.VisitorInfoEntity">
-		select * from sp_visitor_info where idcard_no = #{idcardNo}
-	</select>
 
 	<select id="queryList" resultType="com.chris.smartpark.busi.entity.VisitorInfoEntity">
 		select * from sp_visitor_info where 1=1
@@ -37,9 +33,6 @@
 			</if>
 				<if test="name != null and name !='' ">
 				AND name = #{name}
-			</if>
-				<if test="physicalCardId != null and physicalCardId !='' ">
-				AND physical_card_id = #{physicalCardId}
 			</if>
 				<if test="idcardNo != null and idcardNo !='' ">
 				AND idcard_no = #{idcardNo}
@@ -89,9 +82,6 @@
 				<if test="name != null and name !='' ">
                 AND name = #{name}
             </if>
-				<if test="physicalCardId != null and physicalCardId !='' ">
-                AND physical_card_id = #{physicalCardId}
-            </if>
 				<if test="idcardNo != null and idcardNo !='' ">
                 AND idcard_no = #{idcardNo}
             </if>
@@ -125,7 +115,6 @@
 		insert into sp_visitor_info
 		(
 			`name`, 
-			`physical_card_id`, 
 			`idcard_no`, 
 			`phone`, 
 			`type`, 
@@ -143,7 +132,6 @@
 		values
 		(
 			#{name}, 
-			#{physicalCardId}, 
 			#{idcardNo}, 
 			#{phone}, 
 			#{type}, 
@@ -164,7 +152,6 @@
 		update sp_visitor_info 
 		<set>
 			<if test="name != null">`name` = #{name}, </if>
-			<if test="physicalCardId != null">`physical_card_id` = #{physicalCardId}, </if>
 			<if test="idcardNo != null">`idcard_no` = #{idcardNo}, </if>
 			<if test="phone != null">`phone` = #{phone}, </if>
 			<if test="type != null">`type` = #{type}, </if>

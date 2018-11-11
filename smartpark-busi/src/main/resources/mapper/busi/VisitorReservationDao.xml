@@ -25,14 +25,11 @@
         <result property="createUserId" column="create_user_id"/>
         <result property="updateTime" column="update_time"/>
         <result property="updateUserId" column="update_user_id"/>
+        <result property="physicalCardId" column="physical_card_id"/>
     </resultMap>
 
 	<select id="queryObject" resultType="com.chris.smartpark.busi.entity.VisitorReservationEntity">
 		select * from sp_visitor_reservation where id = #{value}
-	</select>
-
-	<select id="queryEffectRecord" resultType="com.chris.smartpark.busi.entity.VisitorReservationEntity">
-		select * from sp_visitor_reservation a LEFT JOIN sp_visitor_info b on a.visitor_id=b.id where  a.`status` = 4  and b.idcard_no = #{idcardNo};
 	</select>
 
 	<select id="queryList" resultType="com.chris.smartpark.busi.entity.VisitorReservationEntity">
@@ -84,6 +81,9 @@
 			</if>
 				<if test="ext3 != null and ext3 !='' ">
 				AND ext3 = #{ext3}
+			</if>
+				<if test="physicalCardId != null and physicalCardId !='' ">
+				AND physical_card_id = #{physicalCardId}
 			</if>
 		        <choose>
             <when test="sidx != null and sidx.trim() != ''">
@@ -148,6 +148,9 @@
 				<if test="ext3 != null and ext3 !='' ">
                 AND ext3 = #{ext3}
             </if>
+				<if test="physicalCardId != null and physicalCardId !='' ">
+                AND physical_card_id = #{physicalCardId}
+            </if>
 			</select>
 	 
 	<insert id="save" parameterType="com.chris.smartpark.busi.entity.VisitorReservationEntity" useGeneratedKeys="true" keyProperty="id">
@@ -156,7 +159,7 @@
 			`phone`, 
 			`photo_url`, 
 			`visitor_id`, 
-			`staff_id`,
+			`staff_id`, 
 			`status`, 
 			`appoint_start_time`, 
 			`appoint_end_time`, 
@@ -171,14 +174,15 @@
 			`create_time`, 
 			`create_user_id`, 
 			`update_time`, 
-			`update_user_id`
+			`update_user_id`, 
+			`physical_card_id`
 		)
 		values
 		(
 			#{phone}, 
 			#{photoUrl}, 
 			#{visitorId}, 
-			#{staffId},
+			#{staffId}, 
 			#{status}, 
 			#{appointStartTime}, 
 			#{appointEndTime}, 
@@ -193,7 +197,8 @@
 			#{createTime}, 
 			#{createUserId}, 
 			#{updateTime}, 
-			#{updateUserId}
+			#{updateUserId}, 
+			#{physicalCardId}
 		)
 	</insert>
 	 
@@ -218,7 +223,8 @@
 			<if test="createTime != null">`create_time` = #{createTime}, </if>
 			<if test="createUserId != null">`create_user_id` = #{createUserId}, </if>
 			<if test="updateTime != null">`update_time` = #{updateTime}, </if>
-			<if test="updateUserId != null">`update_user_id` = #{updateUserId}</if>
+			<if test="updateUserId != null">`update_user_id` = #{updateUserId}, </if>
+			<if test="physicalCardId != null">`physical_card_id` = #{physicalCardId}</if>
 		</set>
 		where id = #{id}
 	</update>

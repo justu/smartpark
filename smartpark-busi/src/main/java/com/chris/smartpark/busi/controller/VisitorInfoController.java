@@ -5,11 +5,7 @@ import java.util.Map;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.chris.smartpark.busi.entity.VisitorInfoEntity;
 import com.chris.smartpark.busi.service.VisitorInfoService;
@@ -25,10 +21,10 @@ import com.chris.base.common.utils.CommonResponse;
  * 
  * @author chris
  * @email 258321511@qq.com
- * @since Nov 04.18
+ * @since Nov 11.18
  */
 @RestController
-@RequestMapping("/app/visitorinfo")
+@RequestMapping("/busi/visitorinfo")
 public class VisitorInfoController {
 	@Autowired
 	private VisitorInfoService visitorInfoService;
@@ -36,7 +32,8 @@ public class VisitorInfoController {
 	/**
 	 * 列表
 	 */
-	@RequestMapping("/list")
+	@PostMapping("/list")
+	@RequiresPermissions("busi:visitorinfo:list")
 	public CommonResponse list(@RequestBody Map<String, Object> params){
 		//查询列表数据
         Query query = new Query(params);
@@ -53,7 +50,8 @@ public class VisitorInfoController {
 	/**
 	 * 信息
 	 */
-	@RequestMapping("/info/{id}")
+	@GetMapping("/info/{id}")
+	@RequiresPermissions("busi:visitorinfo:info")
 	public CommonResponse info(@PathVariable("id") Long id){
 		VisitorInfoEntity visitorInfo = visitorInfoService.queryObject(id);
 		
@@ -63,7 +61,8 @@ public class VisitorInfoController {
 	/**
 	 * 保存
 	 */
-	@RequestMapping("/save")
+	@PostMapping("/save")
+	@RequiresPermissions("busi:visitorinfo:save")
 	public CommonResponse save(@RequestBody VisitorInfoEntity visitorInfo){
 		visitorInfoService.save(visitorInfo);
 		
@@ -73,7 +72,8 @@ public class VisitorInfoController {
 	/**
 	 * 修改
 	 */
-	@RequestMapping("/update")
+	@PostMapping("/update")
+	@RequiresPermissions("busi:visitorinfo:update")
 	public CommonResponse update(@RequestBody VisitorInfoEntity visitorInfo){
 		visitorInfoService.update(visitorInfo);
 		
@@ -83,7 +83,8 @@ public class VisitorInfoController {
 	/**
 	 * 删除
 	 */
-	@RequestMapping("/delete")
+	@PostMapping("/delete")
+	@RequiresPermissions("busi:visitorinfo:delete")
 	public CommonResponse delete(@RequestBody Long[] ids){
 		visitorInfoService.deleteBatch(ids);
 		
