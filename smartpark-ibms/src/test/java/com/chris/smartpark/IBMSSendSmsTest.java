@@ -4,12 +4,12 @@ import com.alibaba.fastjson.JSONObject;
 import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
 import com.chris.IBMSApplication;
 import com.chris.base.common.utils.Constant;
-import com.chris.base.modules.sms.service.SendSMSService;
+import com.chris.base.common.utils.SendSMSUtils;
+import com.chris.base.modules.sms.entity.SMSEntity;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -23,9 +23,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class IBMSSendSmsTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(IBMSSendSmsTest.class);
-
-    @Autowired
-    private SendSMSService sendSMSService;
 
     /**
      * 验证码短信发送测试
@@ -44,9 +41,14 @@ public class IBMSSendSmsTest {
         // RESERVATION_HANDLE  预约处理短信模板,
         // RESERVATION_VERIFY_CODE 预约验证码短信模板,
         // REGISTER_VERIFY_CODE  注册验证码短信模板;
-        SendSmsResponse sendSmsResponse = sendSMSService.sendSms(mobile, Constant.SMSType.VERIFY, templateParam, Constant.SMSTemplateCode.REGISTER_VERIFY_CODE);
+        SMSEntity smsEntity = new SMSEntity();
+        smsEntity.setMobile(mobile);
+        smsEntity.setSmsType(Constant.SMSType.VERIFY);
+        smsEntity.setTemplateParam(templateParam);
+        smsEntity.setTemplateCode(Constant.SMSTemplateCode.REGISTER_VERIFY_CODE.getTemplateCode());
+        SendSmsResponse sendSmsResponse = SendSMSUtils.sendSms(smsEntity);
         //获取短信发送的验证码
-        String verifyCode = sendSMSService.getVerifyCode(mobile);
+        String verifyCode = SendSMSUtils.getVerifyCode(mobile);
         LOGGER.info("sendVerifyCode sendSmsResponse :{}", JSONObject.toJSONString(sendSmsResponse));
         LOGGER.info("sendVerifyCode verifyCode:{}", verifyCode);
     }
@@ -60,7 +62,12 @@ public class IBMSSendSmsTest {
         String mobile = "13866135563";
         jsonObject.put("reason", "由于用户拒绝");
         String templateParam = jsonObject.toJSONString();
-        SendSmsResponse sendSmsResponse = sendSMSService.sendSms(mobile, Constant.SMSType.NOTICE, templateParam, Constant.SMSTemplateCode.RESERVATION_FAIL);
+        SMSEntity smsEntity = new SMSEntity();
+        smsEntity.setMobile(mobile);
+        smsEntity.setSmsType(Constant.SMSType.NOTICE);
+        smsEntity.setTemplateParam(templateParam);
+        smsEntity.setTemplateCode(Constant.SMSTemplateCode.RESERVATION_FAIL.getTemplateCode());
+        SendSmsResponse sendSmsResponse = SendSMSUtils.sendSms(smsEntity);
         LOGGER.info("sendVerifyCode sendSmsResponse :{}", JSONObject.toJSONString(sendSmsResponse));
     }
 
@@ -70,7 +77,11 @@ public class IBMSSendSmsTest {
     @Test
     public void sendBatchSms() {
         String mobile = "13866135563,18874023514";
-        SendSmsResponse sendSmsResponse = sendSMSService.sendSms(mobile, Constant.SMSType.NOTICE, null, Constant.SMSTemplateCode.RESERVATION_HANDLE);
+        SMSEntity smsEntity = new SMSEntity();
+        smsEntity.setMobile(mobile);
+        smsEntity.setSmsType(Constant.SMSType.NOTICE);
+        smsEntity.setTemplateCode(Constant.SMSTemplateCode.RESERVATION_HANDLE.getTemplateCode());
+        SendSmsResponse sendSmsResponse = SendSMSUtils.sendSms(smsEntity);
         LOGGER.info("sendVerifyCode sendSmsResponse :{}", JSONObject.toJSONString(sendSmsResponse));
     }
 
