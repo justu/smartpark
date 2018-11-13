@@ -51,5 +51,10 @@ public class VisitorDoorRelServiceImpl implements VisitorDoorRelService {
 	public void deleteBatch(Long[] ids){
 		visitorDoorRelDao.deleteBatch(ids);
 	}
-	
+
+	@Override
+	public void saveBatch(List<VisitorDoorRelEntity> list) {
+		//to be continue..
+	}
+
 }
