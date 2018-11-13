@@ -31,4 +31,6 @@ public interface VisitorReservationService {
 	void delete(Long id);
 	
 	void deleteBatch(Long[] ids);
+
+	VisitorReservationEntity queryObjectById(Long id);
 }

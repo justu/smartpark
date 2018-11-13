@@ -87,5 +87,10 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
 	public void deleteBatch(Long[] ids){
 		visitorReservationDao.deleteBatch(ids);
 	}
-	
+
+	@Override
+	public VisitorReservationEntity queryObjectById(Long id) {
+		return visitorReservationDao.queryObject(id);
+	}
+
 }

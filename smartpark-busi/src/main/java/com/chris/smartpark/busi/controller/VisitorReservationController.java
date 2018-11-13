@@ -236,7 +236,7 @@ public class VisitorReservationController {
             }
 
             //3.保存授权记录表
-            VisitorReservationEntity reservation=visitorReservationService.queryObject(visitorReservation.getId());
+			VisitorReservationEntity reservation=visitorReservationService.queryObjectById(visitorReservation.getId());
             AuthenticationRecordEntity authenticationRecordEntity = new AuthenticationRecordEntity();
             authenticationRecordEntity.setReservationId(visitorReservation.getId());
             authenticationRecordEntity.setVisitorId(visitorReservation.getVisitorId());
@@ -252,9 +252,11 @@ public class VisitorReservationController {
 
 
             //4.更新预约信息
-            reservation.setActStartTime(visitorReservation.getActStartTime());
-            reservation.setActEndTime(visitorReservation.getAppointEndTime());
-            reservation.setStatus("");//
+			reservation.setId(visitorReservation.getId());
+			reservation.setActStartTime(visitorReservation.getActStartTime());
+			reservation.setActEndTime(visitorReservation.getAppointEndTime());
+			reservation.setStatus("");
+			//to be update
 
         }catch (Exception e){
             commonResponse = CommonResponse.error();
