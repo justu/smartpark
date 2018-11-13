@@ -19,7 +19,7 @@ public class VisitorReservationEntity  extends SysUpdateInfo  implements Seriali
 	private Long id;
 	//访客手机号
 	private String phone;
-	//访客照片
+	//访客照片地址
 	private String photoUrl;
 	//访客id
 	private Long visitorId;

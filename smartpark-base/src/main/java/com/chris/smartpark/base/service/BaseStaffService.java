@@ -15,7 +15,9 @@ import java.util.Map;
 public interface BaseStaffService {
 	
 	BaseStaffEntity queryObject(Long id);
-	
+
+	BaseStaffEntity queryByMobile(BaseStaffEntity baseStaffEntity);
+
 	List<BaseStaffEntity> queryList(Map<String, Object> map);
 	
 	int queryTotal(Map<String, Object> map);

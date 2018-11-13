@@ -16,11 +16,7 @@ import org.apache.shiro.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 /**
@@ -52,15 +48,12 @@ public class VisitorReservationController {
 	 * 列表
 	 */
 	@RequestMapping("/list")
-	public CommonResponse list(@RequestParam Map<String, Object> params){
+	public CommonResponse list(@RequestBody Map<String, Object> params){
 		//查询列表数据
         Query query = new Query(params);
-
 		List<VisitorReservationEntity> visitorReservationList = visitorReservationService.queryList(query);
 		int total = visitorReservationService.queryTotal(query);
-		
 		PageUtils pageUtil = new PageUtils(visitorReservationList, total, query.getLimit(), query.getPage());
-		
 		return CommonResponse.ok().put("page", pageUtil);
 	}
 	
@@ -68,12 +61,12 @@ public class VisitorReservationController {
 	/**
 	 * 信息
 	 */
-	@RequestMapping("/info/{id}")
+	@GetMapping("/info/{id}")
 	//@RequiresPermissions("busi:visitorreservation:info")重要操作前可加入权限校验
 	public CommonResponse info(@PathVariable("id") Long id){
-		VisitorReservationEntity visitorReservation = visitorReservationService.queryObject(id);
+		ReservationDto reservation = visitorReservationService.queryObject(id);
 		
-		return CommonResponse.ok().put("visitorReservation", visitorReservation);
+		return CommonResponse.ok().put("ReservationDto", reservation);
 	}
 
 	/**
