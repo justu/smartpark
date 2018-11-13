@@ -1,6 +1,8 @@
 package com.chris.smartpark.busi.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.chris.smartpark.busi.dto.AuthenticationDto;
+import com.chris.smartpark.busi.dto.AuthorizeDto;
 import com.chris.smartpark.busi.dto.ReservationDto;
 import com.chris.smartpark.busi.entity.VisitorReservationEntity;
 
@@ -33,4 +35,6 @@ public interface VisitorReservationService {
 	void deleteBatch(Long[] ids);
 
 	VisitorReservationEntity queryObjectById(Long id);
+
+	JSONObject authorize(AuthorizeDto authorizeDto);
 }

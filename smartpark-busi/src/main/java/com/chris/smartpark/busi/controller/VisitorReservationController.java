@@ -3,11 +3,13 @@ package com.chris.smartpark.busi.controller;
 import java.util.*;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.chris.base.common.exception.CommonException;
 import com.chris.base.common.utils.*;
 import com.chris.base.common.validator.ValidatorUtils;
 import com.chris.smartpark.busi.common.BeanUtil;
 import com.chris.smartpark.busi.dto.AuthenticationDto;
+import com.chris.smartpark.busi.dto.AuthorizeDto;
 import com.chris.smartpark.busi.dto.ReservationDto;
 import com.chris.smartpark.busi.entity.*;
 import com.chris.smartpark.busi.service.*;
@@ -210,61 +212,12 @@ public class VisitorReservationController {
      * 审核
      */
     @RequestMapping("/authorize")
-    public CommonResponse Authorize(@RequestBody VisitorReservationEntity visitorReservation,List<Long> doorList){
-        CommonResponse commonResponse = new CommonResponse();
-        try{
-            //1.保存访客门禁表
-            List<VisitorDoorRelEntity> visitorDoorRelList = new ArrayList<VisitorDoorRelEntity>();
-            for(Long doorId : doorList){
-                VisitorDoorRelEntity visitorDoorRelEntity = new VisitorDoorRelEntity();
-                visitorDoorRelEntity.setReservationId(visitorReservation.getId());
-                visitorDoorRelEntity.setDoorId(doorId);
-                visitorDoorRelEntity.setVisitorId(visitorReservation.getVisitorId());
-                visitorDoorRelEntity.setStatus("1");
-                visitorDoorRelList.add(visitorDoorRelEntity);
-            }
-            visitorDoorRelService.saveBatch(visitorDoorRelList);
-
-            //2.车辆授权
-            String isAuthCar="0";
-            Map<String, Object> params = new HashMap<String, Object>();
-            params.put("reservationId", visitorReservation.getId());
-            List<CarInfoEntity> carInfoList=carInfoService.queryList(params);
-            if(!carInfoList.isEmpty()){
-                //车道系统授权 to be continue;
-                isAuthCar="1";
-            }
-
-            //3.保存授权记录表
-			VisitorReservationEntity reservation=visitorReservationService.queryObjectById(visitorReservation.getId());
-            AuthenticationRecordEntity authenticationRecordEntity = new AuthenticationRecordEntity();
-            authenticationRecordEntity.setReservationId(visitorReservation.getId());
-            authenticationRecordEntity.setVisitorId(visitorReservation.getVisitorId());
-            authenticationRecordEntity.setApplyBeginTime(reservation.getAppointEndTime());
-            authenticationRecordEntity.setApplyEndTime(reservation.getAppointEndTime());
-            authenticationRecordEntity.setAuthBeginTime(visitorReservation.getActStartTime());
-            authenticationRecordEntity.setAuthEndTime(visitorReservation.getActEndTime());
-            authenticationRecordEntity.setAuthTime(new Date());
-            authenticationRecordEntity.setAuthCode("1"+isAuthCar);//第一位门禁 第二位车道 1已授权 0 未授权
-            authenticationRecordEntity.setStatus("1");
-
-            authenticationRecordService.save(authenticationRecordEntity);
-
-
-            //4.更新预约信息
-			reservation.setId(visitorReservation.getId());
-			reservation.setActStartTime(visitorReservation.getActStartTime());
-			reservation.setActEndTime(visitorReservation.getAppointEndTime());
-			reservation.setStatus("");
-			//to be update
-
-        }catch (Exception e){
-            commonResponse = CommonResponse.error();
-            log.error(e.getMessage());
-            e.printStackTrace();
-        }
-
-
-        return CommonResponse.ok();
+    public CommonResponse authorize(@RequestBody AuthorizeDto authorizeDto){
+		JSONObject returnJo=visitorReservationService.authorize(authorizeDto);
+		if("1".equals(returnJo.getString("returnCode"))){
+			return CommonResponse.ok().setData( returnJo.getJSONArray("returnData"));
+		}else{
+			return CommonResponse.error(returnJo.getString("returnMessage")).setData(new JSONObject());
+		}
     }
 }
