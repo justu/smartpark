@@ -55,6 +55,7 @@ public class VisitorDoorRelServiceImpl implements VisitorDoorRelService {
 	@Override
 	public void saveBatch(List<VisitorDoorRelEntity> list) {
 		//to be continue..
+        visitorDoorRelDao.saveBatch(list);
 	}
 
 }
