@@ -42,10 +42,6 @@ public class VisitorReservationController {
 	private CarInfoService carInfoService;
 	@Autowired
 	private VisitorIdcardService visitorIdcardService;
-    @Autowired
-    private AuthenticationRecordService authenticationRecordService;
-    @Autowired
-    private VisitorDoorRelService visitorDoorRelService;
 	/**
 	 * 列表
 	 */
