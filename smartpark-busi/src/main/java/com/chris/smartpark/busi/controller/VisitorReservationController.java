@@ -3,7 +3,6 @@ package com.chris.smartpark.busi.controller;
 import java.util.*;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.chris.base.common.exception.CommonException;
 import com.chris.base.common.utils.*;
 import com.chris.smartpark.busi.common.BeanUtil;
@@ -189,7 +188,6 @@ public class VisitorReservationController {
 	@RequestMapping("/update")
 	public CommonResponse update(@RequestBody VisitorReservationEntity visitorReservation){
 		visitorReservationService.update(visitorReservation);
-		
 		return CommonResponse.ok();
 	}
 	
@@ -199,15 +197,14 @@ public class VisitorReservationController {
 	@RequestMapping("/delete")
 	public CommonResponse delete(@RequestBody Long[] ids){
 		visitorReservationService.deleteBatch(ids);
-		
 		return CommonResponse.ok();
 	}
     /**
      * 访客预约审核
      */
-    @RequestMapping("/authorize")
-    public CommonResponse authorize(@RequestBody AuthorizeDTO authorizeDTO){
-		this.visitorReservationService.authorize(authorizeDTO);
+    @RequestMapping("/approve")
+    public CommonResponse approve(@RequestBody AuthorizeDTO authorizeDTO){
+		this.visitorReservationService.approve(authorizeDTO);
 		return CommonResponse.ok();
     }
 }

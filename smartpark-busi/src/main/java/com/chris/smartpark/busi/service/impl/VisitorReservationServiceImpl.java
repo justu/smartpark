@@ -111,12 +111,12 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
     }
 
     /**
-     * 访客预约授权
+     * 访客预约审核
      * @param authorizeDTO
      * @return
      */
     @Override
-    public void authorize(AuthorizeDTO authorizeDTO) {
+    public void approve(AuthorizeDTO authorizeDTO) {
         log.error("请求参数：{}", JSONObject.toJSONString(authorizeDTO));
         this.validateParams(authorizeDTO);
         //1.查询预约单

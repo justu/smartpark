@@ -37,5 +37,5 @@ public interface VisitorReservationService {
 	VisitorReservationEntity queryObjectById(Long id);
 
 	@Transactional
-	void authorize(AuthorizeDTO authorizeDTO);
+	void approve(AuthorizeDTO authorizeDTO);
 }
