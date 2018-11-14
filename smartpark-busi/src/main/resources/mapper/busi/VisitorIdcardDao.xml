@@ -12,7 +12,7 @@
         <result property="name" column="name"/>
         <result property="facePhotoUrl" column="face_photo_url"/>
         <result property="idcardPhotoUrl" column="idcard_photo_url"/>
-        <result property="sex" column="sex"/>
+        <result property="gender" column="gender"/>
         <result property="address" column="address"/>
         <result property="issuOrganization" column="issu_organization"/>
         <result property="effDate" column="eff_date"/>
@@ -54,8 +54,8 @@
 				<if test="idcardPhotoUrl != null and idcardPhotoUrl !='' ">
 				AND idcard_photo_url = #{idcardPhotoUrl}
 			</if>
-				<if test="sex != null and sex !='' ">
-				AND sex = #{sex}
+				<if test="gender != null and gender !='' ">
+				AND gender = #{gender}
 			</if>
 				<if test="address != null and address !='' ">
 				AND address = #{address}
@@ -117,8 +117,8 @@
 				<if test="idcardPhotoUrl != null and idcardPhotoUrl !='' ">
                 AND idcard_photo_url = #{idcardPhotoUrl}
             </if>
-				<if test="sex != null and sex !='' ">
-                AND sex = #{sex}
+				<if test="gender != null and gender !='' ">
+                AND gender = #{gender}
             </if>
 				<if test="address != null and address !='' ">
                 AND address = #{address}
@@ -155,7 +155,7 @@
 			`name`, 
 			`face_photo_url`, 
 			`idcard_photo_url`, 
-			`sex`, 
+			`gender`,
 			`address`, 
 			`issu_organization`, 
 			`eff_date`, 
@@ -177,7 +177,7 @@
 			#{name}, 
 			#{facePhotoUrl}, 
 			#{idcardPhotoUrl}, 
-			#{sex}, 
+			#{gender},
 			#{address}, 
 			#{issuOrganization}, 
 			#{effDate}, 
@@ -202,7 +202,7 @@
 			<if test="name != null">`name` = #{name}, </if>
 			<if test="facePhotoUrl != null">`face_photo_url` = #{facePhotoUrl}, </if>
 			<if test="idcardPhotoUrl != null">`idcard_photo_url` = #{idcardPhotoUrl}, </if>
-			<if test="sex != null">`sex` = #{sex}, </if>
+			<if test="gender != null">`gender` = #{gender}, </if>
 			<if test="address != null">`address` = #{address}, </if>
 			<if test="issuOrganization != null">`issu_organization` = #{issuOrganization}, </if>
 			<if test="effDate != null">`eff_date` = #{effDate}, </if>

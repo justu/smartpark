@@ -35,7 +35,7 @@ public class VisitorIdcardEntity  extends SysUpdateInfo  implements Serializable
 	//身份证照片
 	private String idcardPhotoUrl;
 	//性别  1 男  2 女
-	private Integer sex;
+	private String gender;
 	//住址
 	private String address;
 	//签发机关
@@ -102,12 +102,12 @@ public class VisitorIdcardEntity  extends SysUpdateInfo  implements Serializable
 	public String getIdcardPhotoUrl() {
 		return idcardPhotoUrl;
 	}
-	public void setSex(Integer sex) {
-		this.sex = sex;
+	public void setGender(String gender) {
+		this.gender = gender;
 	}
 
-	public Integer getSex() {
-		return sex;
+	public String getGender() {
+		return gender;
 	}
 	public void setAddress(String address) {
 		this.address = address;
