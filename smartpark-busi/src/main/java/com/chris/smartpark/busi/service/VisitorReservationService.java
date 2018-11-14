@@ -3,6 +3,7 @@ package com.chris.smartpark.busi.service;
 import com.alibaba.fastjson.JSONObject;
 import com.chris.smartpark.busi.dto.AuthorizeDTO;
 import com.chris.smartpark.busi.dto.ReservationDto;
+import com.chris.smartpark.busi.entity.VisitorIdcardEntity;
 import com.chris.smartpark.busi.entity.VisitorReservationEntity;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,6 +34,10 @@ public interface VisitorReservationService {
 	void delete(Long id);
 	
 	void deleteBatch(Long[] ids);
+	@Transactional
+	void createReservation(ReservationDto reservationDto);
+	@Transactional
+	void checkIdCardAndGetAuth(VisitorIdcardEntity visitorIdcardEntity);
 
 	VisitorReservationEntity queryObjectById(Long id);
 
