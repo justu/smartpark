@@ -207,11 +207,7 @@ public class VisitorReservationController {
      */
     @RequestMapping("/authorize")
     public CommonResponse authorize(@RequestBody AuthorizeDTO authorizeDTO){
-		JSONObject returnJo= this.visitorReservationService.authorize(authorizeDTO);
-		if("1".equals(returnJo.getString("returnCode"))){
-			return CommonResponse.ok().setData( returnJo.getJSONArray("returnData"));
-		}else{
-			return CommonResponse.error(returnJo.getString("returnMessage")).setData(new JSONObject());
-		}
+		this.visitorReservationService.authorize(authorizeDTO);
+		return CommonResponse.ok();
     }
 }
