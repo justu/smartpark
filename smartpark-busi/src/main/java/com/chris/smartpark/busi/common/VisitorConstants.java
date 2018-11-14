@@ -3,13 +3,13 @@ package com.chris.smartpark.busi.common;
 public class VisitorConstants {
     public interface ApproveResult {
         /**
-         * 授权通过
+         * 审核通过
          */
-        int AUTHORIZED = 1;
+        int OK = 1;
         /**
-         * 未授权
+         * 审核不通过
          */
-        int UNAUTHORIZED = 0;
+        int REJECT = 0;
     }
 
     /**
@@ -28,5 +28,13 @@ public class VisitorConstants {
         int COMPLETED = 5;
         // 已过期
         int EXPIRED = 6;
+    }
+
+    /**
+     * 预约单类型
+     */
+    public interface ReservationType {
+        int ONLINE = 1;
+        int OFFLINE = 2;
     }
 }

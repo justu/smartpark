@@ -1,10 +1,10 @@
 package com.chris.smartpark.busi.service;
 
 import com.alibaba.fastjson.JSONObject;
-import com.chris.smartpark.busi.dto.AuthenticationDto;
-import com.chris.smartpark.busi.dto.AuthorizeDto;
+import com.chris.smartpark.busi.dto.AuthorizeDTO;
 import com.chris.smartpark.busi.dto.ReservationDto;
 import com.chris.smartpark.busi.entity.VisitorReservationEntity;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -36,5 +36,6 @@ public interface VisitorReservationService {
 
 	VisitorReservationEntity queryObjectById(Long id);
 
-	JSONObject authorize(AuthorizeDto authorizeDto);
+	@Transactional
+	void authorize(AuthorizeDTO authorizeDTO);
 }

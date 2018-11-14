@@ -6,10 +6,8 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.chris.base.common.exception.CommonException;
 import com.chris.base.common.utils.*;
-import com.chris.base.common.validator.ValidatorUtils;
 import com.chris.smartpark.busi.common.BeanUtil;
-import com.chris.smartpark.busi.dto.AuthenticationDto;
-import com.chris.smartpark.busi.dto.AuthorizeDto;
+import com.chris.smartpark.busi.dto.AuthorizeDTO;
 import com.chris.smartpark.busi.dto.ReservationDto;
 import com.chris.smartpark.busi.entity.*;
 import com.chris.smartpark.busi.service.*;
@@ -205,11 +203,11 @@ public class VisitorReservationController {
 		return CommonResponse.ok();
 	}
     /**
-     * 审核
+     * 访客预约审核
      */
     @RequestMapping("/authorize")
-    public CommonResponse authorize(@RequestBody AuthorizeDto authorizeDto){
-		JSONObject returnJo=visitorReservationService.authorize(authorizeDto);
+    public CommonResponse authorize(@RequestBody AuthorizeDTO authorizeDTO){
+		JSONObject returnJo= this.visitorReservationService.authorize(authorizeDTO);
 		if("1".equals(returnJo.getString("returnCode"))){
 			return CommonResponse.ok().setData( returnJo.getJSONArray("returnData"));
 		}else{

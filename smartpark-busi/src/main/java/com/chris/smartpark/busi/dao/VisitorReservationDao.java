@@ -18,4 +18,10 @@ import java.util.List;
 @Mapper
 public interface VisitorReservationDao extends BaseDao<VisitorReservationEntity> {
     List<VisitorReservationEntity> queryEffectRecord(String idcardNo);
+
+    /**
+     * 更新预约单状态
+     * @param visitorReservationEntity
+     */
+    void updateStatus(VisitorReservationEntity visitorReservationEntity);
 }
