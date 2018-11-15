@@ -60,8 +60,7 @@ public class BaseStaffEntity  implements Serializable {
 	private String unicode;
 	//hr记录主键对应用户所在的一个组织
 	private String hrid;
-	//集团用户帐号全省唯一，员工号@两位省公司编码
-            集团删除唯一标识
+	//集团用户帐号全省唯一，员工号@两位省公司编码 集团删除唯一标识
             
 	private String loginname;
 	//所在集团组织的唯一编码两位省公司编码+8位流水号
@@ -72,24 +71,14 @@ public class BaseStaffEntity  implements Serializable {
 	private String ctstatus;
 	//生日yyyy-MM-dd
 	private String ctbirthday;
-	//岗位等级体系新岗位体系、旧岗位体系
-            参照 6.7
-            6.7.	岗位等级体系（ctPosLevelType）
+	//岗位等级体系新岗位体系、旧岗位体系参照 6.7 6.7.	岗位等级体系（ctPosLevelType）
 	private String ctposleveltype;
-	//岗位等级如果岗位体系选择为新岗位体系则参照岗位等级（新），如果岗位体系选择为旧岗位体系则参照岗位等级（旧）
-            参照6.8/6.9
-            6.8.	岗位等级-旧（ctPositionLevel）
-            6.9.	岗位等级-新（ctPositionLevel）
+	//岗位等级如果岗位体系选择为新岗位体系则参照岗位等级（新），如果岗位体系选择为旧岗位体系则参照岗位等级（旧） 参照6.8/6.9 岗位等级-旧（ctPositionLevel） 6.9.岗位等级-新（ctPositionLevel）
 	private String ctpositionlevel;
-	//岗位层级体系新岗位层级体系、旧岗位层级体系
-            参照 6.11
-            6.11.	岗位层级体系（ctPosLayerType）
+	//岗位层级体系新岗位层级体系、旧岗位层级体系 参照 6.11 岗位层级体系（ctPosLayerType）
             
 	private String ctposlayertype;
-	//岗位层级参照数据字典6.12/6.13
-            参照 6.11
-            6.12.	岗位层级-旧（ctPositionLayer）
-            6.13.	岗位层级-新（ctPositionLayer）
+	//岗位层级参照数据字典6.12/6.13 参照 6.11 6.12.	岗位层级-旧（ctPositionLayer） 6.13.	岗位层级-新（ctPositionLayer）
 	private String ctpositionlayer;
 	//岗位序列6.146.14.	岗位序列（ctPositionSequence）
 	private String ctpositionsequence;
@@ -101,9 +90,7 @@ public class BaseStaffEntity  implements Serializable {
 	private String userstatus;
 	//参照 6.6, 由于与四级划小同步规范中的属性重名,由ctUserType改为gctUserType6.6.	员工分类（gctUserType）
 	private String gctusertype;
-	//同级排序编号用户部门排序号
-            支持浮点
-            
+	//同级排序编号用户部门排序号 支持浮点
 	private String shownum;
 	//任职类型6.5区分是否主职组织6.5.	任职类型（pType）
 	private String ptype;

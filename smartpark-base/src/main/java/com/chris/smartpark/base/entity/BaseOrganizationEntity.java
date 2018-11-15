@@ -45,13 +45,10 @@ public class BaseOrganizationEntity  implements Serializable {
 	private String opertype;
 	//组织机构编码即ctOu
 	private String unicode;
-	//集团组织唯一编码两位省公司编码+8位流水号
-            集团删除唯一标识
+	//集团组织唯一编码两位省公司编码+8位流水号 集团删除唯一标识
             
 	private String ctou;
-	//上级公司编码
-            如果该组织为公司，则为上级公司ctOu；
-            如果该组织为部门，则为该部门所属公司ctOu
+	//上级公司编码 如果该组织为公司，则为上级公司ctOu； 如果该组织为部门，则为该部门所属公司ctOu
 	private String parentcorpcode;
 	//上级集团组织唯一编码上级组织ctOu
 	private String parentcode;
@@ -73,8 +70,7 @@ public class BaseOrganizationEntity  implements Serializable {
 	private String ctvicemanager;
 	//是否划小承包单元OA选择6.27.	是否承包单元（IS_CNTRT_MGMT_UNIT）
 	private String isCntrtMgmtUnit;
-	//划小承包模式
-            内包（绩效考核）对应绩效考核，内包（经营责任制）对应经营责任制，员工创业承包对应员工创业承包，外包人员承包对应社会外包6.28.	划小承包模式（CNTRT_MGMT_MODE_FLAG）
+	//划小承包模式 内包（绩效考核）对应绩效考核，内包（经营责任制）对应经营责任制，员工创业承包对应员工创业承包，外包人员承包对应社会外包6.28.	划小承包模式（CNTRT_MGMT_MODE_FLAG）
 	private String cntrtMgmtModeFlag;
 	//划小承包单元编码根据四级组织编码生成，是承包单元才有编码
 	private String cntrtMgmtUnitCd;
