@@ -72,22 +72,10 @@ public class VisitorReservationController {
 	@RequestMapping("/authentication")
 	//@RequiresPermissions("busi:visitorreservation:info")重要操作前可加入权限校验
 	public CommonResponse authentication(@RequestBody @Validated(VisitorIdcardEntity.ValidateIdentity.class)VisitorIdcardEntity visitorIdcardEntity,BindingResult result){
-		CommonResponse commonResponse = new CommonResponse();
 		log.info("========身份证识别开始并同步信息到门禁系统=====");
-		try {
-            ValidateUtils.validatedParams(result);
-			visitorReservationService.checkIdCardAndGetAuth(visitorIdcardEntity);
-			commonResponse = CommonResponse.ok();
-        }catch (CommonException e){
-            log.error(e.getMessage());
-            e.printStackTrace();
-            commonResponse = CommonResponse.error(e.getMsg());
-		}catch (Exception e){
-			commonResponse = CommonResponse.error();
-			log.error(e.getMessage());
-			e.printStackTrace();
-		}
-		return commonResponse;
+		ValidateUtils.validatedParams(result);
+		visitorReservationService.checkIdCardAndGetAuth(visitorIdcardEntity);
+		return CommonResponse.ok();
 	}
 	
 	/**
@@ -96,21 +84,9 @@ public class VisitorReservationController {
 	@RequestMapping("/save")
 	public CommonResponse save(@RequestBody  @Validated(ReservationDto.ValidateSaveReservation.class)ReservationDto reservationDto,BindingResult result){
 		log.info("预约单生成入参"+ JSON.toJSONString(reservationDto));
-		CommonResponse commonResponse = new CommonResponse();
-		try {
-			ValidateUtils.validatedParams(result);
-			visitorReservationService.createReservation(reservationDto);
-			commonResponse = CommonResponse.ok();
-		}catch (CommonException e){
-			log.error(e.getMessage());
-			e.printStackTrace();
-			commonResponse = CommonResponse.error(e.getMsg());
-		}catch (Exception e){
-			commonResponse = CommonResponse.error();
-			log.error(e.getMessage());
-			e.printStackTrace();
-		}
-		return commonResponse;
+		ValidateUtils.validatedParams(result);
+		visitorReservationService.createReservation(reservationDto);
+		return CommonResponse.ok();
 	}
 	
 	/**

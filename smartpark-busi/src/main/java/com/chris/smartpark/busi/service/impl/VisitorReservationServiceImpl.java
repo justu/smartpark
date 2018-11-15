@@ -62,7 +62,7 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
         //受访者
         BaseStaffEntity baseStaffEntity = baseStaffService.queryObject(visitorReservation.getStaffId());
         reservationDto.setStaffId(baseStaffEntity.getId());
-        reservationDto.setStaffName(baseStaffEntity.getName());
+        reservationDto.setStaffName(baseStaffEntity.getUsername());
         reservationDto.setStaffPhone(baseStaffEntity.getMobile());
         //获取同行车辆信息
         Map<String, Object> map = new HashMap<String, Object>();
@@ -168,17 +168,12 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
         //验证有无有效预约单
         List<VisitorReservationEntity> list = visitorReservationService.queryEffectRecord(visitorIdcardEntity.getIdcardNo());
         if(CollectionUtils.isEmpty(list)){
-            log.error("该身份证没有匹配的预约单信息");
-            return;
+            throw new CommonException("该身份证没有匹配的预约单信息");
         }else{
-            String physicalCardId = visitorIdcardEntity.getPhysicalCardId();
-            String idcardNo = visitorIdcardEntity.getIdcardNo();
             for(VisitorReservationEntity VisitorReservation : list){
                 visitorIdcardEntity.setVisitorId(VisitorReservation.getVisitorId());
                 //保存或更新信息到访客身份信息表
-                Map<String, Object> map = new HashMap<String, Object>();
-                map.put("idcardNo",idcardNo);
-                List<VisitorIdcardEntity> idcardEntityList  = visitorIdcardService.queryList(map);
+                List<VisitorIdcardEntity> idcardEntityList  = visitorIdcardService.queryList(ImmutableMap.of("idcardNo", visitorIdcardEntity.getIdcardNo()));
                 if(CollectionUtils.isEmpty(idcardEntityList)){
                     visitorIdcardService.save(visitorIdcardEntity);
                 }else{
@@ -187,10 +182,10 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
                 //组装入参调用门禁接口授权
                 Date startTime = VisitorReservation.getAppointStartTime();
                 Date endTime = VisitorReservation.getAppointEndTime();
-                //保存身份证信息到身份信息表中
+                // TODO 保存身份证信息到身份信息表中
                 log.info("========调用门禁接口授权成功=====");
                 //更改预约单状态
-                VisitorReservation.setStatus("5");
+                VisitorReservation.setStatus(VisitorConstants.ReservationStatus.COMPLETED + "");
                 visitorReservationService.update(VisitorReservation);
             }
         }
