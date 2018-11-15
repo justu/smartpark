@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import com.chris.smartpark.base.entity.BaseStaffEntity;
-import com.chris.smartpark.base.service.BaseStaffService;
+import com.chris.smartpark.base.entity.BaseOrganizationEntity;
+import com.chris.smartpark.base.service.BaseOrganizationService;
 import com.chris.base.common.utils.PageUtils;
 import com.chris.base.common.utils.Query;
 import com.chris.base.common.utils.CommonResponse;
@@ -22,31 +22,31 @@ import com.chris.base.common.utils.CommonResponse;
 
 
 /**
- * 员工用户
+ * 组织机构
  * 
  * @author chris
  * @email 258321511@qq.com
  * @since Nov 15.18
  */
 @RestController
-@RequestMapping("/base/basestaff")
-public class BaseStaffController {
+@RequestMapping("/base/baseorganization")
+public class BaseOrganizationController {
 	@Autowired
-	private BaseStaffService baseStaffService;
+	private BaseOrganizationService baseOrganizationService;
 	
 	/**
 	 * 列表
 	 */
 	@PostMapping("/list")
-	@RequiresPermissions("base:basestaff:list")
+	@RequiresPermissions("base:baseorganization:list")
 	public CommonResponse list(@RequestBody Map<String, Object> params){
 		//查询列表数据
         Query query = new Query(params);
 
-		List<BaseStaffEntity> baseStaffList = baseStaffService.queryList(query);
-		int total = baseStaffService.queryTotal(query);
+		List<BaseOrganizationEntity> baseOrganizationList = baseOrganizationService.queryList(query);
+		int total = baseOrganizationService.queryTotal(query);
 		
-		PageUtils pageUtil = new PageUtils(baseStaffList, total, query.getLimit(), query.getPage());
+		PageUtils pageUtil = new PageUtils(baseOrganizationList, total, query.getLimit(), query.getPage());
 		
 		return CommonResponse.ok().put("page", pageUtil);
 	}
@@ -56,20 +56,20 @@ public class BaseStaffController {
 	 * 信息
 	 */
 	@GetMapping("/info/{id}")
-	@RequiresPermissions("base:basestaff:info")
+	@RequiresPermissions("base:baseorganization:info")
 	public CommonResponse info(@PathVariable("id") Long id){
-		BaseStaffEntity baseStaff = baseStaffService.queryObject(id);
+		BaseOrganizationEntity baseOrganization = baseOrganizationService.queryObject(id);
 		
-		return CommonResponse.ok().put("baseStaff", baseStaff);
+		return CommonResponse.ok().put("baseOrganization", baseOrganization);
 	}
 	
 	/**
 	 * 保存
 	 */
 	@PostMapping("/save")
-	@RequiresPermissions("base:basestaff:save")
-	public CommonResponse save(@RequestBody BaseStaffEntity baseStaff){
-		baseStaffService.save(baseStaff);
+	@RequiresPermissions("base:baseorganization:save")
+	public CommonResponse save(@RequestBody BaseOrganizationEntity baseOrganization){
+		baseOrganizationService.save(baseOrganization);
 		
 		return CommonResponse.ok();
 	}
@@ -78,9 +78,9 @@ public class BaseStaffController {
 	 * 修改
 	 */
 	@PostMapping("/update")
-	@RequiresPermissions("base:basestaff:update")
-	public CommonResponse update(@RequestBody BaseStaffEntity baseStaff){
-		baseStaffService.update(baseStaff);
+	@RequiresPermissions("base:baseorganization:update")
+	public CommonResponse update(@RequestBody BaseOrganizationEntity baseOrganization){
+		baseOrganizationService.update(baseOrganization);
 		
 		return CommonResponse.ok();
 	}
@@ -89,9 +89,9 @@ public class BaseStaffController {
 	 * 删除
 	 */
 	@PostMapping("/delete")
-	@RequiresPermissions("base:basestaff:delete")
+	@RequiresPermissions("base:baseorganization:delete")
 	public CommonResponse delete(@RequestBody Long[] ids){
-		baseStaffService.deleteBatch(ids);
+		baseOrganizationService.deleteBatch(ids);
 		
 		return CommonResponse.ok();
 	}

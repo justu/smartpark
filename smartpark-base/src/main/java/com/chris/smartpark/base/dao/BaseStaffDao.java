@@ -5,13 +5,13 @@ import com.chris.base.modules.sys.dao.BaseDao;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
- * 园区员工表
+ * 员工用户
  * 
  * @author chris
  * @email 258321511@qq.com
- * @since Nov 11.18
+ * @since Nov 15.18
  */
 @Mapper
 public interface BaseStaffDao extends BaseDao<BaseStaffEntity> {
-    BaseStaffEntity queryByMobile(BaseStaffEntity baseStaffEntity);
+	
 }

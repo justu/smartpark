@@ -6,18 +6,16 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 园区员工表
+ * 员工用户
  * 
  * @author chris
  * @email 258321511@qq.com
- * @since Nov 11.18
+ * @since Nov 15.18
  */
 public interface BaseStaffService {
 	
 	BaseStaffEntity queryObject(Long id);
-
-	BaseStaffEntity queryByMobile(BaseStaffEntity baseStaffEntity);
-
+	
 	List<BaseStaffEntity> queryList(Map<String, Object> map);
 	
 	int queryTotal(Map<String, Object> map);

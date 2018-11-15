@@ -16,16 +16,12 @@ import com.chris.smartpark.base.service.BaseStaffService;
 public class BaseStaffServiceImpl implements BaseStaffService {
 	@Autowired
 	private BaseStaffDao baseStaffDao;
-
+	
 	@Override
 	public BaseStaffEntity queryObject(Long id){
 		return baseStaffDao.queryObject(id);
 	}
-
-	@Override
-	public BaseStaffEntity queryByMobile(BaseStaffEntity baseStaffEntity){
-		return baseStaffDao.queryByMobile(baseStaffEntity);
-	};
+	
 	@Override
 	public List<BaseStaffEntity> queryList(Map<String, Object> map){
 		return baseStaffDao.queryList(map);
