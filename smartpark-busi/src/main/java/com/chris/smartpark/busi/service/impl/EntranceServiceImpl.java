@@ -1,6 +1,8 @@
 package com.chris.smartpark.busi.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.chris.base.common.exception.CommonException;
+import com.chris.base.common.utils.ValidateUtils;
 import com.chris.smartpark.busi.dao.DoorControllerDao;
 import com.chris.smartpark.busi.dao.DoorDao;
 import com.chris.smartpark.busi.dao.OpenDoorLogDao;
@@ -31,38 +33,16 @@ public class EntranceServiceImpl implements EntranceService {
     private OpenDoorLogDao openDoorLogDao;
 
     @Override
-    public JSONObject queryUserDoors(DoorEntity doorEntity) {
+    public List<DoorEntity>  queryUserDoors(String openId) {
         JSONObject returnJo  = new JSONObject();
-        try {
-            //userId 从tb_user 取mobile , 用mobile 从 base_staff 中取出员工id, 根据员工id的工位取出门禁列表
-            //查询用户门禁权限
-            Long userId = doorEntity.getId();
-            if(userId==null || userId.intValue()==0){
-                returnJo.put("returnCode","0");
-                returnJo.put("returnMessage","参数id不能为空!");
-                returnJo.put("returnData",new JSONObject());
-                return returnJo;
-            }
-            List<DoorEntity> userDoorList=doorDao.queryUserDoor(doorEntity);
-            if(userDoorList == null || userDoorList.isEmpty()){
-                returnJo.put("returnCode","0");
-                returnJo.put("returnMessage","未查询到数据!");
-                returnJo.put("returnData",new JSONObject());
-                return returnJo;
-            }
-
-            returnJo.put("returnCode","1");
-            returnJo.put("returnMessage","查询成功!");
-            returnJo.put("returnData",userDoorList);
-
-        }catch (Exception e){
-            returnJo.put("returnCode","0");
-            returnJo.put("returnMessage","查询用户门禁权限异常"+e.getMessage());
-            returnJo.put("returnData",new JSONObject());
-            return returnJo;
+        //openId 从tb_user 取mobile , 用mobile 从 base_staff 中取出员工id, 根据员工id的工位取出门禁列表
+        //参数校验
+        if(ValidateUtils.isEmptyString(openId)){
+            throw new CommonException("参数openId不能为空!");
         }
-
-        return returnJo;
+        Map<String,Object> params = new HashMap<String,Object>();
+        params.put("openId",openId);
+        return this.doorDao.queryUserDoor(params);
     }
 
     @Override

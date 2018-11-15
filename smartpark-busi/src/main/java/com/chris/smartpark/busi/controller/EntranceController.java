@@ -3,19 +3,21 @@ package com.chris.smartpark.busi.controller;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.chris.base.common.utils.CommonResponse;
+import com.chris.base.common.utils.ValidateUtils;
 import com.chris.smartpark.busi.entity.DoorEntity;
 import com.chris.smartpark.busi.service.EntranceService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 /**
  * 出入管理
  */
 @RestController
-@RequestMapping("/busi/entrance")
+@RequestMapping("/app/entrance")
 public class EntranceController {
     @Autowired
     EntranceService entranceService;
@@ -23,16 +25,16 @@ public class EntranceController {
     /**
      * 用户门禁权限列表
      */
-    @RequestMapping(value= "/userDoors" , method = RequestMethod.POST)
+    @RequestMapping(value= "/userDoors")
     //@RequiresPermissions("busi:entrance:userDoors")
-    public CommonResponse userDoors(@RequestBody DoorEntity doorEntity){
+    public CommonResponse userDoors(@RequestParam String openId){
         //查询列表数据
         //Query query = new Query(params);
-        JSONObject returnJo=entranceService.queryUserDoors(doorEntity);
-        if("1".equals(returnJo.getString("returnCode"))){
-            return CommonResponse.ok().setData( returnJo.getJSONArray("returnData"));
+        List<DoorEntity> userDoorList=this.entranceService.queryUserDoors(openId);
+        if(ValidateUtils.isNotEmptyCollection(userDoorList)){
+            return CommonResponse.ok().setData(userDoorList);
         }else{
-            return CommonResponse.error(returnJo.getString("returnMessage")).setData(new JSONArray());
+            return CommonResponse.error("未查询到数据!").setData(new JSONArray());
         }
 
     }

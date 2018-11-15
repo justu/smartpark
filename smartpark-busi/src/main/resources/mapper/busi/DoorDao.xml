@@ -200,18 +200,21 @@
 		</foreach>
 	</delete>
 	<!-- 查询用户门禁权限 -->
-	<select id="queryUserDoor" resultMap="doorMap" parameterType="com.chris.smartpark.busi.entity.DoorEntity" >
+	<select id="queryUserDoor" resultMap="doorMap" parameterType="java.util.Map" >
 		select c.*
 		from sp_user_station a,sp_station_door b,sp_door c,tb_user d,base_staff e
 		<trim prefix="WHERE" prefixOverrides="AND|OR">
-			 a.id=b.station_id and b.door_id=c.id and d.mobile = e.mobile and e.work_no=a.work_no
+			a.station_id=b.station_id and b.door_id=c.id and d.mobile = e.mobile and e.EMPLOYNUM=a.work_no
 			<if test="id != null and id != ''">
 				and d.user_id =#{id,jdbcType=BIGINT}
+			</if>
+			<if test="openId != null and openId != ''">
+				and d.open_id =#{openId,jdbcType=VARCHAR}
 			</if>
 			<if test="floorId != null and floorId != ''">
 				and c.floor_id =#{floorId,jdbcType=INTEGER}
 			</if>
 		</trim>
-		order by c.floor_id
+		order by c.floor_id,door_no
 	</select>
 </mapper>
