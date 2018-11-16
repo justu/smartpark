@@ -271,9 +271,12 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
             authenticationRecord.setAuthBeginTime(authorizeDTO.getActStartTime());
             authenticationRecord.setAuthEndTime(authorizeDTO.getActEndTime());
             authenticationRecord.setStatus(VisitorConstants.ApproveResult.OK + "");
+            authenticationRecord.setAuthDesc("审核通过");
         } else {
             authenticationRecord.setStatus(VisitorConstants.ApproveResult.REJECT + "");
+            authenticationRecord.setAuthDesc(authorizeDTO.getRejectReaon());
         }
+        authenticationRecord.setAuthTime(new Date());
         authenticationRecord.setCreateUserId(user.getUserId());
         authenticationRecord.setCreateTime(new Date());
         authenticationRecord.setUpdateUserId(user.getUserId());
