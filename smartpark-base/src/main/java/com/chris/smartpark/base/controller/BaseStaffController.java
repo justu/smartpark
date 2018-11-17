@@ -3,6 +3,8 @@ package com.chris.smartpark.base.controller;
 import java.util.List;
 import java.util.Map;
 
+import com.chris.base.common.utils.ValidateUtils;
+import com.chris.smartpark.base.dto.BaseStaffDTO;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -94,6 +96,15 @@ public class BaseStaffController {
 		baseStaffService.deleteBatch(ids);
 		
 		return CommonResponse.ok();
+	}
+
+	@PostMapping("/queryByMobile.notoken")
+	public CommonResponse queryByMobile(@RequestBody Map<String, Object> params) {
+		if (ValidateUtils.isEmpty(params) || ValidateUtils.isEmpty(params.get("mobile"))) {
+			return CommonResponse.error("手机号码不能为空！");
+		}
+		BaseStaffDTO baseStaffDTO = this.baseStaffService.queryByMobile(params.get("mobile").toString());
+		return CommonResponse.ok().setData(baseStaffDTO);
 	}
 	
 }

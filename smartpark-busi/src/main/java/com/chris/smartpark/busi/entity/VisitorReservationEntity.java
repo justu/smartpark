@@ -25,6 +25,10 @@ public class VisitorReservationEntity  extends SysUpdateInfo  implements Seriali
 	private Long visitorId;
 	//受访者id
 	private Long staffId;
+	/**
+	 * 被访人手机号
+	 */
+	private String staffMobile;
 	//订单状态
 	private String status;
 	//预约开始时间
@@ -168,5 +172,13 @@ public class VisitorReservationEntity  extends SysUpdateInfo  implements Seriali
 
 	public String getPhysicalCardId() {
 		return physicalCardId;
+	}
+
+	public String getStaffMobile() {
+		return staffMobile;
+	}
+
+	public void setStaffMobile(String staffMobile) {
+		this.staffMobile = staffMobile;
 	}
 }

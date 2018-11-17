@@ -34,7 +34,6 @@ public class EntranceServiceImpl implements EntranceService {
 
     @Override
     public List<DoorEntity>  queryUserDoors(String openId) {
-        JSONObject returnJo  = new JSONObject();
         //openId 从tb_user 取mobile , 用mobile 从 base_staff 中取出员工id, 根据员工id的工位取出门禁列表
         //参数校验
         if(ValidateUtils.isEmptyString(openId)){

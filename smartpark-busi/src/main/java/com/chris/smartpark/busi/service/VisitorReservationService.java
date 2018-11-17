@@ -35,7 +35,7 @@ public interface VisitorReservationService {
 	
 	void deleteBatch(Long[] ids);
 	@Transactional
-	void createReservation(ReservationDto reservationDto);
+	void createReservationOrder(ReservationDto reservationDto);
 	@Transactional
 	void checkIdCardAndGetAuth(VisitorIdcardEntity visitorIdcardEntity);
 
@@ -43,4 +43,12 @@ public interface VisitorReservationService {
 
 	@Transactional
 	void approve(AuthorizeDTO authorizeDTO);
+
+	/**
+	 * 根据身份证号和状态查询预约单
+	 * @param idcardNo
+	 * @param status
+	 * @return
+	 */
+    List<VisitorReservationEntity> queryByIdcardAndStatus(String idcardNo, String status);
 }

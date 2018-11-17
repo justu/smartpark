@@ -12,6 +12,7 @@ import com.chris.smartpark.base.service.BaseDeviceInfoService;
 import com.chris.smartpark.base.service.BaseOrganizationService;
 import com.chris.smartpark.base.service.BaseParkService;
 import com.chris.smartpark.base.service.BaseStaffService;
+import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,6 +21,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.HashMap;
+import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = BaseApplication.class)
@@ -550,5 +552,14 @@ public class BaseStaffTest {
 		this.baseOrgService.save(company);
 		System.out.println("部门级保存组织机构信息成功！组织机构ID = " + company.getId());
 	}
+
+    /**
+     * 根据条件查询员工信息
+     */
+	@Test
+	public void queryStaffByCondition() {
+        List<BaseStaffEntity> staffList = this.baseStaffService.queryList(ImmutableMap.of("mobile", "15873230762"));
+        System.out.println("员工列表JSON ＝ " + JSONObject.toJSONString(staffList));
+    }
 
 }

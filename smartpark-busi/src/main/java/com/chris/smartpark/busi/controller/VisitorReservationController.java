@@ -1,7 +1,6 @@
 package com.chris.smartpark.busi.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.chris.base.common.exception.CommonException;
 import com.chris.base.common.utils.CommonResponse;
 import com.chris.base.common.utils.PageUtils;
 import com.chris.base.common.utils.Query;
@@ -85,7 +84,7 @@ public class VisitorReservationController {
 	public CommonResponse save(@RequestBody  @Validated(ReservationDto.ValidateSaveReservation.class)ReservationDto reservationDto,BindingResult result){
 		log.info("预约单生成入参"+ JSON.toJSONString(reservationDto));
 		ValidateUtils.validatedParams(result);
-		visitorReservationService.createReservation(reservationDto);
+		visitorReservationService.createReservationOrder(reservationDto);
 		return CommonResponse.ok();
 	}
 	

@@ -30,11 +30,11 @@ public class EntranceController {
     public CommonResponse userDoors(@RequestParam String openId){
         //查询列表数据
         //Query query = new Query(params);
-        List<DoorEntity> userDoorList=this.entranceService.queryUserDoors(openId);
+        List<DoorEntity> userDoorList = this.entranceService.queryUserDoors(openId);
         if(ValidateUtils.isNotEmptyCollection(userDoorList)){
             return CommonResponse.ok().setData(userDoorList);
         }else{
-            return CommonResponse.error("未查询到数据!").setData(new JSONArray());
+            return CommonResponse.error("未查询到数据!");
         }
 
     }

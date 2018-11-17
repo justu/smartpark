@@ -10,6 +10,7 @@ import com.chris.smartpark.base.entity.BaseStaffEntity;
 import com.chris.smartpark.base.service.BaseStaffService;
 import com.chris.smartpark.busi.common.BeanUtil;
 import com.chris.smartpark.busi.common.VisitorConstants;
+import com.chris.smartpark.busi.common.VisitorUtils;
 import com.chris.smartpark.busi.dao.AuthenticationRecordDao;
 import com.chris.smartpark.busi.dao.VisitorDoorRelDao;
 import com.chris.smartpark.busi.dao.VisitorReservationDao;
@@ -19,7 +20,6 @@ import com.chris.smartpark.busi.entity.*;
 import com.chris.smartpark.busi.service.*;
 import com.google.common.collect.ImmutableMap;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.shiro.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -46,8 +46,6 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
     private VisitorIdcardService visitorIdcardService;
     @Autowired
     private VisitorInfoHisService visitorInfoHisService;
-    @Autowired
-    private VisitorReservationService visitorReservationService;
 
     @Override
     public ReservationDto queryObject(Long id) {
@@ -111,85 +109,111 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
      * 生成预约单信息
      */
     @Override
-    public void createReservation(ReservationDto reservationDto){
-        //查询系统配置判断是否配置了同行人详细信息(需要抽掉一个字典查询公共方法) 暂时放到第二阶段
+    public void createReservationOrder(ReservationDto reservationDto) {
+        this.validateReservationOrder(reservationDto);
+        // TODO 查询系统配置判断是否配置了同行人详细信息(需要抽掉一个字典查询公共方法) 暂时放到第二阶段
         //1.保存访客信息（历史信息）
         VisitorInfoEntity visitorInfo = new VisitorInfoEntity();
         visitorInfo.setIdcardNo(reservationDto.getIdcardNo());
-        VisitorInfoEntity rcd = visitorInfoService.selectByIdcardNo(visitorInfo);
-        //保存身份信息
-        VisitorIdcardEntity idcardEntity = reservationDto.getVisitorIdcardEntity();
-        if(null!=idcardEntity){
-            visitorIdcardService.save(idcardEntity);
+        VisitorInfoEntity rcd = this.visitorInfoService.selectByIdcardNo(visitorInfo);
+        //存在身份证信息则保存
+        if (ValidateUtils.isNotEmpty(reservationDto.getVisitorIdcardEntity()) &&
+                ValidateUtils.isNotEmptyString(reservationDto.getIdcardNo())) {
+            this.visitorIdcardService.save(reservationDto.getVisitorIdcardEntity());
         }
-        if(null!=rcd){
+        if (ValidateUtils.isNotEmpty(rcd)) {
             //删除现有记录并记录到历史记录表
             VisitorInfoHisEntity visitorInfoHis = new VisitorInfoHisEntity();
-            BeanUtil.copyProperties(rcd,visitorInfoHis);
+            BeanUtil.copyProperties(rcd, visitorInfoHis);
             visitorInfoHis.setCreateTime(DateUtils.currentDate());
             visitorInfoHis.setVisitorId(rcd.getId());
             visitorInfoHis.setId(null);
-            visitorInfoHisService.save(visitorInfoHis);
-            visitorInfoService.delete(rcd.getId());
+            this.visitorInfoHisService.save(visitorInfoHis);
+            this.visitorInfoService.delete(rcd.getId());
             visitorInfo.setId(rcd.getId());
         }
         visitorInfo.setName(reservationDto.getName());
         visitorInfo.setPhone(reservationDto.getPhone());
         visitorInfo.setCreateTime(DateUtils.currentDate());
-        visitorInfoService.save(visitorInfo);//此处可获取到visitorid = visitorInfo.getId()
+        this.visitorInfoService.save(visitorInfo);//此处可获取到visitorid = visitorInfo.getId()
         //2.保存预约单信息
-        VisitorReservationEntity visitorReservation = new VisitorReservationEntity();
-        BeanUtil.copyProperties(reservationDto, visitorReservation);
-        visitorReservation.setVisitorId(visitorInfo.getId());
-        visitorReservation.setCreateTime(DateUtils.currentDate());
-        visitorReservation.setStatus("1");
-        visitorReservationService.save(visitorReservation);
+        VisitorReservationEntity reservationOrder = new VisitorReservationEntity();
+        BeanUtil.copyProperties(reservationDto, reservationOrder);
+        reservationOrder.setStaffMobile(reservationDto.getStaffPhone());
+        reservationOrder.setType(VisitorConstants.ReservationOrderType.ONLINE);
+        reservationOrder.setVisitorId(visitorInfo.getId());
+        reservationOrder.setCreateTime(DateUtils.currentDate());
+        reservationOrder.setStatus(VisitorConstants.ReservationOrderStatus.PENDING_APPROVE + "");
+        this.save(reservationOrder);
         //3.保存车牌信息
-        if(1==reservationDto.getIsAddCarInfo()){
-            List<CarInfoEntity> carInfoEntitys = reservationDto.getCarInfoEntitys();
-            if(!CollectionUtils.isEmpty(carInfoEntitys)){
-                for(CarInfoEntity carInfo :  carInfoEntitys){
-                    carInfo.setCreateTime(DateUtils.currentDate());
-                    carInfo.setReservationId(visitorReservation.getId());
-                }
-                carInfoService.batchInsert(carInfoEntitys);
+        if (ValidateUtils.isNotEmptyCollection(reservationDto.getCarInfoEntitys())) {
+            for (CarInfoEntity carInfo : reservationDto.getCarInfoEntitys()) {
+                carInfo.setCreateTime(DateUtils.currentDate());
+                carInfo.setReservationId(reservationOrder.getId());
             }
+            this.carInfoService.batchInsert(reservationDto.getCarInfoEntitys());
         }
-        //4.保存同行人信息（暂缓）
-        //校验参数自定义捕捉ValidatedUtil.validatedParams(result);
+        // TODO 4.保存同行人信息（暂缓）
+    }
 
+    /**
+     * 校验预约单
+     * @param reservationDto
+     */
+    private void validateReservationOrder(ReservationDto reservationDto) {
+        //校验身份证是否合法
+        if (!CommonValidator.isIDCard(reservationDto.getIdcardNo())) {
+            throw new CommonException("身份证格式不正确！");
+        }
+        //校验手机号是否正确
+        if (!CommonValidator.isMobile(reservationDto.getPhone())) {
+            throw new CommonException("手机号格式不正确！");
+        }
+        //校验验证码是否正确
+        if (!VisitorUtils.isVerifyCodeOK(reservationDto.getPhone(), reservationDto.getVerifyCode())) {
+            throw new CommonException("验证码不正确！");
+        }
+        //校验员工手机号是否存在
+        if (ValidateUtils.isEmpty(this.baseStaffService.queryByMobile(reservationDto.getStaffPhone()))) {
+            throw new CommonException("被访人信息不存在！");
+        }
     }
 
     /**
      * 身份鉴权送门禁
      */
     @Override
-    public void checkIdCardAndGetAuth(VisitorIdcardEntity visitorIdcardEntity){
+    public void checkIdCardAndGetAuth(VisitorIdcardEntity visitorIdcard) {
+        log.error("访客身份信息验证请求JSON {}", JSONObject.toJSONString(visitorIdcard));
         //验证有无有效预约单
-        List<VisitorReservationEntity> list = visitorReservationService.queryEffectRecord(visitorIdcardEntity.getIdcardNo());
-        if(CollectionUtils.isEmpty(list)){
+        List<VisitorReservationEntity> reservationOrders = this.queryByIdcardAndStatus(visitorIdcard.getIdcardNo(), VisitorConstants.ReservationOrderStatus.APPROVE_OK + "");
+        if (ValidateUtils.isEmptyCollection(reservationOrders)) {
             throw new CommonException("该身份证没有匹配的预约单信息");
-        }else{
-            for(VisitorReservationEntity VisitorReservation : list){
-                visitorIdcardEntity.setVisitorId(VisitorReservation.getVisitorId());
+        } else {
+            for (VisitorReservationEntity reservationOrder : reservationOrders) {
+                visitorIdcard.setVisitorId(reservationOrder.getVisitorId());
                 //保存或更新信息到访客身份信息表
-                List<VisitorIdcardEntity> idcardEntityList  = visitorIdcardService.queryList(ImmutableMap.of("idcardNo", visitorIdcardEntity.getIdcardNo()));
-                if(CollectionUtils.isEmpty(idcardEntityList)){
-                    visitorIdcardService.save(visitorIdcardEntity);
-                }else{
-                    visitorIdcardService.update(idcardEntityList.get(0));
+                List<VisitorIdcardEntity> idcardList = this.visitorIdcardService.queryList(ImmutableMap.of("idcardNo", visitorIdcard.getIdcardNo()));
+                if (ValidateUtils.isNotEmptyCollection(idcardList)) {
+                    this.visitorIdcardService.save(visitorIdcard);
+                } else {
+                    //更新访客身份信息，一般更新的情况很少
+                    visitorIdcard.setId(idcardList.get(0).getId());
+                    this.visitorIdcardService.update(visitorIdcard);
                 }
                 //组装入参调用门禁接口授权
-                Date startTime = VisitorReservation.getAppointStartTime();
-                Date endTime = VisitorReservation.getAppointEndTime();
-                // TODO 保存身份证信息到身份信息表中
+                Date startTime = reservationOrder.getAppointStartTime();
+                Date endTime = reservationOrder.getAppointEndTime();
+                // TODO 需要根据访客ID查询访客对应可授权的门禁列表
                 log.info("========调用门禁接口授权成功=====");
-                //更改预约单状态
-                VisitorReservation.setStatus(VisitorConstants.ReservationStatus.COMPLETED + "");
-                visitorReservationService.update(VisitorReservation);
+                //更新预约单状态为完成
+                reservationOrder.setStatus(VisitorConstants.ReservationOrderStatus.COMPLETED + "");
+                this.visitorReservationDao.updateStatus(reservationOrder);
             }
         }
-    };
+    }
+
+    ;
 
     @Override
     public VisitorReservationEntity queryObjectById(Long id) {
@@ -198,6 +222,7 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
 
     /**
      * 访客预约审核
+     *
      * @param authorizeDTO
      * @return
      */
@@ -207,7 +232,7 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
         this.validateParams(authorizeDTO);
         //1.查询预约单
         VisitorReservationEntity visitorReservationOrder = visitorReservationDao.queryObject(authorizeDTO.getReservationId());
-        if (ValidateUtils.notEquals(VisitorConstants.ReservationStatus.PENDING_APPROVE + "", visitorReservationOrder.getStatus())) {
+        if (ValidateUtils.notEquals(VisitorConstants.ReservationOrderStatus.PENDING_APPROVE + "", visitorReservationOrder.getStatus())) {
             //不是待审核状态无需处理
             throw new CommonException("当前预约单已经审核，请查看预约单详情！");
         }
@@ -218,7 +243,7 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
         // 审核不通过处理
         if (ValidateUtils.equals(VisitorConstants.ApproveResult.REJECT, authorizeDTO.getApproveReslut())) {
             //更新预约单状态为审核不通过
-            visitorReservationOrder.setStatus(VisitorConstants.ReservationStatus.APPROVE_REJECT + "");
+            visitorReservationOrder.setStatus(VisitorConstants.ReservationOrderStatus.APPROVE_REJECT + "");
             this.visitorReservationDao.updateStatus(visitorReservationOrder);
             //发送审核结果短信给访客
             this.sendApproveRejectSMS(authorizeDTO, visitorInfo);
@@ -240,14 +265,14 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
                 // TODO 送车管系统（第一阶段暂不实现）
                 log.error("送车管系统开始......");
             }
-            if (VisitorConstants.ReservationType.OFFLINE == visitorReservationOrder.getType()) {
+            if (VisitorConstants.ReservationOrderType.OFFLINE == visitorReservationOrder.getType()) {
                 // 线下预约的预约单需要送门禁
                 // TODO 调用李森写好的服务
             }
             //4.更新预约信息
             visitorReservationOrder.setActStartTime(authorizeDTO.getActStartTime());
             visitorReservationOrder.setActEndTime(authorizeDTO.getActEndTime());
-            visitorReservationOrder.setStatus(VisitorConstants.ReservationStatus.APPROVE_OK + "");
+            visitorReservationOrder.setStatus(VisitorConstants.ReservationOrderStatus.APPROVE_OK + "");
             this.visitorReservationDao.update(visitorReservationOrder);
             //5.发送审核成功短信给访客
             this.sendApproveOKSMS(authorizeDTO, visitorInfo, user);
@@ -258,6 +283,7 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
 
     /**
      * 保存授权结果记录
+     *
      * @param authorizeDTO
      * @param visitorReservationOrder
      */
@@ -344,4 +370,8 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
         }
     }
 
+    @Override
+    public List<VisitorReservationEntity> queryByIdcardAndStatus(String idcardNo, String status) {
+        return this.visitorReservationDao.queryByIdcardAndStatus(idcardNo, status);
+    }
 }
