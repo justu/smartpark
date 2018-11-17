@@ -1,8 +1,7 @@
 package com.chris.smartpark.busi.service;
 
-import com.alibaba.fastjson.JSONObject;
 import com.chris.smartpark.busi.dto.AuthorizeDTO;
-import com.chris.smartpark.busi.dto.ReservationDto;
+import com.chris.smartpark.busi.dto.ReservationDTO;
 import com.chris.smartpark.busi.entity.VisitorIdcardEntity;
 import com.chris.smartpark.busi.entity.VisitorReservationEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +18,7 @@ import java.util.Map;
  */
 public interface VisitorReservationService {
 
-	ReservationDto queryObject(Long id);
+	ReservationDTO queryObject(Long id);
 	
 	List<VisitorReservationEntity> queryList(Map<String, Object> map);
 
@@ -35,7 +34,7 @@ public interface VisitorReservationService {
 	
 	void deleteBatch(Long[] ids);
 	@Transactional
-	void createReservationOrder(ReservationDto reservationDto);
+	void createReservationOrder(ReservationDTO reservationDTO);
 	@Transactional
 	void checkIdCardAndGetAuth(VisitorIdcardEntity visitorIdcardEntity);
 

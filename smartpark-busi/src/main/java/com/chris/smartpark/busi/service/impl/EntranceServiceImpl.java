@@ -2,22 +2,23 @@ package com.chris.smartpark.busi.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.chris.base.common.exception.CommonException;
+import com.chris.base.common.tree.TreeNode;
 import com.chris.base.common.utils.ValidateUtils;
+import com.chris.smartpark.busi.common.VisitorConstants;
 import com.chris.smartpark.busi.dao.DoorControllerDao;
 import com.chris.smartpark.busi.dao.DoorDao;
 import com.chris.smartpark.busi.dao.OpenDoorLogDao;
+import com.chris.smartpark.busi.dto.DoorLevelDTO;
 import com.chris.smartpark.busi.entity.DoorControllerEntity;
 import com.chris.smartpark.busi.entity.DoorEntity;
 import com.chris.smartpark.busi.entity.OpenDoorLogEntity;
 import com.chris.smartpark.busi.service.EntranceService;
+import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.logging.Logger;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service("entranceService")
 public class EntranceServiceImpl implements EntranceService {
@@ -42,6 +43,41 @@ public class EntranceServiceImpl implements EntranceService {
         Map<String,Object> params = new HashMap<String,Object>();
         params.put("openId",openId);
         return this.doorDao.queryUserDoor(params);
+    }
+
+    @Override
+    public List<TreeNode> queryHasPermissionDoorLevelNodesByOpenId(String openId) {
+        // 查询员工有权限的门信息
+        List<DoorLevelDTO> hasPermissionDoorLevelList = this.doorDao.queryHasPermissionDoorsByOpenId(openId);
+        if (ValidateUtils.isEmptyCollection(hasPermissionDoorLevelList)) {
+            throw new CommonException("当前员工没有门禁权限，不能授权！");
+        }
+        // 组装成树结构，用于前台展示
+        // 根节点为楼宇名称
+        List<TreeNode> treeNodes = Lists.newArrayList();
+        TreeNode root = TreeNode.createRoot(hasPermissionDoorLevelList.get(0).getBuildingId() + "", hasPermissionDoorLevelList.get(0).getBuildingName());
+        treeNodes.add(root);
+        treeNodes.addAll(this.buildFloorNodes(root, hasPermissionDoorLevelList));
+        treeNodes.addAll(this.buildDoorNodes(hasPermissionDoorLevelList));
+        return treeNodes;
+    }
+
+    private List<TreeNode> buildFloorNodes(TreeNode root, List<DoorLevelDTO> hasPermissionDoorLevelList) {
+        Map<Long, List<DoorLevelDTO>> groupFloorMap = hasPermissionDoorLevelList.stream().collect(Collectors.groupingBy(DoorLevelDTO::getFloorId));
+        List<TreeNode> floorNodes = new ArrayList<>(groupFloorMap.size());
+        groupFloorMap.forEach((k, v) -> {
+            TreeNode floorNode = TreeNode.createNode(k + "", v.get(0).getFloorName(), root.getNodeId(), null);
+            floorNodes.add(floorNode);
+        });
+        return floorNodes;
+    }
+
+    private List<TreeNode> buildDoorNodes(List<DoorLevelDTO> hasPermissionDoorLevelList) {
+        return hasPermissionDoorLevelList.stream().map(item -> {
+            TreeNode doorNode = TreeNode.createNode(item.getDoorId() + "", item.getDoorName(), item.getFloorId() + "",
+                    VisitorConstants.DefaultAuthorizedFlag.YES == item.getDefaultAuthorizedFlag() ? VisitorConstants.DefaultAuthorizedFlag.YES + "" : null);
+            return doorNode;
+        }).collect(Collectors.toList());
     }
 
     @Override

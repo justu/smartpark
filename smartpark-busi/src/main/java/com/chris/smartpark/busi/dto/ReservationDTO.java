@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * Created by lisen on 2018/11/6.
  */
-public class ReservationDto  extends SysUpdateInfo {
+public class ReservationDTO extends SysUpdateInfo {
 
     //姓名
     @NotBlank(message = "姓名必填", groups = {ValidateSaveReservation.class})

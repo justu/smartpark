@@ -2,10 +2,14 @@ package com.chris.smartpark.busi.dto;
 
 import org.hibernate.validator.constraints.NotBlank;
 
+import java.io.Serializable;
+
 /**
  * Created by lisen on 2018/11/7.
  */
-public class AuthenticationDto {
+public class AuthenticationDTO implements Serializable {
+
+    private static final long serialVersionUID = 1L;
     //姓名
 
     private String name;

@@ -3,9 +3,6 @@
 /* Created on:     2018/11/4 16:14:34                           */
 /*==============================================================*/
 
-
-drop table if exists base_staff;
-
 drop table if exists sp_car_info;
 
 drop table if exists sp_companions;
@@ -15,31 +12,6 @@ drop table if exists sp_visitor_info;
 drop table if exists sp_visitor_info_his;
 
 drop table if exists sp_visitor_reservation;
-
-/*==============================================================*/
-/* Table: base_staff                                            */
-/*==============================================================*/
-create table base_staff
-(
-   id                   bigint comment '员工ID',
-   name                 varchar(10) comment '员工姓名',
-   work_no              varchar(10) comment '员工工号',
-   mobile              varchar(20) comment '手机号',
-   dept_id              bigint comment '部门ID',
-   company_id           bigint comment '公司IDv',
-   park_id              bigint comment '园区ID',
-   id_card              varchar(20) comment '身份证',
-   position             varchar(32) comment '职务',
-   gender               char(1) comment '性别',
-   born_date            datetime comment '出生日期',
-   status               char(1) comment '状态',
-   create_time          datetime comment '创建时间',
-   create_user_id       bigint comment '创建人id',
-   update_time          datetime comment '更新时间',
-   update_user_id       bigint comment '更新人id'
-);
-
-alter table base_staff comment '园区员工表';
 
 /*==============================================================*/
 /* Table: sp_car_info                                           */
@@ -172,3 +144,38 @@ create table sp_visitor_reservation
 
 alter table sp_visitor_reservation comment '访客预约登记单';
 
+drop table if exists sp_group;
+CREATE TABLE `sp_group` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '群组ID',
+  `name` varchar(50) NOT NULL COMMENT '群组名称',
+  `group_no` varchar(20) DEFAULT NULL COMMENT '群组编号',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `create_user_id` bigint(20) DEFAULT NULL COMMENT '创建人',
+  `update_time` datetime DEFAULT NULL COMMENT '修改时间',
+  `update_user_id` bigint(20) DEFAULT NULL COMMENT '修改人',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='群组表';
+
+drop table if exists sp_group_door;
+CREATE TABLE `sp_group_door` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `group_id` bigint(20) DEFAULT NULL COMMENT '群组id',
+  `door_id` bigint(20) DEFAULT NULL COMMENT '门id',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `create_user_id` bigint(20) DEFAULT NULL COMMENT '创建人',
+  `update_time` datetime DEFAULT NULL COMMENT '修改时间',
+  `update_user_id` bigint(20) DEFAULT NULL COMMENT '修改人',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='群组门表';
+
+drop table if exists sp_group_station;
+CREATE TABLE `sp_group_station` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `group_id` bigint(20) DEFAULT NULL COMMENT '群组id',
+  `station_id` bigint(20) DEFAULT NULL COMMENT '工位id',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `create_user_id` bigint(20) DEFAULT NULL COMMENT '创建人',
+  `update_time` datetime DEFAULT NULL COMMENT '修改时间',
+  `update_user_id` bigint(20) DEFAULT NULL COMMENT '修改人',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='群组工位表';

@@ -39,4 +39,14 @@ public class VisitorConstants {
         // 线下
         int OFFLINE = 2;
     }
+
+    /**
+     * 默认授权标识
+     */
+    public interface DefaultAuthorizedFlag {
+        // 是
+        int YES = 1;
+        // 否
+        int NO = 1;
+    }
 }

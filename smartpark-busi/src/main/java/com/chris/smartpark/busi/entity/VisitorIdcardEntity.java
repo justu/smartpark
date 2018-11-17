@@ -3,7 +3,6 @@ package com.chris.smartpark.busi.entity;
 import java.io.Serializable;
 import java.util.Date;
 import com.chris.base.common.model.SysUpdateInfo;
-import com.chris.smartpark.busi.dto.AuthenticationDto;
 import org.hibernate.validator.constraints.NotBlank;
 
 

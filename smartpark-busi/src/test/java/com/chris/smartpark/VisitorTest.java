@@ -12,7 +12,7 @@ import java.util.List;
 
 import com.alibaba.fastjson.JSONObject;
 import com.chris.BusiApplication;
-import com.chris.smartpark.busi.dto.ReservationDto;
+import com.chris.smartpark.busi.dto.ReservationDTO;
 import com.chris.smartpark.busi.entity.VisitorInfoEntity;
 import com.chris.smartpark.busi.service.VisitorInfoService;
 import com.chris.smartpark.busi.service.VisitorReservationService;
@@ -51,7 +51,7 @@ public class VisitorTest {
      */
     @Test
 	public void queryReservationOrder() {
-        ReservationDto reservationOrder = this.visitorReservationService.queryObject(3L);
+        ReservationDTO reservationOrder = this.visitorReservationService.queryObject(3L);
         System.out.println("预约单JSON = " + JSONObject.toJSONString(reservationOrder));
     }
 
@@ -60,7 +60,7 @@ public class VisitorTest {
      */
 	@Test
 	public void createReservationOrder() {
-        ReservationDto reservationOrder = new ReservationDto();
+        ReservationDTO reservationOrder = new ReservationDTO();
         reservationOrder.setName("黎明");
         reservationOrder.setIdcardNo("342225199109102078");
         reservationOrder.setPhone("18877885566");

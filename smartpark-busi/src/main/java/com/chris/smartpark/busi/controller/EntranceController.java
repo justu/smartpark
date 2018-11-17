@@ -2,6 +2,7 @@ package com.chris.smartpark.busi.controller;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.chris.base.common.tree.TreeNode;
 import com.chris.base.common.utils.CommonResponse;
 import com.chris.base.common.utils.ValidateUtils;
 import com.chris.smartpark.busi.entity.DoorEntity;
@@ -36,7 +37,17 @@ public class EntranceController {
         }else{
             return CommonResponse.error("未查询到数据!");
         }
+    }
 
+    /**
+     * 根据openId查询用户有权限门节点信息
+     * @param openId
+     * @return
+     */
+    @GetMapping("/queryDoorNodes")
+    public CommonResponse queryDoorNodes(String openId) {
+        List<TreeNode> doorNodes = this.entranceService.queryHasPermissionDoorLevelNodesByOpenId(openId);
+        return CommonResponse.ok().setData(doorNodes);
     }
 
     /**

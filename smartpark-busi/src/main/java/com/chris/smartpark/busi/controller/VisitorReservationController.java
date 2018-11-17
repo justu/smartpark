@@ -6,7 +6,7 @@ import com.chris.base.common.utils.PageUtils;
 import com.chris.base.common.utils.Query;
 import com.chris.base.common.utils.ValidateUtils;
 import com.chris.smartpark.busi.dto.AuthorizeDTO;
-import com.chris.smartpark.busi.dto.ReservationDto;
+import com.chris.smartpark.busi.dto.ReservationDTO;
 import com.chris.smartpark.busi.entity.VisitorIdcardEntity;
 import com.chris.smartpark.busi.entity.VisitorReservationEntity;
 import com.chris.smartpark.busi.service.CarInfoService;
@@ -60,9 +60,9 @@ public class VisitorReservationController {
 	@GetMapping("/info/{id}")
 	//@RequiresPermissions("busi:visitorreservation:info")重要操作前可加入权限校验
 	public CommonResponse info(@PathVariable("id") Long id){
-		ReservationDto reservation = visitorReservationService.queryObject(id);
+		ReservationDTO reservation = visitorReservationService.queryObject(id);
 		
-		return CommonResponse.ok().put("ReservationDto", reservation);
+		return CommonResponse.ok().put("ReservationDTO", reservation);
 	}
 
 	/**
@@ -81,10 +81,10 @@ public class VisitorReservationController {
 	 * 预约单保存
 	 */
 	@RequestMapping("/save")
-	public CommonResponse save(@RequestBody  @Validated(ReservationDto.ValidateSaveReservation.class)ReservationDto reservationDto,BindingResult result){
-		log.info("预约单生成入参"+ JSON.toJSONString(reservationDto));
+	public CommonResponse save(@RequestBody  @Validated(ReservationDTO.ValidateSaveReservation.class)ReservationDTO reservationDTO, BindingResult result){
+		log.info("预约单生成入参"+ JSON.toJSONString(reservationDTO));
 		ValidateUtils.validatedParams(result);
-		visitorReservationService.createReservationOrder(reservationDto);
+		visitorReservationService.createReservationOrder(reservationDTO);
 		return CommonResponse.ok();
 	}
 	
