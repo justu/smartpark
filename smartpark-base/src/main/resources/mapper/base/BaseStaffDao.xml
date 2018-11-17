@@ -294,4 +294,14 @@
 		</foreach>
 	</delete>
 
+	<select id="queryParkNameByStaffMobile" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT p.name FROM base_park p
+		INNER JOIN base_building b ON b.park_id = p.id
+		INNER JOIN base_floor f ON f.building_id = b.id
+		INNER JOIN sp_station s ON s.floor_id = f.id
+		INNER JOIN sp_user_station us ON us.station_id = s.id
+		inner join base_staff staff ON staff.EMPLOYNUM = us.work_no
+		where staff.MOBILE = #{mobile}
+	</select>
+
 </mapper>

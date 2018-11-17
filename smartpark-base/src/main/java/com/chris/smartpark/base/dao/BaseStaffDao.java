@@ -13,5 +13,6 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface BaseStaffDao extends BaseDao<BaseStaffEntity> {
-	
+
+    String queryParkNameByStaffMobile(String mobile);
 }

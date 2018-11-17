@@ -1,13 +1,12 @@
 package com.chris.smartpark.busi.dto;
 
-import org.hibernate.validator.constraints.NotBlank;
-
 import java.io.Serializable;
 
 /**
+ * 预约单认证DTO
  * Created by lisen on 2018/11/7.
  */
-public class AuthenticationDTO implements Serializable {
+public class ReservationOrderAuthenticateDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
     //姓名

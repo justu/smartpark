@@ -30,4 +30,11 @@ public interface BaseStaffService {
 	void deleteBatch(Long[] ids);
 
     BaseStaffDTO queryByMobile(String mobile);
+
+	/**
+	 * 根据员工手机号查询所有园区名称
+	 * @param mobile
+	 * @return
+	 */
+	String queryParkNameByStaffMobile(String mobile);
 }

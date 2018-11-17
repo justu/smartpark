@@ -1,11 +1,13 @@
 package com.chris.smartpark.busi.dao;
 
+import com.chris.smartpark.busi.dto.ReservationOrderQryDTO;
 import com.chris.smartpark.busi.entity.VisitorReservationEntity;
 import com.chris.base.modules.sys.dao.BaseDao;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 访客预约登记单
@@ -25,4 +27,8 @@ public interface VisitorReservationDao extends BaseDao<VisitorReservationEntity>
     void updateStatus(VisitorReservationEntity visitorReservationEntity);
 
     List<VisitorReservationEntity> queryByIdcardAndStatus(@Param("idcardNo") String idcardNo, @Param("status") String status);
+
+    List<ReservationOrderQryDTO> queryReservationOrdersByOpenId(Map<String, Object> params);
+
+    int countReservationOrdersByOpenId(Map<String, Object> params);
 }

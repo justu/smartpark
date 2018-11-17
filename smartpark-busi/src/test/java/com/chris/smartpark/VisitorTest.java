@@ -1,21 +1,25 @@
 package com.chris.smartpark;
-import com.chris.base.common.utils.*;
-import com.chris.smartpark.base.dto.BaseStaffDTO;
-import com.chris.smartpark.base.service.BaseStaffService;
-import com.chris.smartpark.busi.entity.CarInfoEntity;
-import com.chris.smartpark.busi.entity.DoorEntity;
-import com.chris.smartpark.busi.service.EntranceService;
-import com.google.common.collect.Lists;
-import com.chris.smartpark.busi.entity.VisitorIdcardEntity;
-import java.util.Date;
-import java.util.List;
 
 import com.alibaba.fastjson.JSONObject;
 import com.chris.BusiApplication;
-import com.chris.smartpark.busi.dto.ReservationDTO;
+import com.chris.base.common.utils.DateUtils;
+import com.chris.base.common.utils.HttpContextUtils;
+import com.chris.base.common.utils.PageUtils;
+import com.chris.base.common.utils.VerifyCodeUtils;
+import com.chris.smartpark.base.dto.BaseStaffDTO;
+import com.chris.smartpark.base.service.BaseStaffService;
+import com.chris.smartpark.busi.common.VisitorConstants;
+import com.chris.smartpark.busi.dto.ReservationOrderApproveDTO;
+import com.chris.smartpark.busi.dto.ReservationOrderDTO;
+import com.chris.smartpark.busi.entity.CarInfoEntity;
+import com.chris.smartpark.busi.entity.VisitorIdcardEntity;
 import com.chris.smartpark.busi.entity.VisitorInfoEntity;
+import com.chris.smartpark.busi.service.EntranceService;
 import com.chris.smartpark.busi.service.VisitorInfoService;
 import com.chris.smartpark.busi.service.VisitorReservationService;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +28,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.Date;
+import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = BusiApplication.class)
@@ -51,7 +57,7 @@ public class VisitorTest {
      */
     @Test
 	public void queryReservationOrder() {
-        ReservationDTO reservationOrder = this.visitorReservationService.queryObject(3L);
+        ReservationOrderDTO reservationOrder = this.visitorReservationService.queryReservationOrderDetail(3L);
         System.out.println("预约单JSON = " + JSONObject.toJSONString(reservationOrder));
     }
 
@@ -60,7 +66,7 @@ public class VisitorTest {
      */
 	@Test
 	public void createReservationOrder() {
-        ReservationDTO reservationOrder = new ReservationDTO();
+        ReservationOrderDTO reservationOrder = new ReservationOrderDTO();
         reservationOrder.setName("黎明");
         reservationOrder.setIdcardNo("342225199109102078");
         reservationOrder.setPhone("18877885566");
@@ -137,10 +143,39 @@ public class VisitorTest {
         System.out.println("访客身份校验成功！访客身份信息ID = " + visitorIdcard.getId());
     }
 
+    /**
+     * 预约审核
+     */
     @Test
-    public void queryDoorControllers() {
-        List<DoorEntity> list = this.entranceService.queryUserDoors("YzcmCZNvbXocrsz9dm8e");
-        System.out.println("获取访客可授权的门禁列表JSON = " + JSONObject.toJSONString(list));
+    public void reservationApprove() {
+        ReservationOrderApproveDTO authorizeDTO = new ReservationOrderApproveDTO();
+        authorizeDTO.setReservationId(5L);
+        authorizeDTO.setDoorList(ImmutableList.of(4L, 6L));
+        authorizeDTO.setApproveReslut(VisitorConstants.ApproveResult.OK);
+//        authorizeDTO.setRejectReaon("");
+        authorizeDTO.setOpenId("YzcmCZNvbXocrsz9dm8e"); // 授权人openId
+        authorizeDTO.setActStartTime(DateUtils.parseDate("2018-11-20 09:00"));
+        authorizeDTO.setActEndTime(DateUtils.parseDate("2018-11-20 18:00"));
+
+        System.out.println("预约审核请求JSON = " + JSONObject.toJSONString(authorizeDTO));
+        this.visitorReservationService.approve(authorizeDTO);
+        System.out.println("预约审核结束.....");
+    }
+
+    /**
+     * 根据openid查询员工对应的预约单列表
+     */
+    @Test
+    public void queryReservationOrdersByOpenId() {
+        PageUtils page = this.visitorReservationService.queryReservationOrdersByOpenId(ImmutableMap.of(VisitorConstants.Keys.OPEN_ID, "YzcmCZNvbXocrsz9dm8e",
+                VisitorConstants.Keys.PAGE, "1", VisitorConstants.Keys.LIMIT, "10"));
+        System.out.println("查询员工对应的预约单JSON = " + JSONObject.toJSONString(page));
+    }
+
+    @Test
+    public void queryReservationOrderDetail() {
+        ReservationOrderDTO detail = this.visitorReservationService.queryReservationOrderDetail(6L);
+        System.out.println("查询预约单详情JSON = " + JSONObject.toJSONString(detail));
     }
 
 }

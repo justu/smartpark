@@ -16,17 +16,29 @@ public class VisitorConstants {
      * 预约单状态
      */
     public interface ReservationOrderStatus {
-        // 待审核
+        /**
+         * 待审核
+         */
         int PENDING_APPROVE = 1;
-        // 审核不通过
+        /**
+         * 审核不通过
+         */
         int APPROVE_REJECT = 2;
-        // 审核通过
+        /**
+         * 审核通过
+         */
         int APPROVE_OK = 3;
-        // 待激活
+        /**
+         * 待激活
+         */
         int PENDING_ACTIVE = 4;
-        // 已完成
+        /**
+         * 已完成
+         */
         int COMPLETED = 5;
-        // 已过期
+        /**
+         * 已过期
+         */
         int EXPIRED = 6;
     }
 
@@ -34,9 +46,13 @@ public class VisitorConstants {
      * 预约单类型
      */
     public interface ReservationOrderType {
-        // 线上
+        /**
+         * 线上
+         */
         int ONLINE = 1;
-        // 线下
+        /**
+         * 线下
+         */
         int OFFLINE = 2;
     }
 
@@ -44,9 +60,29 @@ public class VisitorConstants {
      * 默认授权标识
      */
     public interface DefaultAuthorizedFlag {
-        // 是
+        /**
+         * 是
+         */
         int YES = 1;
-        // 否
+        /**
+         * 否
+         */
         int NO = 1;
+    }
+
+    public interface Keys {
+        String OPEN_ID = "openId";
+        String PAGE = "page";
+        String LIMIT = "limit";
+        String IDCARD_NO = "idcardNo";
+        String TIME = "time";
+        String PARK_NAME = "parkName";
+        String REJECT_REASON = "reason";
+        String RESERVATION_ORDER_ID = "reservationId";
+    }
+
+    public interface Page {
+        int PAGE_NO = 1;
+        int PAGE_SIZE = 10;
     }
 }

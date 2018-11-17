@@ -562,4 +562,12 @@ public class BaseStaffTest {
         System.out.println("员工列表JSON ＝ " + JSONObject.toJSONString(staffList));
     }
 
+	/**
+	 * 根据手机号查询员工所在园区名称
+	 */
+	@Test
+    public void queryStaffParkName() {
+		System.out.println("员工所有园区名称为 = " + this.baseStaffService.queryParkNameByStaffMobile("18975841003"));
+	}
+
 }

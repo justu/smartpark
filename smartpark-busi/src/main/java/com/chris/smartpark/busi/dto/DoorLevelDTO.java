@@ -2,6 +2,7 @@ package com.chris.smartpark.busi.dto;
 
 import java.io.Serializable;
 
+
 public class DoorLevelDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;

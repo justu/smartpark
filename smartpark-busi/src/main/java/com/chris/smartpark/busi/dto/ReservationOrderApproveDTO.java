@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-public class AuthorizeDTO implements Serializable {
+public class ReservationOrderApproveDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

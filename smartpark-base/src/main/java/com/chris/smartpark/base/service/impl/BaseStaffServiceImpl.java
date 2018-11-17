@@ -67,4 +67,9 @@ public class BaseStaffServiceImpl implements BaseStaffService {
 		}
 		return null;
 	}
+
+	@Override
+	public String queryParkNameByStaffMobile(String mobile) {
+		return this.baseStaffDao.queryParkNameByStaffMobile(mobile);
+	}
 }

@@ -94,6 +94,39 @@
 			limit #{offset}, #{limit}
 		</if>
 	</select>
+
+	<select id="queryReservationOrdersByOpenId" resultType="com.chris.smartpark.busi.dto.ReservationOrderQryDTO" >
+		SELECT
+			r.id,
+			r.status,
+			r.appoint_start_time AS appointStartTime,
+			r.appoint_end_time AS appointEndTime,
+			r.remark,
+			v.name AS visitorName,
+			v.phone AS visitorMobile,
+			v.idcard_no AS idcardNo
+		 FROM sp_visitor_reservation r
+		INNER JOIN sp_visitor_info v ON v.id = r.visitor_id
+		INNER JOIN base_staff s ON s.id = r.staff_id
+		INNER JOIN tb_user u ON u.mobile = s.MOBILE
+		WHERE u.open_id = #{openId}
+		ORDER BY r.create_time desc
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+	<select id="countReservationOrdersByOpenId" resultType="int" >
+		SELECT COUNT(1) FROM sp_visitor_reservation r
+		INNER JOIN sp_visitor_info v ON v.id = r.visitor_id
+		INNER JOIN base_staff s ON s.id = r.staff_id
+		INNER JOIN tb_user u ON u.mobile = s.MOBILE
+		WHERE u.open_id = #{openId}
+		ORDER BY r.create_time desc
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
 	
  	<select id="queryTotal" resultType="int">
 		select count(*) from sp_visitor_reservation where 1=1

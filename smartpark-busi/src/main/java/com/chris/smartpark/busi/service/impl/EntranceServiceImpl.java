@@ -41,7 +41,7 @@ public class EntranceServiceImpl implements EntranceService {
             throw new CommonException("参数openId不能为空!");
         }
         Map<String,Object> params = new HashMap<String,Object>();
-        params.put("openId",openId);
+        params.put(VisitorConstants.Keys.OPEN_ID,openId);
         return this.doorDao.queryUserDoor(params);
     }
 

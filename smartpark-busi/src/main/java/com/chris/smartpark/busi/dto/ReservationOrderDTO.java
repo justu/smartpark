@@ -7,14 +7,16 @@ import com.chris.smartpark.busi.entity.VisitorIdcardEntity;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 /**
  * Created by lisen on 2018/11/6.
  */
-public class ReservationDTO extends SysUpdateInfo {
+public class ReservationOrderDTO extends SysUpdateInfo implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     //姓名
     @NotBlank(message = "姓名必填", groups = {ValidateSaveReservation.class})
     private String name;
@@ -55,6 +57,8 @@ public class ReservationDTO extends SysUpdateInfo {
     List<CarInfoEntity> carInfoEntitys;
     //同行人员信息需要看项目配置是否添加
     List<CompanionsEntity> companionsEntitys;
+
+
     public String getName() {
         return name;
     }

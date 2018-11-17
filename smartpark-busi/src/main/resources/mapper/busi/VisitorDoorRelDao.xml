@@ -123,9 +123,9 @@
 			#{ext1}, 
 			#{ext2}, 
 			#{ext3}, 
-			#{createTime}, 
+			now(),
 			#{createUserId}, 
-			#{updateTime}, 
+			now(),
 			#{updateUserId}
 		)
 	</insert>
@@ -187,9 +187,9 @@
 			#{item.ext1},
 			#{item.ext2},
 			#{item.ext3},
-			#{item.createTime},
+			now(),
 			#{item.createUserId},
-			#{item.updateTime},
+			now(),
 			#{item.updateUserId}
 			)
 		</foreach>

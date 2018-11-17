@@ -3,10 +3,11 @@ package com.chris.smartpark.busi.controller;
 import com.alibaba.fastjson.JSON;
 import com.chris.base.common.utils.CommonResponse;
 import com.chris.base.common.utils.PageUtils;
-import com.chris.base.common.utils.Query;
 import com.chris.base.common.utils.ValidateUtils;
-import com.chris.smartpark.busi.dto.AuthorizeDTO;
-import com.chris.smartpark.busi.dto.ReservationDTO;
+import com.chris.base.modules.app.annotation.Login;
+import com.chris.smartpark.busi.common.VisitorConstants;
+import com.chris.smartpark.busi.dto.ReservationOrderApproveDTO;
+import com.chris.smartpark.busi.dto.ReservationOrderDTO;
 import com.chris.smartpark.busi.entity.VisitorIdcardEntity;
 import com.chris.smartpark.busi.entity.VisitorReservationEntity;
 import com.chris.smartpark.busi.service.CarInfoService;
@@ -18,7 +19,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Map;
 
 
@@ -41,35 +41,40 @@ public class VisitorReservationController {
 	private CarInfoService carInfoService;
 
 	/**
-	 * 列表
+	 * 根据条件分页查询员工或管理员对应的预约单
+	 * @param params
+	 * @return
 	 */
-	@RequestMapping("/list")
-	public CommonResponse list(@RequestBody Map<String, Object> params){
-		//查询列表数据
-        Query query = new Query(params);
-		List<VisitorReservationEntity> visitorReservationList = visitorReservationService.queryList(query);
-		int total = visitorReservationService.queryTotal(query);
-		PageUtils pageUtil = new PageUtils(visitorReservationList, total, query.getLimit(), query.getPage());
+	@PostMapping("/queryReservationOrdersByOpenId")
+	public CommonResponse queryReservationOrdersByOpenId(@RequestBody Map<String, Object> params){
+		if (ValidateUtils.isEmpty(params.get(VisitorConstants.Keys.OPEN_ID))) {
+			return CommonResponse.error("openId为空！");
+		}
+		if (ValidateUtils.isEmpty(params.get(VisitorConstants.Keys.PAGE))) {
+			params.put(VisitorConstants.Keys.PAGE, VisitorConstants.Page.PAGE_NO + "");
+		}
+		if (ValidateUtils.isEmpty(params.get(VisitorConstants.Keys.LIMIT))) {
+			params.put(VisitorConstants.Keys.LIMIT, VisitorConstants.Page.PAGE_SIZE + "");
+		}
+		PageUtils pageUtil = this.visitorReservationService.queryReservationOrdersByOpenId(params);
 		return CommonResponse.ok().put("page", pageUtil);
 	}
-	
+
+
 	
 	/**
 	 * 信息
 	 */
 	@GetMapping("/info/{id}")
-	//@RequiresPermissions("busi:visitorreservation:info")重要操作前可加入权限校验
 	public CommonResponse info(@PathVariable("id") Long id){
-		ReservationDTO reservation = visitorReservationService.queryObject(id);
-		
-		return CommonResponse.ok().put("ReservationDTO", reservation);
+		ReservationOrderDTO reservationOrder = visitorReservationService.queryReservationOrderDetail(id);
+		return CommonResponse.ok().setData(reservationOrder);
 	}
 
 	/**
 	 * 信息
 	 */
 	@RequestMapping("/authentication")
-	//@RequiresPermissions("busi:visitorreservation:info")重要操作前可加入权限校验
 	public CommonResponse authentication(@RequestBody @Validated(VisitorIdcardEntity.ValidateIdentity.class)VisitorIdcardEntity visitorIdcardEntity,BindingResult result){
 		log.info("========身份证识别开始并同步信息到门禁系统=====");
 		ValidateUtils.validatedParams(result);
@@ -81,10 +86,11 @@ public class VisitorReservationController {
 	 * 预约单保存
 	 */
 	@RequestMapping("/save")
-	public CommonResponse save(@RequestBody  @Validated(ReservationDTO.ValidateSaveReservation.class)ReservationDTO reservationDTO, BindingResult result){
-		log.info("预约单生成入参"+ JSON.toJSONString(reservationDTO));
+	@Login
+	public CommonResponse save(@RequestBody  @Validated(ReservationOrderDTO.ValidateSaveReservation.class)ReservationOrderDTO reservationOrderDTO, BindingResult result){
+		log.info("预约单生成入参"+ JSON.toJSONString(reservationOrderDTO));
 		ValidateUtils.validatedParams(result);
-		visitorReservationService.createReservationOrder(reservationDTO);
+		visitorReservationService.createReservationOrder(reservationOrderDTO);
 		return CommonResponse.ok();
 	}
 	
@@ -101,6 +107,7 @@ public class VisitorReservationController {
 	 * 删除
 	 */
 	@RequestMapping("/delete")
+	@Login
 	public CommonResponse delete(@RequestBody Long[] ids){
 		visitorReservationService.deleteBatch(ids);
 		return CommonResponse.ok();
@@ -109,7 +116,8 @@ public class VisitorReservationController {
      * 访客预约审核
      */
     @RequestMapping("/approve")
-    public CommonResponse approve(@RequestBody AuthorizeDTO authorizeDTO){
+	@Login
+    public CommonResponse approve(@RequestBody ReservationOrderApproveDTO authorizeDTO){
 		this.visitorReservationService.approve(authorizeDTO);
 		return CommonResponse.ok();
     }

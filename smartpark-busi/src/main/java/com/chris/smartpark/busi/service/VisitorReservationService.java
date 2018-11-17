@@ -1,7 +1,8 @@
 package com.chris.smartpark.busi.service;
 
-import com.chris.smartpark.busi.dto.AuthorizeDTO;
-import com.chris.smartpark.busi.dto.ReservationDTO;
+import com.chris.base.common.utils.PageUtils;
+import com.chris.smartpark.busi.dto.ReservationOrderApproveDTO;
+import com.chris.smartpark.busi.dto.ReservationOrderDTO;
 import com.chris.smartpark.busi.entity.VisitorIdcardEntity;
 import com.chris.smartpark.busi.entity.VisitorReservationEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,9 +19,16 @@ import java.util.Map;
  */
 public interface VisitorReservationService {
 
-	ReservationDTO queryObject(Long id);
+	ReservationOrderDTO queryReservationOrderDetail(Long id);
 	
 	List<VisitorReservationEntity> queryList(Map<String, Object> map);
+
+	/**
+	 * 根据openid分页查询员工对应的预约单
+	 * @param params
+	 * @return
+	 */
+	PageUtils queryReservationOrdersByOpenId(Map<String, Object> params);
 
 	List<VisitorReservationEntity> queryEffectRecord(String  idcardNo);
 
@@ -34,14 +42,14 @@ public interface VisitorReservationService {
 	
 	void deleteBatch(Long[] ids);
 	@Transactional
-	void createReservationOrder(ReservationDTO reservationDTO);
+	void createReservationOrder(ReservationOrderDTO reservationOrderDTO);
 	@Transactional
 	void checkIdCardAndGetAuth(VisitorIdcardEntity visitorIdcardEntity);
 
 	VisitorReservationEntity queryObjectById(Long id);
 
 	@Transactional
-	void approve(AuthorizeDTO authorizeDTO);
+	void approve(ReservationOrderApproveDTO authorizeDTO);
 
 	/**
 	 * 根据身份证号和状态查询预约单
