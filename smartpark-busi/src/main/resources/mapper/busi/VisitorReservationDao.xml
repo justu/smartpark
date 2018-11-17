@@ -10,6 +10,7 @@
         <result property="photoUrl" column="photo_url"/>
         <result property="visitorId" column="visitor_id"/>
         <result property="staffId" column="staff_id"/>
+        <result property="staffMobile" column="staff_mobile"/>
         <result property="status" column="status"/>
         <result property="appointStartTime" column="appoint_start_time"/>
         <result property="appointEndTime" column="appoint_end_time"/>
@@ -33,7 +34,11 @@
 	</select>
 
 	<select id="queryEffectRecord" resultType="com.chris.smartpark.busi.entity.VisitorReservationEntity">
-		select * from sp_visitor_reservation a LEFT JOIN sp_visitor_info b on a.visitor_id=b.id where  a.`status` = 4  and b.idcard_no = #{idcardNo};
+		select * from sp_visitor_reservation a LEFT JOIN sp_visitor_info b on a.visitor_id=b.id where  a.`status` = 3  and b.idcard_no = #{idcardNo};
+	</select>
+
+	<select id="queryByIdcardAndStatus" resultType="com.chris.smartpark.busi.entity.VisitorReservationEntity">
+		select a.* from sp_visitor_reservation a LEFT JOIN sp_visitor_info b on a.visitor_id=b.id where  a.`status` = #{status}  and b.idcard_no = #{idcardNo};
 	</select>
 
 	<select id="queryList" resultType="com.chris.smartpark.busi.entity.VisitorReservationEntity">
@@ -53,6 +58,9 @@
 				<if test="staffId != null and staffId !='' ">
 				AND staff_id = #{staffId}
 			</if>
+			<if test="staffMobile != null and staffMobile !='' ">
+				AND staff_mobile = #{staffMobile}
+			</if>
 				<if test="status != null and status !='' ">
 				AND status = #{status}
 			</if>
@@ -70,21 +78,6 @@
 			</if>
 				<if test="type != null and type !='' ">
 				AND type = #{type}
-			</if>
-				<if test="remark != null and remark !='' ">
-				AND remark = #{remark}
-			</if>
-				<if test="companions != null and companions !='' ">
-				AND companions = #{companions}
-			</if>
-				<if test="ext1 != null and ext1 !='' ">
-				AND ext1 = #{ext1}
-			</if>
-				<if test="ext2 != null and ext2 !='' ">
-				AND ext2 = #{ext2}
-			</if>
-				<if test="ext3 != null and ext3 !='' ">
-				AND ext3 = #{ext3}
 			</if>
 				<if test="physicalCardId != null and physicalCardId !='' ">
 				AND physical_card_id = #{physicalCardId}
@@ -119,6 +112,9 @@
 				<if test="staffId != null and staffId !='' ">
                 AND staff_id = #{staffId}
             </if>
+			<if test="staffMobile != null and staffMobile !='' ">
+				AND staff_mobile = #{staffMobile}
+			</if>
 				<if test="status != null and status !='' ">
                 AND status = #{status}
             </if>
@@ -137,21 +133,6 @@
 				<if test="type != null and type !='' ">
                 AND type = #{type}
             </if>
-				<if test="remark != null and remark !='' ">
-                AND remark = #{remark}
-            </if>
-				<if test="companions != null and companions !='' ">
-                AND companions = #{companions}
-            </if>
-				<if test="ext1 != null and ext1 !='' ">
-                AND ext1 = #{ext1}
-            </if>
-				<if test="ext2 != null and ext2 !='' ">
-                AND ext2 = #{ext2}
-            </if>
-				<if test="ext3 != null and ext3 !='' ">
-                AND ext3 = #{ext3}
-            </if>
 				<if test="physicalCardId != null and physicalCardId !='' ">
                 AND physical_card_id = #{physicalCardId}
             </if>
@@ -164,7 +145,8 @@
 			`photo_url`, 
 			`visitor_id`, 
 			`staff_id`, 
-			`status`, 
+			`staff_mobile`,
+			`status`,
 			`appoint_start_time`, 
 			`appoint_end_time`, 
 			`act_start_time`, 
@@ -187,7 +169,8 @@
 			#{photoUrl}, 
 			#{visitorId}, 
 			#{staffId}, 
-			#{status}, 
+			#{staffMobile},
+			#{status},
 			#{appointStartTime}, 
 			#{appointEndTime}, 
 			#{actStartTime}, 
@@ -198,7 +181,7 @@
 			#{ext1}, 
 			#{ext2}, 
 			#{ext3}, 
-			#{createTime}, 
+			now(),
 			#{createUserId}, 
 			#{updateTime}, 
 			#{updateUserId}, 
@@ -213,6 +196,7 @@
 			<if test="photoUrl != null">`photo_url` = #{photoUrl}, </if>
 			<if test="visitorId != null">`visitor_id` = #{visitorId}, </if>
 			<if test="staffId != null">`staff_id` = #{staffId}, </if>
+			<if test="staffMobile != null">`staff_mobile` = #{staffMobile}, </if>
 			<if test="status != null">`status` = #{status}, </if>
 			<if test="appointStartTime != null">`appoint_start_time` = #{appointStartTime}, </if>
 			<if test="appointEndTime != null">`appoint_end_time` = #{appointEndTime}, </if>
@@ -245,7 +229,7 @@
 	</delete>
 
 	<update id="updateStatus" parameterType="com.chris.smartpark.busi.entity.VisitorReservationEntity">
-		update sp_visitor_reservation set status = #{status} where id = #{id}
+		update sp_visitor_reservation set update_time = now(),status = #{status} where id = #{id}
 	</update>
 
 </mapper>

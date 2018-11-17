@@ -1,5 +1,6 @@
 package com.chris.smartpark.base.service;
 
+import com.chris.smartpark.base.dto.BaseStaffDTO;
 import com.chris.smartpark.base.entity.BaseStaffEntity;
 
 import java.util.List;
@@ -27,4 +28,6 @@ public interface BaseStaffService {
 	void delete(Long id);
 	
 	void deleteBatch(Long[] ids);
+
+    BaseStaffDTO queryByMobile(String mobile);
 }

@@ -26,7 +26,7 @@ public class ReservationDto  extends SysUpdateInfo {
     private String phone;
     //验证码
     @NotBlank(message = "验证码必填", groups = {ValidateSaveReservation.class})
-    private String verifiCode;
+    private String verifyCode;
     //受访者id
     @NotNull(message = "受访者id必填", groups = {ValidateSaveReservation.class})
     private Long staffId;
@@ -79,12 +79,12 @@ public class ReservationDto  extends SysUpdateInfo {
         this.phone = phone;
     }
 
-    public String getVerifiCode() {
-        return verifiCode;
+    public String getVerifyCode() {
+        return verifyCode;
     }
 
-    public void setVerifiCode(String verifiCode) {
-        this.verifiCode = verifiCode;
+    public void setVerifyCode(String verifiCode) {
+        this.verifyCode = verifiCode;
     }
 
     public Long getStaffId() {

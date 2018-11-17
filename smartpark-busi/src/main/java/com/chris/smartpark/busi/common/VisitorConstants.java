@@ -15,7 +15,7 @@ public class VisitorConstants {
     /**
      * 预约单状态
      */
-    public interface ReservationStatus {
+    public interface ReservationOrderStatus {
         // 待审核
         int PENDING_APPROVE = 1;
         // 审核不通过
@@ -33,8 +33,10 @@ public class VisitorConstants {
     /**
      * 预约单类型
      */
-    public interface ReservationType {
+    public interface ReservationOrderType {
+        // 线上
         int ONLINE = 1;
+        // 线下
         int OFFLINE = 2;
     }
 }
