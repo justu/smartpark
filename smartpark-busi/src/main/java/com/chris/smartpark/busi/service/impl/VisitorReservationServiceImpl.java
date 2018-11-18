@@ -175,6 +175,10 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
      * @param reservationOrderDTO
      */
     private void validateReservationOrder(ReservationOrderDTO reservationOrderDTO) {
+        //校验预约结束时间结束时间在开始时间一小时以后
+        if(!this.isOneHourAfter(reservationOrderDTO.getAppointStartTime(),reservationOrderDTO.getAppointEndTime())){
+            throw new CommonException("预约结束时间需要在开始时间一小时以后！");
+        }
         //校验身份证是否合法
         if (!CommonValidator.isIDCard(reservationOrderDTO.getIdcardNo())) {
             throw new CommonException("身份证格式不正确！");
@@ -394,5 +398,13 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
     @Override
     public List<VisitorReservationEntity> queryByIdcardAndStatus(String idcardNo, String status) {
         return this.visitorReservationDao.queryByIdcardAndStatus(idcardNo, status);
+    }
+
+    private boolean isOneHourAfter(Date actStartTime,Date actEndTime){
+        long interval = (actEndTime.getTime() - actStartTime.getTime())/1000 - 3600;
+        if(interval<0){
+           return false;
+        }
+        return true;
     }
 }
