@@ -1,5 +1,6 @@
 package com.chris.smartpark.busi.dto;
 
+import com.alibaba.fastjson.JSONObject;
 import com.chris.base.common.model.SysUpdateInfo;
 import com.chris.smartpark.busi.entity.CarInfoEntity;
 import com.chris.smartpark.busi.entity.CompanionsEntity;
@@ -51,13 +52,14 @@ public class ReservationOrderDTO extends SysUpdateInfo implements Serializable {
     //是否添加车辆 1 是 0 否
     private int isAddCarInfo = 0;
     //访客身份信息表
-    VisitorIdcardEntity visitorIdcardEntity;
+    private VisitorIdcardEntity visitorIdcardEntity;
     //车辆信息
     //@Size(message = "车辆信息明细必填", groups = {ValidateSaveReservation.class}, min = 1)
-    List<CarInfoEntity> carInfoEntitys;
+    private List<CarInfoEntity> carInfoEntitys;
     //同行人员信息需要看项目配置是否添加
-    List<CompanionsEntity> companionsEntitys;
+    private List<CompanionsEntity> companionsEntitys;
 
+    private String openId;
 
     public String getName() {
         return name;
@@ -87,8 +89,8 @@ public class ReservationOrderDTO extends SysUpdateInfo implements Serializable {
         return verifyCode;
     }
 
-    public void setVerifyCode(String verifiCode) {
-        this.verifyCode = verifiCode;
+    public void setVerifyCode(String verifyCode) {
+        this.verifyCode = verifyCode;
     }
 
     public Long getStaffId() {
@@ -155,6 +157,14 @@ public class ReservationOrderDTO extends SysUpdateInfo implements Serializable {
         this.isAddCarInfo = isAddCarInfo;
     }
 
+    public VisitorIdcardEntity getVisitorIdcardEntity() {
+        return visitorIdcardEntity;
+    }
+
+    public void setVisitorIdcardEntity(VisitorIdcardEntity visitorIdcardEntity) {
+        this.visitorIdcardEntity = visitorIdcardEntity;
+    }
+
     public List<CarInfoEntity> getCarInfoEntitys() {
         return carInfoEntitys;
     }
@@ -171,18 +181,19 @@ public class ReservationOrderDTO extends SysUpdateInfo implements Serializable {
         this.companionsEntitys = companionsEntitys;
     }
 
-    public VisitorIdcardEntity getVisitorIdcardEntity() {
-        return visitorIdcardEntity;
+    public String getOpenId() {
+        return openId;
     }
 
-    public void setVisitorIdcardEntity(VisitorIdcardEntity visitorIdcardEntity) {
-        this.visitorIdcardEntity = visitorIdcardEntity;
+    public void setOpenId(String openId) {
+        this.openId = openId;
     }
 
     /* ********************** 参数校验类 *******************************/
     public interface ValidateSaveReservation{
 
     }
+
 
 
 }

@@ -27,6 +27,7 @@
         <result property="updateTime" column="update_time"/>
         <result property="updateUserId" column="update_user_id"/>
         <result property="physicalCardId" column="physical_card_id"/>
+        <result property="openId" column="open_id"/>
     </resultMap>
 
 	<select id="queryObject" resultType="com.chris.smartpark.busi.entity.VisitorReservationEntity">
@@ -82,6 +83,9 @@
 				<if test="physicalCardId != null and physicalCardId !='' ">
 				AND physical_card_id = #{physicalCardId}
 			</if>
+			<if test="openId != null and openId !='' ">
+				AND open_id = #{openId}
+			</if>
 		        <choose>
             <when test="sidx != null and sidx.trim() != ''">
                 order by ${sidx} ${order}
@@ -107,9 +111,14 @@
 			v.idcard_no AS idcardNo
 		 FROM sp_visitor_reservation r
 		INNER JOIN sp_visitor_info v ON v.id = r.visitor_id
-		INNER JOIN base_staff s ON s.id = r.staff_id
-		INNER JOIN tb_user u ON u.mobile = s.MOBILE
-		WHERE u.open_id = #{openId}
+		<if test="type == 1">
+			WHERE r.open_id = #{openId}
+		</if>
+		<if test="type == 2">
+			INNER JOIN base_staff s ON s.id = r.staff_id
+			INNER JOIN tb_user u ON u.mobile = s.MOBILE
+			WHERE u.open_id = #{openId}
+		</if>
 		ORDER BY r.create_time desc
 		<if test="offset != null and limit != null">
 			limit #{offset}, #{limit}
@@ -119,9 +128,14 @@
 	<select id="countReservationOrdersByOpenId" resultType="int" >
 		SELECT COUNT(1) FROM sp_visitor_reservation r
 		INNER JOIN sp_visitor_info v ON v.id = r.visitor_id
-		INNER JOIN base_staff s ON s.id = r.staff_id
-		INNER JOIN tb_user u ON u.mobile = s.MOBILE
-		WHERE u.open_id = #{openId}
+		<if test="type == 1">
+			WHERE r.open_id = #{openId}
+		</if>
+		<if test="type == 2">
+			INNER JOIN base_staff s ON s.id = r.staff_id
+			INNER JOIN tb_user u ON u.mobile = s.MOBILE
+			WHERE u.open_id = #{openId}
+		</if>
 		ORDER BY r.create_time desc
 		<if test="offset != null and limit != null">
 			limit #{offset}, #{limit}
@@ -194,7 +208,8 @@
 			`create_user_id`, 
 			`update_time`, 
 			`update_user_id`, 
-			`physical_card_id`
+			`physical_card_id`,
+			`open_id`
 		)
 		values
 		(
@@ -218,7 +233,8 @@
 			#{createUserId}, 
 			#{updateTime}, 
 			#{updateUserId}, 
-			#{physicalCardId}
+			#{physicalCardId},
+			#{openId}
 		)
 	</insert>
 	 
@@ -245,6 +261,7 @@
 			<if test="createUserId != null">`create_user_id` = #{createUserId}, </if>
 			<if test="updateTime != null">`update_time` = #{updateTime}, </if>
 			<if test="updateUserId != null">`update_user_id` = #{updateUserId}, </if>
+			<if test="openId != null">`open_id` = #{openId}, </if>
 			<if test="physicalCardId != null">`physical_card_id` = #{physicalCardId}</if>
 		</set>
 		where id = #{id}

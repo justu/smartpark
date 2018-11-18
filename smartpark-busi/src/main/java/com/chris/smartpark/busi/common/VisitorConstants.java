@@ -79,6 +79,7 @@ public class VisitorConstants {
         String PARK_NAME = "parkName";
         String REJECT_REASON = "reason";
         String RESERVATION_ORDER_ID = "reservationId";
+        String TYPE = "type";
     }
 
     public interface Page {

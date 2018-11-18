@@ -5,7 +5,7 @@ import com.chris.base.common.utils.ValidateUtils;
 
 public final class VisitorUtils {
 
-    public static boolean isVerifyCodeOK(String mobile, String verifyCode) {
-        return ValidateUtils.equals(verifyCode, SendSMSUtils.getVerifyCode(mobile));
+    public static boolean isVerifyCodeOK(String mobile, String verifyCode, String tempCode) {
+        return ValidateUtils.equals(verifyCode, SendSMSUtils.getVerifyCode4App(mobile, tempCode));
     }
 }

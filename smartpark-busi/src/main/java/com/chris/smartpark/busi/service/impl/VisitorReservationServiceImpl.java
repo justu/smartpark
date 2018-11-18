@@ -184,7 +184,7 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
             throw new CommonException("手机号格式不正确！");
         }
         //校验验证码是否正确
-        if (!VisitorUtils.isVerifyCodeOK(reservationOrderDTO.getPhone(), reservationOrderDTO.getVerifyCode())) {
+        if (!VisitorUtils.isVerifyCodeOK(reservationOrderDTO.getPhone(), reservationOrderDTO.getVerifyCode(), Constant.SMSTemplateCode.RESERVATION_VERIFY_CODE.getTemplateCode())) {
             throw new CommonException("验证码不正确！");
         }
         //校验员工手机号是否存在

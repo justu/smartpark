@@ -50,6 +50,9 @@ public class VisitorReservationController {
 		if (ValidateUtils.isEmpty(params.get(VisitorConstants.Keys.OPEN_ID))) {
 			return CommonResponse.error("openId为空！");
 		}
+		if (ValidateUtils.isEmpty(params.get(VisitorConstants.Keys.TYPE))) {
+			return CommonResponse.error("type为空！");
+		}
 		if (ValidateUtils.isEmpty(params.get(VisitorConstants.Keys.PAGE))) {
 			params.put(VisitorConstants.Keys.PAGE, VisitorConstants.Page.PAGE_NO + "");
 		}

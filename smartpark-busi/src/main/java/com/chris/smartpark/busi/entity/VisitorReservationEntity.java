@@ -53,6 +53,7 @@ public class VisitorReservationEntity  extends SysUpdateInfo  implements Seriali
 	private String ext3;
 	//访客物理卡id
 	private String physicalCardId;
+	private String openId;
 
 	public void setId(Long id) {
 		this.id = id;
@@ -180,5 +181,13 @@ public class VisitorReservationEntity  extends SysUpdateInfo  implements Seriali
 
 	public void setStaffMobile(String staffMobile) {
 		this.staffMobile = staffMobile;
+	}
+
+	public String getOpenId() {
+		return openId;
+	}
+
+	public void setOpenId(String openId) {
+		this.openId = openId;
 	}
 }
