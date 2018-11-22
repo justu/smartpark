@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.chris.base.common.tree.TreeNode;
 import com.chris.base.common.utils.CommonResponse;
 import com.chris.base.common.utils.ValidateUtils;
+import com.chris.base.modules.app.annotation.Login;
 import com.chris.smartpark.busi.entity.DoorEntity;
 import com.chris.smartpark.busi.service.EntranceService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -45,6 +46,7 @@ public class EntranceController {
      * @return
      */
     @GetMapping("/queryDoorNodes")
+//    @Login
     public CommonResponse queryDoorNodes(String openId) {
         List<TreeNode> doorNodes = this.entranceService.queryHasPermissionDoorLevelNodesByOpenId(openId);
         return CommonResponse.ok().setData(doorNodes);
