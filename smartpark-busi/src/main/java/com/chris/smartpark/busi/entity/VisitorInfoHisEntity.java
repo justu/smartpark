@@ -39,6 +39,11 @@ public class VisitorInfoHisEntity  extends SysUpdateInfo  implements Serializabl
 	//备注
 	private String remark;
 
+	/**
+	 * 预约单号
+	 */
+	private Long reservationId;
+
 	public void setId(Long id) {
 		this.id = id;
 	}
@@ -122,5 +127,13 @@ public class VisitorInfoHisEntity  extends SysUpdateInfo  implements Serializabl
 
 	public String getRemark() {
 		return remark;
+	}
+
+	public Long getReservationId() {
+		return reservationId;
+	}
+
+	public void setReservationId(Long reservationId) {
+		this.reservationId = reservationId;
 	}
 }

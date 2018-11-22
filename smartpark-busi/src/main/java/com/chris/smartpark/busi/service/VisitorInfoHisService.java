@@ -15,7 +15,9 @@ import java.util.Map;
 public interface VisitorInfoHisService {
 	
 	VisitorInfoHisEntity queryObject(Long id);
-	
+
+	VisitorInfoHisEntity queryByReservationId(Long reservationId);
+
 	List<VisitorInfoHisEntity> queryList(Map<String, Object> map);
 	
 	int queryTotal(Map<String, Object> map);

@@ -21,6 +21,7 @@
         <result property="updateTime" column="update_time"/>
         <result property="updateUserId" column="update_user_id"/>
         <result property="remark" column="remark"/>
+        <result property="reservationId" column="reservation_id"/>
     </resultMap>
 
 	<select id="queryObject" resultType="com.chris.smartpark.busi.entity.VisitorInfoHisEntity">
@@ -47,25 +48,10 @@
 				<if test="type != null and type !='' ">
 				AND type = #{type}
 			</if>
-				<if test="photoUrl != null and photoUrl !='' ">
-				AND photo_url = #{photoUrl}
+			<if test="reservationId != null and reservationId !='' ">
+				AND reservation_id = #{reservationId}
 			</if>
-				<if test="company != null and company !='' ">
-				AND company = #{company}
-			</if>
-				<if test="ext1 != null and ext1 !='' ">
-				AND ext1 = #{ext1}
-			</if>
-				<if test="ext2 != null and ext2 !='' ">
-				AND ext2 = #{ext2}
-			</if>
-				<if test="ext3 != null and ext3 !='' ">
-				AND ext3 = #{ext3}
-			</if>
-				<if test="remark != null and remark !='' ">
-				AND remark = #{remark}
-			</if>
-		        <choose>
+		<choose>
             <when test="sidx != null and sidx.trim() != ''">
                 order by ${sidx} ${order}
             </when>
@@ -86,9 +72,6 @@
 				<if test="visitorId != null and visitorId !='' ">
                 AND visitor_id = #{visitorId}
             </if>
-				<if test="name != null and name !='' ">
-                AND name = #{name}
-            </if>
 				<if test="idcardNo != null and idcardNo !='' ">
                 AND idcard_no = #{idcardNo}
             </if>
@@ -98,24 +81,9 @@
 				<if test="type != null and type !='' ">
                 AND type = #{type}
             </if>
-				<if test="photoUrl != null and photoUrl !='' ">
-                AND photo_url = #{photoUrl}
-            </if>
-				<if test="company != null and company !='' ">
-                AND company = #{company}
-            </if>
-				<if test="ext1 != null and ext1 !='' ">
-                AND ext1 = #{ext1}
-            </if>
-				<if test="ext2 != null and ext2 !='' ">
-                AND ext2 = #{ext2}
-            </if>
-				<if test="ext3 != null and ext3 !='' ">
-                AND ext3 = #{ext3}
-            </if>
-				<if test="remark != null and remark !='' ">
-                AND remark = #{remark}
-            </if>
+				<if test="reservationId != null and reservationId !='' ">
+                	AND reservation_id = #{reservationId}
+            	</if>
 			</select>
 	 
 	<insert id="save" parameterType="com.chris.smartpark.busi.entity.VisitorInfoHisEntity" useGeneratedKeys="true" keyProperty="id">
@@ -135,7 +103,8 @@
 			`create_user_id`, 
 			`update_time`, 
 			`update_user_id`, 
-			`remark`
+			`remark`,
+			`reservation_id`
 		)
 		values
 		(
@@ -149,11 +118,12 @@
 			#{ext1}, 
 			#{ext2}, 
 			#{ext3}, 
-			#{createTime}, 
+			now(),
 			#{createUserId}, 
 			#{updateTime}, 
 			#{updateUserId}, 
-			#{remark}
+			#{remark},
+			#{reservationId}
 		)
 	</insert>
 	 

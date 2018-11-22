@@ -55,10 +55,14 @@ public class EntranceServiceImpl implements EntranceService {
         // 组装成树结构，用于前台展示
         // 根节点为楼宇名称
         List<TreeNode> treeNodes = Lists.newArrayList();
-        TreeNode root = TreeNode.createRoot(hasPermissionDoorLevelList.get(0).getBuildingId() + "", hasPermissionDoorLevelList.get(0).getBuildingName());
+        TreeNode root = TreeNode.createRoot("0", hasPermissionDoorLevelList.get(0).getBuildingName());
         treeNodes.add(root);
-        treeNodes.addAll(this.buildFloorNodes(root, hasPermissionDoorLevelList));
-        treeNodes.addAll(this.buildDoorNodes(hasPermissionDoorLevelList));
+        root.setChildren(this.buildFloorNodes(root, hasPermissionDoorLevelList));
+        List<TreeNode> doorNodes = this.buildDoorNodes(hasPermissionDoorLevelList);
+        root.getChildren().forEach(floorNode -> {
+            List<TreeNode> chidrenNodes = doorNodes.stream().filter(doorNode -> ValidateUtils.equals(doorNode.getParentNodeId(), floorNode.getNodeId())).collect(Collectors.toList());
+            floorNode.getChildren().addAll(chidrenNodes);
+        });
         return treeNodes;
     }
 

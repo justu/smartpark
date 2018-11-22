@@ -57,14 +57,19 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
     public ReservationOrderDTO queryReservationOrderDetail(Long id) {
         ReservationOrderDTO reservationOrderDTO = new ReservationOrderDTO();
         //获取预约单信息
-        VisitorReservationEntity visitorReservation = this.visitorReservationDao.queryObject(id);
-        BeanUtil.copyProperties(visitorReservation, reservationOrderDTO);
+        VisitorReservationEntity reservationOrder = this.visitorReservationDao.queryObject(id);
+        if (ValidateUtils.isEmpty(reservationOrder)) {
+            throw new CommonException("预约单不存在！");
+        }
+        BeanUtil.copyProperties(reservationOrder, reservationOrderDTO);
+
         //访客
-        VisitorInfoEntity visitorInfoEntity = this.visitorInfoService.queryObject(visitorReservation.getVisitorId());
-        reservationOrderDTO.setName(visitorInfoEntity.getName());
-        reservationOrderDTO.setIdcardNo(visitorInfoEntity.getIdcardNo());
+        VisitorInfoHisEntity visitorHisInfo = this.visitorInfoHisService.queryByReservationId(reservationOrder.getId());
+//        VisitorInfoEntity visitorInfoEntity = this.visitorInfoService.queryObject(reservationOrder.getVisitorId());
+        reservationOrderDTO.setName(visitorHisInfo.getName());
+        reservationOrderDTO.setIdcardNo(visitorHisInfo.getIdcardNo());
         //受访者
-        BaseStaffEntity baseStaffEntity = this.baseStaffService.queryObject(visitorReservation.getStaffId());
+        BaseStaffEntity baseStaffEntity = this.baseStaffService.queryObject(reservationOrder.getStaffId());
         reservationOrderDTO.setStaffId(baseStaffEntity.getId());
         reservationOrderDTO.setStaffName(baseStaffEntity.getUsername());
         reservationOrderDTO.setStaffPhone(baseStaffEntity.getMobile());
@@ -135,22 +140,16 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
                 ValidateUtils.isNotEmptyString(reservationOrderDTO.getIdcardNo())) {
             this.visitorIdcardService.save(reservationOrderDTO.getVisitorIdcardEntity());
         }
+        // 1、保存访客信息
         if (ValidateUtils.isNotEmpty(rcd)) {
-            //删除现有记录并记录到历史记录表
-            VisitorInfoHisEntity visitorInfoHis = new VisitorInfoHisEntity();
-            BeanUtil.copyProperties(rcd, visitorInfoHis);
-            visitorInfoHis.setCreateTime(DateUtils.currentDate());
-            visitorInfoHis.setVisitorId(rcd.getId());
-            visitorInfoHis.setId(null);
-            this.visitorInfoHisService.save(visitorInfoHis);
-            this.visitorInfoService.delete(rcd.getId());
             visitorInfo.setId(rcd.getId());
         }
         visitorInfo.setName(reservationOrderDTO.getName());
         visitorInfo.setPhone(reservationOrderDTO.getPhone());
         visitorInfo.setCreateTime(DateUtils.currentDate());
-        this.visitorInfoService.save(visitorInfo);//此处可获取到visitorid = visitorInfo.getId()
-        //2.保存预约单信息
+        this.visitorInfoService.save(visitorInfo);
+
+        // 2、保存预约单信息
         VisitorReservationEntity reservationOrder = new VisitorReservationEntity();
         BeanUtil.copyProperties(reservationOrderDTO, reservationOrder);
         reservationOrder.setStaffMobile(reservationOrderDTO.getStaffPhone());
@@ -159,7 +158,17 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
         reservationOrder.setCreateTime(DateUtils.currentDate());
         reservationOrder.setStatus(VisitorConstants.ReservationOrderStatus.PENDING_APPROVE + "");
         this.save(reservationOrder);
-        //3.保存车牌信息
+
+        // 3、保存访客历史信息
+        VisitorInfoHisEntity visitorInfoHis = new VisitorInfoHisEntity();
+        BeanUtil.copyProperties(visitorInfo, visitorInfoHis);
+        visitorInfoHis.setCreateTime(DateUtils.currentDate());
+        visitorInfoHis.setVisitorId(visitorInfo.getId());
+        visitorInfoHis.setId(null);
+        visitorInfoHis.setReservationId(reservationOrder.getId());
+        this.visitorInfoHisService.save(visitorInfoHis);
+
+        // 4、保存车牌信息
         if (ValidateUtils.isNotEmptyCollection(reservationOrderDTO.getCarInfoEntitys())) {
             for (CarInfoEntity carInfo : reservationOrderDTO.getCarInfoEntitys()) {
                 carInfo.setCreateTime(DateUtils.currentDate());

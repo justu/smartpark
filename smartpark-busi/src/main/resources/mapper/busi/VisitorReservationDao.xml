@@ -110,7 +110,7 @@
 			v.phone AS visitorMobile,
 			v.idcard_no AS idcardNo
 		 FROM sp_visitor_reservation r
-		INNER JOIN sp_visitor_info v ON v.id = r.visitor_id
+		INNER JOIN sp_visitor_info_his v ON v.reservation_id = r.id
 		<if test="type == 1">
 			WHERE r.open_id = #{openId}
 		</if>

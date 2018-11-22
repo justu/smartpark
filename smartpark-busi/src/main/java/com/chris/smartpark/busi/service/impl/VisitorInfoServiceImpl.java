@@ -1,5 +1,6 @@
 package com.chris.smartpark.busi.service.impl;
 
+import com.chris.base.common.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,7 +35,13 @@ public class VisitorInfoServiceImpl implements VisitorInfoService {
 	
 	@Override
 	public void save(VisitorInfoEntity visitorInfo){
-		visitorInfoDao.save(visitorInfo);
+		if (null != visitorInfo.getId()) {
+			visitorInfo.setUpdateTime(DateUtils.currentDate());
+			this.visitorInfoDao.update(visitorInfo);
+		} else {
+			this.visitorInfoDao.save(visitorInfo);
+		}
+
 	}
 	@Override
 	public VisitorInfoEntity selectByIdcardNo(VisitorInfoEntity visitorInfo){

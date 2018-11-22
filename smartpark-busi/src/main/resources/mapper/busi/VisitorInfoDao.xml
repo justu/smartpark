@@ -144,7 +144,7 @@
 			#{ext1}, 
 			#{ext2}, 
 			#{ext3}, 
-			#{createTime}, 
+			now(),
 			#{createUserId}, 
 			#{updateTime}, 
 			#{updateUserId}
@@ -152,7 +152,7 @@
 	</insert>
 	 
 	<update id="update" parameterType="com.chris.smartpark.busi.entity.VisitorInfoEntity">
-		update sp_visitor_info 
+		update sp_visitor_info
 		<set>
 			<if test="name != null">`name` = #{name}, </if>
 			<if test="idcardNo != null">`idcard_no` = #{idcardNo}, </if>

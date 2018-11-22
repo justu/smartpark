@@ -108,6 +108,7 @@ create table sp_visitor_info_his
    update_time          datetime comment '更新时间',
    update_user_id       bigint comment '更新人id',
    remark               varchar(200) comment '备注',
+   reservation_id       bigint(20) DEFAULT NULL COMMENT '预约单ID',
    primary key (id)
 );
 

@@ -1,5 +1,8 @@
 package com.chris.smartpark.busi.service.impl;
 
+import com.chris.base.common.utils.ValidateUtils;
+import com.google.common.collect.ImmutableMap;
+import jdk.nashorn.internal.ir.annotations.Immutable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -51,5 +54,10 @@ public class VisitorInfoHisServiceImpl implements VisitorInfoHisService {
 	public void deleteBatch(Long[] ids){
 		visitorInfoHisDao.deleteBatch(ids);
 	}
-	
+
+	@Override
+	public VisitorInfoHisEntity queryByReservationId(Long reservationId) {
+		List<VisitorInfoHisEntity> list = this.queryList(ImmutableMap.of("reservationId", reservationId));
+		return ValidateUtils.isEmptyCollection(list) ? null : list.get(0);
+	}
 }
