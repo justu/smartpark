@@ -2,10 +2,7 @@ package com.chris.smartpark.busi.dto;
 
 import cn.afterturn.easypoi.handler.inter.IExcelModel;
 
-/**
- * 批量预约单导入校验DTO
- */
-public class BatchReservationImortValidateDTO extends BatchReservationImportDTO implements IExcelModel {
+public class BatchCompanionsImportValidateDTO extends BatchCompanionsImportDTO implements IExcelModel {
     private String errorMsg;
     @Override
     public String getErrorMsg() {

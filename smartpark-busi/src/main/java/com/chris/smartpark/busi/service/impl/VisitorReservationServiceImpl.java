@@ -1,5 +1,8 @@
 package com.chris.smartpark.busi.service.impl;
 
+import cn.afterturn.easypoi.excel.ExcelImportUtil;
+import cn.afterturn.easypoi.excel.entity.ImportParams;
+import cn.afterturn.easypoi.excel.entity.result.ExcelImportResult;
 import com.alibaba.fastjson.JSONObject;
 import com.chris.base.common.exception.CommonException;
 import com.chris.base.common.utils.*;
@@ -14,9 +17,7 @@ import com.chris.smartpark.busi.common.VisitorUtils;
 import com.chris.smartpark.busi.dao.AuthenticationRecordDao;
 import com.chris.smartpark.busi.dao.VisitorDoorRelDao;
 import com.chris.smartpark.busi.dao.VisitorReservationDao;
-import com.chris.smartpark.busi.dto.ReservationOrderApproveDTO;
-import com.chris.smartpark.busi.dto.ReservationOrderDTO;
-import com.chris.smartpark.busi.dto.ReservationOrderQryDTO;
+import com.chris.smartpark.busi.dto.*;
 import com.chris.smartpark.busi.entity.*;
 import com.chris.smartpark.busi.service.*;
 import com.google.common.collect.ImmutableMap;
@@ -24,6 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.util.*;
 
 @Slf4j
@@ -130,6 +132,9 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
     @Override
     public void createReservationOrder(ReservationOrderDTO reservationOrderDTO) {
         this.validateReservationOrder(reservationOrderDTO);
+        this.saveReservationOrder(reservationOrderDTO);
+    }
+    private void saveReservationOrder(ReservationOrderDTO reservationOrderDTO){
         // TODO 查询系统配置判断是否配置了同行人详细信息(需要抽掉一个字典查询公共方法) 暂时放到第二阶段
         //1.保存访客信息（历史信息）
         VisitorInfoEntity visitorInfo = new VisitorInfoEntity();
@@ -178,7 +183,6 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
         }
         // TODO 4.保存同行人信息（暂缓）
     }
-
     /**
      * 校验预约单
      * @param reservationOrderDTO
@@ -407,6 +411,146 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
     @Override
     public List<VisitorReservationEntity> queryByIdcardAndStatus(String idcardNo, String status) {
         return this.visitorReservationDao.queryByIdcardAndStatus(idcardNo, status);
+    }
+
+    /**
+     * 批量预约
+     * @param excelFile
+     */
+    @Override
+    public void batchImportReservation(File excelFile) {
+        ImportParams importParams = new ImportParams();
+        //设置需要校验
+        importParams.setNeedVerfiy(true);
+        //1. 第一个 sheet 页（预约单信息）
+        importParams.setVerfiyGroup(new Class[]{BatchReservationImportDTO.ReservationImportValidGroup.class});
+        importParams.setStartSheetIndex(0);
+        ExcelImportResult<BatchReservationImportValidateDTO> reservationImportResult = ExcelImportUtil.importExcelMore(excelFile, BatchReservationImportValidateDTO.class, importParams);
+        List<BatchReservationImportValidateDTO> reservationImportList = reservationImportResult.getList();
+        log.info("预约信息校验正确的列表：" + JSONObject.toJSONString(reservationImportList));
+        log.info("预约信息是否校验失败 = " + reservationImportResult.isVerfiyFail());
+        if (ValidateUtils.isNotEmptyCollection(reservationImportResult.getFailList())) {
+            reservationImportResult.getFailList().forEach(item -> {
+                log.error("错误消息：" + item.getErrorMsg());
+                throw new CommonException(item.getErrorMsg());
+            });
+        }
+        if (ValidateUtils.isEmptyCollection(reservationImportList)) {
+            log.error("访客信息不能为空!");
+            throw new CommonException("访客信息不能为空!");
+        }
+
+        //2 第二个sheet 车辆信息
+        importParams.setStartSheetIndex(1);
+        importParams.setVerfiyGroup(new Class[]{BatchCarInfoImportDTO.CarInfoImportValidGroup.class});
+        ExcelImportResult<BatchCarInfoImportValidateDTO> carInfoImportResult = ExcelImportUtil.importExcelMore(excelFile, BatchCarInfoImportValidateDTO.class, importParams);
+        List<BatchCarInfoImportValidateDTO> carInfoImportList = carInfoImportResult.getList();
+        log.info("车辆信息校验正确的列表：" + JSONObject.toJSONString(carInfoImportList));
+        log.info("车辆信息是否校验失败 = " + carInfoImportResult.isVerfiyFail());
+        if (ValidateUtils.isNotEmptyCollection(carInfoImportResult.getFailList())) {
+            carInfoImportResult.getFailList().forEach(item -> {
+                log.error("错误消息：" + item.getErrorMsg());
+                throw new CommonException(item.getErrorMsg());
+            });
+        }
+
+        //3.第三个sheet页 同行人信息
+        importParams.setStartSheetIndex(2);
+        importParams.setVerfiyGroup(new Class[]{BatchCompanionsImportDTO.CompanionsImportValidGroup.class});
+        ExcelImportResult<BatchCompanionsImportValidateDTO> companionsImportResult = ExcelImportUtil.importExcelMore(excelFile, BatchCompanionsImportValidateDTO.class, importParams);
+        List<BatchCompanionsImportValidateDTO> companionsImportList = companionsImportResult.getList();
+        log.info("同行人信息校验正确的列表：" + JSONObject.toJSONString(companionsImportList));
+        log.info("同行人信息是否校验失败 = " + companionsImportResult.isVerfiyFail());
+        if (ValidateUtils.isNotEmptyCollection(companionsImportResult.getFailList())) {
+            companionsImportResult.getFailList().forEach(item -> {
+                log.error("错误消息：" + item.getErrorMsg());
+                throw new CommonException(item.getErrorMsg());
+            });
+        }
+
+        //4.信息入库
+        reservationImportList.forEach(item -> {
+            BatchReservationOrderDTO reservationOrderDTO = new BatchReservationOrderDTO();
+            //设置预约单基本信息
+            reservationOrderDTO.setIdcardNo(item.getIdcardNo());
+            reservationOrderDTO.setName(item.getName());
+            reservationOrderDTO.setAppointStartTime(item.getAppointStartTime());
+            reservationOrderDTO.setAppointEndTime(item.getAppointEndTime());
+            reservationOrderDTO.setPhone(item.getPhone());
+            reservationOrderDTO.setRemark(item.getRemark());
+            //被访问人电话,名字,工号
+            reservationOrderDTO.setStaffId(item.getStaffId());
+            reservationOrderDTO.setStaffName(item.getStaffName());
+            reservationOrderDTO.setStaffPhone(item.getStaffPhone());
+
+            //设置车辆信息
+            List<CarInfoEntity> carInfoEntityList = new ArrayList<CarInfoEntity>();
+            if (ValidateUtils.isNotEmptyCollection(carInfoImportList)) {
+                carInfoImportList.forEach(car -> {
+                    if(car.getBatchNo().equalsIgnoreCase(item.getBatchNo())){//批次相同
+                        CarInfoEntity carInfo = new CarInfoEntity();
+                        carInfo.setCarNo(car.getCarNo());
+                        carInfo.setName(car.getName());
+                        carInfo.setPhone(car.getPhone());
+                        carInfoEntityList.add(carInfo);
+                    }
+                });
+            }
+            if (ValidateUtils.isNotEmptyCollection(carInfoEntityList)) {
+                reservationOrderDTO.setCarInfoEntitys(carInfoEntityList);
+            }
+            reservationOrderDTO.setIsAddCarInfo(carInfoEntityList.size());
+
+            //设置同行人信息
+            List<CompanionsEntity> companionsList = new ArrayList<CompanionsEntity>();
+            if (ValidateUtils.isNotEmptyCollection(companionsImportList)) {
+                companionsImportList.forEach(companions -> {
+                    if(companions.getBatchNo().equalsIgnoreCase(item.getBatchNo())){//批次相同
+                        CompanionsEntity companionsEntity = new CompanionsEntity();
+                        companionsEntity.setName(companions.getName());
+                        companionsEntity.setPhone(companions.getPhone());
+                        companionsEntity.setIdcardNo(companions.getIdcardNo());
+                        companionsList.add(companionsEntity);
+                    }
+                });
+            }
+            if (ValidateUtils.isNotEmptyCollection(companionsList)) {
+                reservationOrderDTO.setCompanionsEntitys(companionsList);
+            }
+            reservationOrderDTO.setCompanions(companionsList.size());
+
+            //保存
+            this.createBatchReservationOrder(reservationOrderDTO);
+
+        });
+    }
+    private void createBatchReservationOrder(BatchReservationOrderDTO batchCeservationOrderDTO) {
+        this.validateBatchReservationOrder(batchCeservationOrderDTO);
+        ReservationOrderDTO reservationOrderDTO = new ReservationOrderDTO();
+        BeanUtil.copyProperties(batchCeservationOrderDTO ,reservationOrderDTO);
+        this.saveReservationOrder(reservationOrderDTO);
+    }
+    /**
+     * 校验预约单(批量)
+     * @param reservationOrderDTO
+     */
+    private void validateBatchReservationOrder(BatchReservationOrderDTO reservationOrderDTO) {
+        //校验预约结束时间结束时间在开始时间一小时以后
+        if(!this.isOneHourAfter(reservationOrderDTO.getAppointStartTime(),reservationOrderDTO.getAppointEndTime())){
+            throw new CommonException("预约结束时间需要在开始时间一小时以后！");
+        }
+        //校验身份证是否合法
+        if (!CommonValidator.isIDCard(reservationOrderDTO.getIdcardNo())) {
+            throw new CommonException("身份证格式不正确！");
+        }
+        //校验手机号是否正确
+        if (!CommonValidator.isMobile(reservationOrderDTO.getPhone())) {
+            throw new CommonException("手机号格式不正确！");
+        }
+        //校验员工手机号是否存在
+        if (ValidateUtils.isEmpty(this.baseStaffService.queryByMobile(reservationOrderDTO.getStaffPhone()))) {
+            throw new CommonException("被访人信息不存在！");
+        }
     }
 
     private boolean isOneHourAfter(Date actStartTime,Date actEndTime){

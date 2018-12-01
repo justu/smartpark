@@ -7,6 +7,7 @@ import com.chris.smartpark.busi.entity.VisitorIdcardEntity;
 import com.chris.smartpark.busi.entity.VisitorReservationEntity;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 
@@ -58,4 +59,8 @@ public interface VisitorReservationService {
 	 * @return
 	 */
     List<VisitorReservationEntity> queryByIdcardAndStatus(String idcardNo, String status);
+
+    //批量导入
+	@Transactional
+	void batchImportReservation(File excelFile);
 }

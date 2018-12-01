@@ -1,6 +1,7 @@
 package com.chris.smartpark.busi.dto;
 
 import cn.afterturn.easypoi.excel.annotation.Excel;
+import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -39,6 +40,18 @@ public class BatchReservationImportDTO implements Serializable {
 
     @Excel(name = "来访事由")
     private String remark;
+
+    @Excel(name = "受访者id")
+    @NotNull(message = "受访者id不能为空", groups = {ReservationImportValidGroup.class})
+    private Long staffId;
+    //受访者姓名
+    @Excel(name = "受访者姓名")
+    @NotNull(message = "受访者姓名不能为空", groups = {ReservationImportValidGroup.class})
+    private String staffName;
+    //受访者手机号
+    @Excel(name = "受访者手机号")
+    @NotNull(message = "受访者手机号不能为空", groups = {ReservationImportValidGroup.class})
+    private String staffPhone;
 
     public String getName() {
         return name;
@@ -94,6 +107,30 @@ public class BatchReservationImportDTO implements Serializable {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public Long getStaffId() {
+        return staffId;
+    }
+
+    public String getStaffName() {
+        return staffName;
+    }
+
+    public String getStaffPhone() {
+        return staffPhone;
+    }
+
+    public void setStaffId(Long staffId) {
+        this.staffId = staffId;
+    }
+
+    public void setStaffName(String staffName) {
+        this.staffName = staffName;
+    }
+
+    public void setStaffPhone(String staffPhone) {
+        this.staffPhone = staffPhone;
     }
 
     /**

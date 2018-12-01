@@ -2,6 +2,7 @@ package com.chris.smartpark.busi.dto;
 
 import cn.afterturn.easypoi.excel.annotation.Excel;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -12,9 +13,11 @@ public class BatchCompanionsImportDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Excel(name = "批次号")
+    @NotNull(message = "批次号不能为空", groups = {CompanionsImportValidGroup.class})
     private String batchNo;
 
     @Excel(name = "同行人姓名")
+    @NotNull(message = "同行人姓名不能为空", groups = {CompanionsImportValidGroup.class})
     private String name;
 
     @Excel(name = "同行人身份证号")
@@ -53,5 +56,12 @@ public class BatchCompanionsImportDTO implements Serializable {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    /**
+     * 参数校验
+     */
+    public interface CompanionsImportValidGroup {
+
     }
 }
