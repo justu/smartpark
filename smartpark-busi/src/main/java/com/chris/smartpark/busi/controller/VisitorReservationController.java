@@ -6,6 +6,7 @@ import com.chris.base.common.utils.PageUtils;
 import com.chris.base.common.utils.ValidateUtils;
 import com.chris.base.modules.app.annotation.Login;
 import com.chris.smartpark.busi.common.VisitorConstants;
+import com.chris.smartpark.busi.dto.AuthIdCardDTO;
 import com.chris.smartpark.busi.dto.ReservationOrderApproveDTO;
 import com.chris.smartpark.busi.dto.ReservationOrderDTO;
 import com.chris.smartpark.busi.entity.VisitorIdcardEntity;
@@ -84,7 +85,29 @@ public class VisitorReservationController {
 		visitorReservationService.checkIdCardAndGetAuth(visitorIdcardEntity);
 		return CommonResponse.ok();
 	}
-	
+
+	/**
+	 * 信息
+	 */
+	@RequestMapping("/isAppointed")
+	public CommonResponse isAppointed(@RequestBody @Validated(AuthIdCardDTO.ValidateIdCard.class)AuthIdCardDTO authIdCardDTO, BindingResult result){
+		log.info("========身份证识别开始鉴定是否有有效的预约单=====");
+		ValidateUtils.validatedParams(result);
+		CommonResponse res = visitorReservationService.checkIdCard(authIdCardDTO);
+		return res;
+	}
+
+	/**
+	 * 上传对应预约单的访客信息 将来访者的信息上传到主控平台
+	 */
+	@RequestMapping("/saveVisitorIdCard")
+	public CommonResponse saveVisitorIdCard(@RequestBody @Validated(AuthIdCardDTO.ValidateSaveVisitorIdCard.class)AuthIdCardDTO authIdCardDTO, BindingResult result){
+		log.info("========身份证识别开始将来访者的信息上传到主控平台=====");
+		ValidateUtils.validatedParams(result);
+		CommonResponse res = visitorReservationService.saveCardAndGetAuth(authIdCardDTO);
+		return res;
+	}
+
 	/**
 	 * 预约单保存
 	 */

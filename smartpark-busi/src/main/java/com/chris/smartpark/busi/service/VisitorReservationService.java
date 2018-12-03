@@ -1,6 +1,8 @@
 package com.chris.smartpark.busi.service;
 
+import com.chris.base.common.utils.CommonResponse;
 import com.chris.base.common.utils.PageUtils;
+import com.chris.smartpark.busi.dto.AuthIdCardDTO;
 import com.chris.smartpark.busi.dto.ReservationOrderApproveDTO;
 import com.chris.smartpark.busi.dto.ReservationOrderDTO;
 import com.chris.smartpark.busi.entity.VisitorIdcardEntity;
@@ -46,6 +48,10 @@ public interface VisitorReservationService {
 	void createReservationOrder(ReservationOrderDTO reservationOrderDTO);
 	@Transactional
 	void checkIdCardAndGetAuth(VisitorIdcardEntity visitorIdcardEntity);
+
+	CommonResponse checkIdCard(AuthIdCardDTO authIdCardDTO);
+	@Transactional
+	CommonResponse saveCardAndGetAuth(AuthIdCardDTO authIdCardDTO);
 
 	VisitorReservationEntity queryObjectById(Long id);
 

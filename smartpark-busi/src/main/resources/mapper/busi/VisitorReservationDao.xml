@@ -279,7 +279,7 @@
 	</delete>
 
 	<update id="updateStatus" parameterType="com.chris.smartpark.busi.entity.VisitorReservationEntity">
-		update sp_visitor_reservation set update_time = now(),status = #{status} where id = #{id}
+		update sp_visitor_reservation set update_time = now(),status = #{status},physical_card_id = #{physicalCardId} where id = #{id}
 	</update>
 
 </mapper>
