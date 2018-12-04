@@ -1,6 +1,5 @@
 package com.chris.smartpark.busi.dto;
 
-import com.alibaba.fastjson.JSONObject;
 import com.chris.base.common.model.SysUpdateInfo;
 import com.chris.smartpark.busi.entity.CarInfoEntity;
 import com.chris.smartpark.busi.entity.CompanionsEntity;

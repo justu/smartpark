@@ -21,16 +21,14 @@ import com.chris.smartpark.busi.dto.*;
 import com.chris.smartpark.busi.entity.*;
 import com.chris.smartpark.busi.service.*;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 @Service("visitorReservationService")
@@ -96,10 +94,32 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
     public PageUtils queryReservationOrdersByOpenId(Map<String, Object> params) {
         //查询列表数据
         Query query = new Query(params);
-        List<ReservationOrderQryDTO> resultList = this.visitorReservationDao.queryReservationOrdersByOpenId(query);
         int total = this.visitorReservationDao.countReservationOrdersByOpenId(query);
+        List<ReservationOrderQryDTO> resultList = new ArrayList<>();
+        if (total > 0) {
+            resultList = this.sortData(this.visitorReservationDao.queryReservationOrdersByOpenId(query));
+        }
         PageUtils pageUtil = new PageUtils(resultList, total, query.getLimit(), query.getPage());
         return pageUtil;
+    }
+
+    private List<ReservationOrderQryDTO> sortData(List<ReservationOrderQryDTO> resultList) {
+        if (ValidateUtils.isEmptyCollection(resultList)) {
+            return Lists.newArrayList();
+        }
+        List<ReservationOrderQryDTO> firstData = Lists.newArrayList();
+        List<ReservationOrderQryDTO> secondData = Lists.newArrayList();
+        for (int i = 0; i < resultList.size(); i++) {
+            ReservationOrderQryDTO item = resultList.get(i);
+            if (ValidateUtils.equals(VisitorConstants.ReservationOrderStatus.PENDING_APPROVE + "", item.getStatus())) {
+                System.out.println(item.getStatus());
+                firstData.add(item);
+            } else {
+                secondData.add(item);
+            }
+        }
+        firstData.addAll(secondData);
+        return firstData;
     }
 
     @Override
@@ -268,8 +288,8 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
                     this.visitorIdcardService.update(visitorIdcard);
                 }
                 //组装入参调用门禁接口授权
-                Date startTime = reservationOrder.getAppointStartTime();
-                Date endTime = reservationOrder.getAppointEndTime();
+                java.util.Date startTime = reservationOrder.getAppointStartTime();
+                java.util.Date endTime = reservationOrder.getAppointEndTime();
                 // TODO 需要根据访客ID查询访客对应可授权的门禁列表
                 List<VisitorDoorRelEntity> doorList = visitorDoorRelService.queryList(ImmutableMap.of(VisitorConstants.Keys.RESERVATION_ORDER_ID, reservationOrder.getId()));
                 List<DoorAuthEntity> doorAuthList = new ArrayList<DoorAuthEntity>();
@@ -386,8 +406,8 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
                     this.visitorIdcardService.update(visitorIdcard);
                 }
                 //组装入参调用门禁接口授权
-                Date startTime = reservationOrder.getAppointStartTime();
-                Date endTime = reservationOrder.getAppointEndTime();
+                java.util.Date startTime = reservationOrder.getAppointStartTime();
+                java.util.Date endTime = reservationOrder.getAppointEndTime();
                 // TODO 需要根据访客ID查询访客对应可授权的门禁列表
                 List<VisitorDoorRelEntity> doorList = visitorDoorRelService.queryList(ImmutableMap.of(VisitorConstants.Keys.RESERVATION_ORDER_ID, reservationOrder.getId()));
                 List<DoorAuthEntity> doorAuthList = new ArrayList<DoorAuthEntity>();
@@ -563,11 +583,11 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
             authenticationRecord.setStatus(VisitorConstants.ApproveResult.REJECT + "");
             authenticationRecord.setAuthDesc(authorizeDTO.getRejectReaon());
         }
-        authenticationRecord.setAuthTime(new Date());
+        authenticationRecord.setAuthTime(new java.util.Date());
         authenticationRecord.setCreateUserId(user.getUserId());
-        authenticationRecord.setCreateTime(new Date());
+        authenticationRecord.setCreateTime(new java.util.Date());
         authenticationRecord.setUpdateUserId(user.getUserId());
-        authenticationRecord.setUpdateTime(new Date());
+        authenticationRecord.setUpdateTime(new java.util.Date());
         authenticationRecordDao.save(authenticationRecord);
     }
 
@@ -783,7 +803,7 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
         }
     }
 
-    private boolean isOneHourAfter(Date actStartTime,Date actEndTime){
+    private boolean isOneHourAfter(java.util.Date actStartTime, java.util.Date actEndTime){
         long interval = (actEndTime.getTime() - actStartTime.getTime())/1000 - 3600;
         if(interval<0){
            return false;
