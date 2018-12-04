@@ -168,6 +168,10 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
         reservationOrder.setVisitorId(visitorInfo.getId());
         reservationOrder.setCreateTime(DateUtils.currentDate());
         reservationOrder.setStatus(VisitorConstants.ReservationOrderStatus.PENDING_APPROVE + "");
+        //如果为现场预约则预约单类型为线下预约
+        if(reservationOrderDTO.getIsLocalappoint()==VisitorConstants.isLocalappoint.OFFLINE){
+            reservationOrder.setType(VisitorConstants.ReservationOrderType.OFFLINE);
+        }
         this.save(reservationOrder);
 
         // 3、保存访客历史信息
@@ -207,7 +211,7 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
             throw new CommonException("手机号格式不正确！");
         }
         //校验验证码是否正确
-        if (!VisitorUtils.isVerifyCodeOK(reservationOrderDTO.getPhone(), reservationOrderDTO.getVerifyCode(), Constant.SMSTemplateCode.RESERVATION_VERIFY_CODE.getTemplateCode())) {
+        if (reservationOrderDTO.getIsLocalappoint()==VisitorConstants.isLocalappoint.ONLINE && !VisitorUtils.isVerifyCodeOK(reservationOrderDTO.getPhone(), reservationOrderDTO.getVerifyCode(), Constant.SMSTemplateCode.RESERVATION_VERIFY_CODE.getTemplateCode())) {
             throw new CommonException("验证码不正确！");
         }
         //校验员工手机号是否存在

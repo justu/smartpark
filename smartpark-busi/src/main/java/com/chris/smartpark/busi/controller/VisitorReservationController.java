@@ -98,7 +98,7 @@ public class VisitorReservationController {
 	}
 
 	/**
-	 * 上传对应预约单的访客信息 将来访者的信息上传到主控平台
+	 * 上传对应预约单的访客信息 将来访者的信息上传到主控平台、或者现场的预约以后进行授权再次刷卡进入
 	 */
 	@RequestMapping("/saveVisitorIdCard")
 	public CommonResponse saveVisitorIdCard(@RequestBody @Validated(AuthIdCardDTO.ValidateSaveVisitorIdCard.class)AuthIdCardDTO authIdCardDTO, BindingResult result){
@@ -109,7 +109,7 @@ public class VisitorReservationController {
 	}
 
 	/**
-	 * 预约单保存
+	 * 远程预约单保存
 	 */
 	@RequestMapping("/save")
 	@Login
@@ -118,6 +118,22 @@ public class VisitorReservationController {
 		ValidateUtils.validatedParams(result);
 		visitorReservationService.createReservationOrder(reservationOrderDTO);
 		return CommonResponse.ok();
+	}
+
+	/**
+	 * 现场来访保存预约信息到主控平台
+	 */
+	@RequestMapping("/localSave")
+	public CommonResponse localSave(@RequestBody  @Validated(ReservationOrderDTO.ValidateLocalSave.class)ReservationOrderDTO reservationOrderDTO, BindingResult result){
+		try{
+		reservationOrderDTO.setIsLocalappoint(VisitorConstants.isLocalappoint.OFFLINE);
+		log.info("预约单生成入参"+ JSON.toJSONString(reservationOrderDTO));
+		ValidateUtils.validatedParams(result);
+		visitorReservationService.createReservationOrder(reservationOrderDTO);
+		}catch (Exception e){
+			return CommonResponse.ok("现场来访上传失败").put("isSuccess","false");
+		}
+		return CommonResponse.ok("现场来访上传成功").put("isSuccess","true");
 	}
 	
 	/**

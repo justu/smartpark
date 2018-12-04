@@ -55,6 +55,19 @@ public class VisitorConstants {
          */
         int OFFLINE = 2;
     }
+    /**
+     * 是否为
+     */
+    public interface isLocalappoint {
+        /**
+         * 线上
+         */
+        int ONLINE = 0;
+        /**
+         * 线下
+         */
+        int OFFLINE = 1;
+    }
 
     /**
      * 默认授权标识

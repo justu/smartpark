@@ -40,7 +40,7 @@ public class VisitorReservationEntity  extends SysUpdateInfo  implements Seriali
 	//实际结束时间
 	private Date actEndTime;
 	//预约单类型  1  在线预约    2 线下预约  默认1  
-	private Integer type;
+	private Integer type = 1;
 	//备注(来访目的)
 	private String remark;
 	//同行人数

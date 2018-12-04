@@ -19,31 +19,31 @@ public class ReservationOrderDTO extends SysUpdateInfo implements Serializable {
 
     private static final long serialVersionUID = 1L;
     //姓名
-    @NotBlank(message = "姓名必填", groups = {ValidateSaveReservation.class})
+    @NotBlank(message = "姓名必填", groups = {ValidateSaveReservation.class,ValidateLocalSave.class})
     private String name;
     //身份证号
-    @NotBlank(message = "身份证必填", groups = {ValidateSaveReservation.class})
+    @NotBlank(message = "身份证必填", groups = {ValidateSaveReservation.class,ValidateLocalSave.class})
     private String idcardNo;
     //手机号
-    @NotBlank(message = "手机号必填", groups = {ValidateSaveReservation.class})
+    @NotBlank(message = "手机号必填", groups = {ValidateSaveReservation.class,ValidateLocalSave.class})
     private String phone;
     //验证码
     @NotBlank(message = "验证码必填", groups = {ValidateSaveReservation.class})
     private String verifyCode;
     //受访者id
-    @NotNull(message = "受访者id必填", groups = {ValidateSaveReservation.class})
+    @NotNull(message = "受访者id必填", groups = {ValidateSaveReservation.class,ValidateLocalSave.class})
     private Long staffId;
     //受访者姓名
-    @NotBlank(message = "受访者姓名必填", groups = {ValidateSaveReservation.class})
+    @NotBlank(message = "受访者姓名必填", groups = {ValidateSaveReservation.class,ValidateLocalSave.class})
     private String staffName;
     //受访者手机号
-    @NotBlank(message = "受访者手机号必填", groups = {ValidateSaveReservation.class})
+    @NotBlank(message = "受访者手机号必填", groups = {ValidateSaveReservation.class,ValidateLocalSave.class})
     private String staffPhone;
     //预约开始时间
-    @NotNull(message = "预约开始时间必填", groups = {ValidateSaveReservation.class})
+    @NotNull(message = "预约开始时间必填", groups = {ValidateSaveReservation.class,ValidateLocalSave.class})
     private Date appointStartTime;
     //预约结束时间
-    @NotNull(message = "预约结束时间必填", groups = {ValidateSaveReservation.class})
+    @NotNull(message = "预约结束时间必填", groups = {ValidateSaveReservation.class,ValidateLocalSave.class})
     private Date appointEndTime;
     //同行人数
     private Integer companions;
@@ -51,6 +51,8 @@ public class ReservationOrderDTO extends SysUpdateInfo implements Serializable {
     private String remark;
     //是否添加车辆 1 是 0 否
     private int isAddCarInfo = 0;
+    //是否为现场来访预约 1 是 0 否
+    private int isLocalappoint = 0;
     //访客身份信息表
     private VisitorIdcardEntity visitorIdcardEntity;
     //车辆信息
@@ -181,6 +183,14 @@ public class ReservationOrderDTO extends SysUpdateInfo implements Serializable {
         this.companionsEntitys = companionsEntitys;
     }
 
+    public int getIsLocalappoint() {
+        return isLocalappoint;
+    }
+
+    public void setIsLocalappoint(int isLocalappoint) {
+        this.isLocalappoint = isLocalappoint;
+    }
+
     public String getOpenId() {
         return openId;
     }
@@ -193,7 +203,9 @@ public class ReservationOrderDTO extends SysUpdateInfo implements Serializable {
     public interface ValidateSaveReservation{
 
     }
+    public interface ValidateLocalSave{
 
+    }
 
 
 }
