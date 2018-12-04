@@ -167,7 +167,7 @@ public class VisitorTest {
      */
     @Test
     public void queryReservationOrdersByOpenId() {
-        PageUtils page = this.visitorReservationService.queryReservationOrdersByOpenId(ImmutableMap.of(VisitorConstants.Keys.OPEN_ID, "YzcmCZNvbXocrsz9dm8e",
+        PageUtils page = this.visitorReservationService.queryReservationOrdersByOpenId(ImmutableMap.of(VisitorConstants.Keys.OPEN_ID, "obETm5c3-tUxjFf3Rgq5qRbZPRfk",
                 VisitorConstants.Keys.PAGE, "1", VisitorConstants.Keys.LIMIT, "10"));
         System.out.println("查询员工对应的预约单JSON = " + JSONObject.toJSONString(page));
     }

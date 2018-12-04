@@ -37,6 +37,8 @@ public class ReservationOrderQryDTO implements Serializable {
      * 预约结束时间
      */
     private Date appointEndTime;
+
+    private Date createTime;
     /**
      * 备注(来访目的)
      */
@@ -104,5 +106,13 @@ public class ReservationOrderQryDTO implements Serializable {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 }
