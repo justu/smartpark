@@ -47,6 +47,7 @@ public class VisitorReservationController {
 	 * @return
 	 */
 	@PostMapping("/queryReservationOrdersByOpenId")
+	@Login
 	public CommonResponse queryReservationOrdersByOpenId(@RequestBody Map<String, Object> params){
 		if (ValidateUtils.isEmpty(params.get(VisitorConstants.Keys.OPEN_ID))) {
 			return CommonResponse.error("openId为空！");

@@ -1,6 +1,8 @@
 package com.chris.smartpark.busi.entity;
 
 import java.io.Serializable;
+import java.util.List;
+
 import com.chris.base.common.model.SysUpdateInfo;
 
 
@@ -38,6 +40,11 @@ public class VisitorInfoHisEntity  extends SysUpdateInfo  implements Serializabl
 	private String ext3;
 	//备注
 	private String remark;
+
+	/**
+	 * 访客车辆信息
+	 */
+	private List<CarInfoEntity> carInfoList;
 
 	/**
 	 * 预约单号
@@ -135,5 +142,13 @@ public class VisitorInfoHisEntity  extends SysUpdateInfo  implements Serializabl
 
 	public void setReservationId(Long reservationId) {
 		this.reservationId = reservationId;
+	}
+
+	public List<CarInfoEntity> getCarInfoList() {
+		return carInfoList;
+	}
+
+	public void setCarInfoList(List<CarInfoEntity> carInfoList) {
+		this.carInfoList = carInfoList;
 	}
 }

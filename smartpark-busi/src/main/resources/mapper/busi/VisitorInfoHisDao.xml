@@ -160,4 +160,8 @@
 		</foreach>
 	</delete>
 
+	<select id="queryByIdcardNo" parameterType="java.lang.String" resultType="com.chris.smartpark.busi.entity.VisitorInfoHisEntity">
+		select * from sp_visitor_info_his t where t.idcard_no = #{idcardNo} ORDER BY t.create_time desc limit 1
+	</select>
+
 </mapper>

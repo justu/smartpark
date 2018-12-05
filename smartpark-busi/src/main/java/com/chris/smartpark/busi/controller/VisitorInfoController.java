@@ -3,17 +3,17 @@ package com.chris.smartpark.busi.controller;
 import java.util.List;
 import java.util.Map;
 
+import com.chris.base.common.utils.*;
+import com.chris.base.modules.app.annotation.Login;
+import com.chris.smartpark.busi.entity.VisitorInfoHisEntity;
+import com.chris.smartpark.busi.service.VisitorInfoHisService;
+import com.google.common.collect.ImmutableMap;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import com.chris.smartpark.busi.entity.VisitorInfoEntity;
 import com.chris.smartpark.busi.service.VisitorInfoService;
-import com.chris.base.common.utils.PageUtils;
-import com.chris.base.common.utils.Query;
-import com.chris.base.common.utils.CommonResponse;
-
-
 
 
 /**
@@ -28,6 +28,9 @@ import com.chris.base.common.utils.CommonResponse;
 public class VisitorInfoController {
 	@Autowired
 	private VisitorInfoService visitorInfoService;
+
+	@Autowired
+	private VisitorInfoHisService visitorInfoHisService;
 	
 	/**
 	 * 列表
@@ -45,6 +48,23 @@ public class VisitorInfoController {
 		
 		return CommonResponse.ok().put("page", pageUtil);
 	}
+
+	/**
+	 * 根据身份证查询访客信息
+	 * @param idcardNo
+	 * @return
+	 */
+	@PostMapping("/queryByIdcard.notoken")
+	@Login
+	public CommonResponse queryByIdcardNo(String idcardNo){
+		if (!CommonValidator.isIDCard(idcardNo)) {
+			return CommonResponse.error("无效的身份证号码");
+		}
+		VisitorInfoHisEntity visitor = this.visitorInfoHisService.queryByIdcardNo(idcardNo);
+		return CommonResponse.ok().setData(visitor);
+	}
+
+
 	
 	
 	/**

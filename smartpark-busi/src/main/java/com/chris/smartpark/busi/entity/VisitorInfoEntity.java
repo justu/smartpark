@@ -1,6 +1,8 @@
 package com.chris.smartpark.busi.entity;
 
 import java.io.Serializable;
+import java.util.List;
+
 import com.chris.base.common.model.SysUpdateInfo;
 
 

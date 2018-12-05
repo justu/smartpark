@@ -29,4 +29,5 @@ public interface VisitorInfoService {
 	void delete(Long id);
 	
 	void deleteBatch(Long[] ids);
+
 }

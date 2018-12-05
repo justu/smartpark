@@ -13,5 +13,6 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface VisitorInfoHisDao extends BaseDao<VisitorInfoHisEntity> {
-	
+
+    VisitorInfoHisEntity queryByIdcardNo(String idcardNo);
 }

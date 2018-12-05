@@ -14,7 +14,9 @@ import com.chris.smartpark.busi.dto.ReservationOrderDTO;
 import com.chris.smartpark.busi.entity.CarInfoEntity;
 import com.chris.smartpark.busi.entity.VisitorIdcardEntity;
 import com.chris.smartpark.busi.entity.VisitorInfoEntity;
+import com.chris.smartpark.busi.entity.VisitorInfoHisEntity;
 import com.chris.smartpark.busi.service.EntranceService;
+import com.chris.smartpark.busi.service.VisitorInfoHisService;
 import com.chris.smartpark.busi.service.VisitorInfoService;
 import com.chris.smartpark.busi.service.VisitorReservationService;
 import com.google.common.collect.ImmutableList;
@@ -45,6 +47,9 @@ public class VisitorTest {
 
 	@Autowired
 	private EntranceService entranceService;
+
+	@Autowired
+	private VisitorInfoHisService visitorInfoHisService;
 
 	@Test
 	public void queryVisitorInfo() {
@@ -176,6 +181,15 @@ public class VisitorTest {
     public void queryReservationOrderDetail() {
         ReservationOrderDTO detail = this.visitorReservationService.queryReservationOrderDetail(6L);
         System.out.println("查询预约单详情JSON = " + JSONObject.toJSONString(detail));
+    }
+
+    /**
+     * 根据身份证号查询访客
+     */
+    @Test
+    public void queryVisitorHisByIdcardNo() {
+        VisitorInfoHisEntity visitor = this.visitorInfoHisService.queryByIdcardNo("342225199109102078");
+        System.out.println("根据身份证号查询访客实例信息 = " + JSONObject.toJSONString(visitor));
     }
 
 }

@@ -1,6 +1,10 @@
 package com.chris.smartpark.busi.service.impl;
 
 import com.chris.base.common.utils.DateUtils;
+import com.chris.base.common.utils.ValidateUtils;
+import com.chris.smartpark.busi.entity.CarInfoEntity;
+import com.chris.smartpark.busi.service.CarInfoService;
+import com.google.common.collect.ImmutableMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +21,8 @@ import com.chris.smartpark.busi.service.VisitorInfoService;
 public class VisitorInfoServiceImpl implements VisitorInfoService {
 	@Autowired
 	private VisitorInfoDao visitorInfoDao;
+	@Autowired
+	private CarInfoService carInfoService;
 	
 	@Override
 	public VisitorInfoEntity queryObject(Long id){
@@ -62,5 +68,5 @@ public class VisitorInfoServiceImpl implements VisitorInfoService {
 	public void deleteBatch(Long[] ids){
 		visitorInfoDao.deleteBatch(ids);
 	}
-	
+
 }

@@ -29,4 +29,6 @@ public interface VisitorInfoHisService {
 	void delete(Long id);
 	
 	void deleteBatch(Long[] ids);
+
+    VisitorInfoHisEntity queryByIdcardNo(String idcardNo);
 }
