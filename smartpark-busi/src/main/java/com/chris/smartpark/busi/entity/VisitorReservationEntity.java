@@ -17,6 +17,8 @@ public class VisitorReservationEntity  extends SysUpdateInfo  implements Seriali
 	
 	//订单id
 	private Long id;
+	//订单号
+	private String reservationNo;
 	//访客手机号
 	private String phone;
 	//访客照片地址
@@ -62,6 +64,15 @@ public class VisitorReservationEntity  extends SysUpdateInfo  implements Seriali
 	public Long getId() {
 		return id;
 	}
+
+	public String getReservationNo() {
+		return reservationNo;
+	}
+
+	public void setReservationNo(String reservationNo) {
+		this.reservationNo = reservationNo;
+	}
+
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}

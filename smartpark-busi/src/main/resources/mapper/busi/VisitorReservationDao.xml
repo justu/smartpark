@@ -6,6 +6,7 @@
 	<!-- 可根据自己的需求，是否要使用 -->
     <resultMap type="com.chris.smartpark.busi.entity.VisitorReservationEntity" id="visitorReservationMap">
         <result property="id" column="id"/>
+        <result property="reservationNo" column="reservation_no"/>
         <result property="phone" column="phone"/>
         <result property="photoUrl" column="photo_url"/>
         <result property="visitorId" column="visitor_id"/>

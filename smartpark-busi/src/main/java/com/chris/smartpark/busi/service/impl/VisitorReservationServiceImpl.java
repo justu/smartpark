@@ -188,6 +188,7 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
         reservationOrder.setVisitorId(visitorInfo.getId());
         reservationOrder.setCreateTime(DateUtils.currentDate());
         reservationOrder.setStatus(VisitorConstants.ReservationOrderStatus.PENDING_APPROVE + "");
+        reservationOrder.setReservationNo(VisitorUtils.getReservationNo());
         //如果为现场预约则预约单类型为线下预约
         if(reservationOrderDTO.getIsLocalappoint()==VisitorConstants.isLocalappoint.OFFLINE){
             reservationOrder.setType(VisitorConstants.ReservationOrderType.OFFLINE);
