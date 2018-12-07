@@ -44,6 +44,12 @@ public interface VisitorReservationService {
 	void delete(Long id);
 	
 	void deleteBatch(Long[] ids);
+	/**
+	 * 定时任务
+	 * @return
+	 */
+	@Transactional
+	void change2Overdue();
 	@Transactional
 	void createReservationOrder(ReservationOrderDTO reservationOrderDTO);
 	@Transactional

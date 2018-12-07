@@ -30,5 +30,7 @@ public interface VisitorReservationDao extends BaseDao<VisitorReservationEntity>
 
     List<ReservationOrderQryDTO> queryReservationOrdersByOpenId(Map<String, Object> params);
 
+    List<VisitorReservationEntity> queryByStatusAndTime();
+
     int countReservationOrdersByOpenId(Map<String, Object> params);
 }

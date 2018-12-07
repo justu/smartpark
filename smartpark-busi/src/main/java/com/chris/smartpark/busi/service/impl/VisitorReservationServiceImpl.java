@@ -663,6 +663,18 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
     }
 
     @Override
+    public void change2Overdue(){
+        //1.取待审核，待激活但未在规定时间现场激活的预约单
+        List<VisitorReservationEntity> reservation = this.visitorReservationDao.queryByStatusAndTime();
+        for(VisitorReservationEntity res : reservation){
+            res.setUpdateTime(DateUtils.currentDate());
+            //变更为已过期
+            res.setStatus(String.valueOf(VisitorConstants.ReservationOrderStatus.EXPIRED));
+            visitorReservationDao.update(res);
+        }
+    }
+
+    @Override
     public List<VisitorReservationEntity> queryByIdcardAndStatus(String idcardNo, String status) {
         return this.visitorReservationDao.queryByIdcardAndStatus(idcardNo, status);
     }
