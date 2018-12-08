@@ -693,7 +693,7 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
             //获取待审核的预约单发送短信给受访人
             for(VisitorReservationEntity res : reservation){
                 //获取被访人手机号码
-                BaseStaffEntity baseStaffEntity = this.baseStaffService.queryObject(res.getVisitorId());
+                BaseStaffEntity baseStaffEntity = this.baseStaffService.queryObject(res.getStaffId());
                 SMSEntity smsEntity = new SMSEntity();
                 smsEntity.setMobile(baseStaffEntity.getMobile());//baseStaffEntity.getMobile()
                 smsEntity.setSmsType(Constant.SMSType.NOTICE);
