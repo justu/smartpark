@@ -57,8 +57,11 @@
 			<if test="id != null and id !='' ">
 				AND id = #{id}
 			</if>
-				<if test="phone != null and phone !='' ">
-				AND phone = #{phone}
+			<if test="phone != null and phone !='' ">
+			AND phone = #{phone}
+			</if>
+				<if test="reservationNo != null and reservationNo !='' ">
+				AND reservation_no = #{reservationNo}
 			</if>
 				<if test="photoUrl != null and photoUrl !='' ">
 				AND photo_url = #{photoUrl}
@@ -157,6 +160,9 @@
 			<if test="id != null and id !='' ">
                 AND id = #{id}
             </if>
+			<if test="reservationNo != null and reservationNo !='' ">
+                AND reservation_no = #{reservationNo}
+            </if>
 				<if test="phone != null and phone !='' ">
                 AND phone = #{phone}
             </if>
@@ -198,8 +204,9 @@
 	<insert id="save" parameterType="com.chris.smartpark.busi.entity.VisitorReservationEntity" useGeneratedKeys="true" keyProperty="id">
 		insert into sp_visitor_reservation
 		(
-			`phone`, 
-			`photo_url`, 
+			`reservation_no`,
+			`phone`,
+			`photo_url`,
 			`visitor_id`, 
 			`staff_id`, 
 			`staff_mobile`,
@@ -223,8 +230,9 @@
 		)
 		values
 		(
-			#{phone}, 
-			#{photoUrl}, 
+			#{reservationNo},
+			#{phone},
+			#{photoUrl},
 			#{visitorId}, 
 			#{staffId}, 
 			#{staffMobile},
@@ -251,6 +259,7 @@
 	<update id="update" parameterType="com.chris.smartpark.busi.entity.VisitorReservationEntity">
 		update sp_visitor_reservation 
 		<set>
+			<if test="reservationNo != null">`reservation_no` = #{reservationNo}, </if>
 			<if test="phone != null">`phone` = #{phone}, </if>
 			<if test="photoUrl != null">`photo_url` = #{photoUrl}, </if>
 			<if test="visitorId != null">`visitor_id` = #{visitorId}, </if>
