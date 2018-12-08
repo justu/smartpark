@@ -1,6 +1,16 @@
 package com.chris.smartpark.busi.common;
 
 public class VisitorConstants {
+    public interface isSendToEntrance{
+        /**
+         * 送门禁开关 送
+         */
+        String TRUE = "true";        /**
+         * 不送
+         */
+        String FALSE = "false";
+
+    }
     public interface ApproveResult {
         /**
          * 审核通过
