@@ -671,36 +671,45 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
 
     @Override
     public void change2Overdue(){
-        //1.取待审核，待激活但未在规定时间现场激活的预约单
-        List<VisitorReservationEntity> reservation = this.visitorReservationDao.queryByStatusAndTime();
-        for(VisitorReservationEntity res : reservation){
-            res.setUpdateTime(DateUtils.currentDate());
-            //变更为已过期
-            res.setStatus(String.valueOf(VisitorConstants.ReservationOrderStatus.EXPIRED));
-            visitorReservationDao.update(res);
+        try{
+            //1.取待审核，待激活但未在规定时间现场激活的预约单
+            List<VisitorReservationEntity> reservation = this.visitorReservationDao.queryByStatusAndTime();
+            for(VisitorReservationEntity res : reservation){
+                res.setUpdateTime(DateUtils.currentDate());
+                //变更为已过期
+                res.setStatus(String.valueOf(VisitorConstants.ReservationOrderStatus.EXPIRED));
+                visitorReservationDao.update(res);
+            }
+        }catch (Exception e){
+            log.error(e.toString());
         }
+
     }
 
     @Override
     public  void sendSMSPrompt(String beforeHours){
-        List<VisitorReservationEntity> reservation = this.visitorReservationDao.queryByStatusAndTime2(beforeHours);
-        //获取待审核的预约单发送短信给受访人
-        for(VisitorReservationEntity res : reservation){
-            //获取被访人手机号码
-            BaseStaffEntity baseStaffEntity = this.baseStaffService.queryObject(res.getVisitorId());
-            SMSEntity smsEntity = new SMSEntity();
-            smsEntity.setMobile(baseStaffEntity.getMobile());//baseStaffEntity.getMobile()
-            smsEntity.setSmsType(Constant.SMSType.NOTICE);
-            smsEntity.setTemplateCode(Constant.SMSTemplateCode.RESERVATION_NOTICE.getTemplateCode());
-            JSONObject templateParam = new JSONObject();
-            templateParam.put(VisitorConstants.Keys.HOUR, beforeHours);
-            templateParam.put(VisitorConstants.Keys.ORDERNO, res.getReservationNo());
-            smsEntity.setTemplateParam(templateParam.toJSONString());
-            SendSMSUtils.sendSms(smsEntity);
-            res.setIsSendNotice(VisitorConstants.isSendNotice.YES);
-            res.setUpdateTime(DateUtils.currentDate());
-            //更新标识
-            visitorReservationDao.update(res);
+        try{
+            List<VisitorReservationEntity> reservation = this.visitorReservationDao.queryByStatusAndTime2(beforeHours);
+            //获取待审核的预约单发送短信给受访人
+            for(VisitorReservationEntity res : reservation){
+                //获取被访人手机号码
+                BaseStaffEntity baseStaffEntity = this.baseStaffService.queryObject(res.getVisitorId());
+                SMSEntity smsEntity = new SMSEntity();
+                smsEntity.setMobile(baseStaffEntity.getMobile());//baseStaffEntity.getMobile()
+                smsEntity.setSmsType(Constant.SMSType.NOTICE);
+                smsEntity.setTemplateCode(Constant.SMSTemplateCode.RESERVATION_NOTICE.getTemplateCode());
+                JSONObject templateParam = new JSONObject();
+                templateParam.put(VisitorConstants.Keys.HOUR, beforeHours);
+                templateParam.put(VisitorConstants.Keys.ORDERNO, res.getReservationNo());
+                smsEntity.setTemplateParam(templateParam.toJSONString());
+                SendSMSUtils.sendSms(smsEntity);
+                res.setIsSendNotice(VisitorConstants.isSendNotice.YES);
+                res.setUpdateTime(DateUtils.currentDate());
+                //更新标识
+                visitorReservationDao.update(res);
+            }
+        }catch (Exception e){
+            log.error(e.toString());
         }
 
     }
