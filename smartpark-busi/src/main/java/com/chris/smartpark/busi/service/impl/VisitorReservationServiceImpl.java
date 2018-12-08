@@ -676,6 +676,14 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
     }
 
     @Override
+    public  void sendSMSPrompt(){
+        List<VisitorReservationEntity> reservation = this.visitorReservationDao.queryByStatusAndTime2();
+        // TODO 按预约单状态发送信息
+        //获取待审核的预约单发送短信给受访人
+        //获取待激活的预约单发送短信给访客
+    }
+
+    @Override
     public List<VisitorReservationEntity> queryByIdcardAndStatus(String idcardNo, String status) {
         return this.visitorReservationDao.queryByIdcardAndStatus(idcardNo, status);
     }

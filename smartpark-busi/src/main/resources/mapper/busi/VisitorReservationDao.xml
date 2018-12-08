@@ -47,6 +47,11 @@
 		select * from sp_visitor_reservation a where a.`status` in (1,4) and a.appoint_end_time &lt; CURRENT_TIMESTAMP()
 	</select>
 
+	<select id="queryByStatusAndTime2" resultType="com.chris.smartpark.busi.entity.VisitorReservationEntity">
+		select * from sp_visitor_reservation a where a.`status` in (1,4) and a.appoint_end_time &lt;= CURRENT_TIMESTAMP()
+		and a.appoint_end_time &gt;= DATE_SUB(CURRENT_TIMESTAMP(),INTERVAL 6 hour)
+	</select>
+
 	<select id="queryList" resultType="com.chris.smartpark.busi.entity.VisitorReservationEntity">
 		select * from sp_visitor_reservation where 1=1
 			<if test="id != null and id !='' ">

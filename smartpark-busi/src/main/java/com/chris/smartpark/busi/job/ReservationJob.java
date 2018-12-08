@@ -33,4 +33,16 @@ public class ReservationJob {
         log.info("每一小时处理一次预约时间已结束却没到的预约单为已过期定时任务结束");
 
     }
+    /**
+     * 每一小时处理一次预约时间已结束却没到的预约单为已过期
+     *
+     */
+    @Scheduled(cron = "0 0 0/1 * * ?")//一小时一次
+ /*   @Scheduled(cron = "0 0/1 * * * ?")//一分钟一次*/
+    public void promptForReservation(){
+        log.info("每一小时处理一次预约时间已结束却没到的预约单为已过期定时任务开始");
+        visitorReservationService.sendSMSPrompt();
+        log.info("每一小时处理一次预约时间已结束却没到的预约单为已过期定时任务结束");
+
+    }
 }
