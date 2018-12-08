@@ -49,8 +49,9 @@
 	</select>
 
 	<select id="queryByStatusAndTime2" resultType="com.chris.smartpark.busi.entity.VisitorReservationEntity">
-		select * from sp_visitor_reservation a where a.`status` in (1) and a.appoint_end_time &lt;= CURRENT_TIMESTAMP()
-		and a.appoint_end_time &gt;= DATE_SUB(CURRENT_TIMESTAMP(),INTERVAL #{beforeHours} hour) and a.is_send_notice=0
+		select * from sp_visitor_reservation a where a.`status` in (1) and a.appoint_end_time &lt;= DATE_ADD(CURRENT_TIMESTAMP(),INTERVAL #{beforeHours} hour)
+		and a.appoint_end_time &gt;=CURRENT_TIMESTAMP()
+		and a.is_send_notice=0
 	</select>
 
 	<select id="queryList" resultType="com.chris.smartpark.busi.entity.VisitorReservationEntity">

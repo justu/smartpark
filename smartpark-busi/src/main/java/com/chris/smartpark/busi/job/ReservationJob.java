@@ -43,10 +43,10 @@ public class ReservationJob {
     @Scheduled(cron = "0 0/5 * * * ?")//一小时一次
  /*   @Scheduled(cron = "0 0/5 * * * ?")//一分钟一次*/
     public void promptForReservation(){
-        log.info("每一小时处理一次预约时间已结束却没到的预约单为已过期定时任务开始");
+        log.info("每五分钟处理一次预约时间已结束却没到的预约单为已过期定时任务开始");
         String beforeHours = sysConfigService.getValue("BEFOREHOURS");
         visitorReservationService.sendSMSPrompt(beforeHours);
-        log.info("每一小时处理一次预约时间已结束却没到的预约单为已过期定时任务结束");
+        log.info("每五分钟处理一次预约时间已结束却没到的预约单为已过期定时任务结束");
 
     }
 }
