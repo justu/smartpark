@@ -11,6 +11,17 @@ public class VisitorConstants {
         String FALSE = "false";
 
     }
+    public interface isSendNotice{
+        /**
+         * 是否已发送短信给受访者
+         */
+        int YES = 1;
+        /**
+         * 是否已发送短信给受访者
+         */
+        int NO = 0;
+
+    }
     public interface ApproveResult {
         /**
          * 审核通过
@@ -103,6 +114,9 @@ public class VisitorConstants {
         String REJECT_REASON = "reason";
         String RESERVATION_ORDER_ID = "reservationId";
         String TYPE = "type";
+        String HOUR = "hour";
+        String ORDERNO = "orderNo";
+
     }
 
     public interface Page {

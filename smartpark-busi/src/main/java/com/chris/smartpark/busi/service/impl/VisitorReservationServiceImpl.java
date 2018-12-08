@@ -682,11 +682,27 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
     }
 
     @Override
-    public  void sendSMSPrompt(){
-        List<VisitorReservationEntity> reservation = this.visitorReservationDao.queryByStatusAndTime2();
-        // TODO 按预约单状态发送信息
+    public  void sendSMSPrompt(String beforeHours){
+        List<VisitorReservationEntity> reservation = this.visitorReservationDao.queryByStatusAndTime2(beforeHours);
         //获取待审核的预约单发送短信给受访人
-        //获取待激活的预约单发送短信给访客
+        for(VisitorReservationEntity res : reservation){
+            //获取被访人手机号码
+            BaseStaffEntity baseStaffEntity = this.baseStaffService.queryObject(res.getVisitorId());
+            SMSEntity smsEntity = new SMSEntity();
+            smsEntity.setMobile(baseStaffEntity.getMobile());//baseStaffEntity.getMobile()
+            smsEntity.setSmsType(Constant.SMSType.NOTICE);
+            smsEntity.setTemplateCode(Constant.SMSTemplateCode.RESERVATION_NOTICE.getTemplateCode());
+            JSONObject templateParam = new JSONObject();
+            templateParam.put(VisitorConstants.Keys.HOUR, beforeHours);
+            templateParam.put(VisitorConstants.Keys.ORDERNO, res.getReservationNo());
+            smsEntity.setTemplateParam(templateParam.toJSONString());
+            SendSMSUtils.sendSms(smsEntity);
+            res.setIsSendNotice(VisitorConstants.isSendNotice.YES);
+            res.setUpdateTime(DateUtils.currentDate());
+            //更新标识
+            visitorReservationDao.update(res);
+        }
+
     }
 
     @Override

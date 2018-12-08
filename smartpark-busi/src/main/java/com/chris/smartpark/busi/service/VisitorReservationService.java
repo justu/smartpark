@@ -48,7 +48,7 @@ public interface VisitorReservationService {
 	 * 定时任务
 	 * @return
 	 */
-	void sendSMSPrompt();
+	void sendSMSPrompt(String beforeHours);
 	@Transactional
 	void change2Overdue();
 	@Transactional

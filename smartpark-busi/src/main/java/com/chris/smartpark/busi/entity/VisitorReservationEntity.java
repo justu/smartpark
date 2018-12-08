@@ -57,6 +57,8 @@ public class VisitorReservationEntity  extends SysUpdateInfo  implements Seriali
 	private String physicalCardId;
 	private String openId;
 
+	private int isSendNotice;
+
 	public void setId(Long id) {
 		this.id = id;
 	}
@@ -200,5 +202,13 @@ public class VisitorReservationEntity  extends SysUpdateInfo  implements Seriali
 
 	public void setOpenId(String openId) {
 		this.openId = openId;
+	}
+
+	public int getIsSendNotice() {
+		return isSendNotice;
+	}
+
+	public void setIsSendNotice(int isSendNotice) {
+		this.isSendNotice = isSendNotice;
 	}
 }
