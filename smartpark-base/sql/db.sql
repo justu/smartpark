@@ -172,6 +172,7 @@ CREATE TABLE base_organization
    CNTRT_MGMT_CHECK_TYPE varchar(10) comment '划小承包考核类型是承包才允许手动输入6.30.	划小承包考核类型（CNTRT_MGMT_CHECK_TYPE）',
    CNTRT_MGMT_UNIT_LEVEL varchar(200) comment '划小承包单元层级用门户四级组织层级 5级不可选（自动匹配四级）',
    CNTRT_MGMT_STATE     varchar(50) comment '划小承包状态承包对应（待承包、已承包）、未承包',
+   park_id bigint(20) DEFAULT NULL COMMENT '园区ID',
    primary key (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='组织机构';
 

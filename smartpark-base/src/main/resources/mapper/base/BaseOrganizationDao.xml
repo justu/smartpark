@@ -40,6 +40,7 @@
         <result property="cntrtMgmtCheckType" column="CNTRT_MGMT_CHECK_TYPE"/>
         <result property="cntrtMgmtUnitLevel" column="CNTRT_MGMT_UNIT_LEVEL"/>
         <result property="cntrtMgmtState" column="CNTRT_MGMT_STATE"/>
+        <result property="parkId" column="park_id"/>
     </resultMap>
 
 	<select id="queryObject" resultType="com.chris.smartpark.base.entity.BaseOrganizationEntity">
@@ -152,6 +153,9 @@
 			</if>
 				<if test="cntrtMgmtState != null and cntrtMgmtState !='' ">
 				AND CNTRT_MGMT_STATE = #{cntrtMgmtState}
+			</if>
+			<if test="park_id != null and park_id !='' ">
+				AND park_id = #{park_id}
 			</if>
 		        <choose>
             <when test="sidx != null and sidx.trim() != ''">
@@ -273,6 +277,9 @@
 				<if test="cntrtMgmtState != null and cntrtMgmtState !='' ">
                 AND CNTRT_MGMT_STATE = #{cntrtMgmtState}
             </if>
+			<if test="park_id != null and park_id !='' ">
+				AND park_id = #{park_id}
+			</if>
 			</select>
 	 
 	<insert id="save" parameterType="com.chris.smartpark.base.entity.BaseOrganizationEntity" useGeneratedKeys="true" keyProperty="id">
@@ -311,7 +318,8 @@
 			`CNTRT_MGMT_TYPE`, 
 			`CNTRT_MGMT_CHECK_TYPE`, 
 			`CNTRT_MGMT_UNIT_LEVEL`, 
-			`CNTRT_MGMT_STATE`
+			`CNTRT_MGMT_STATE`,
+			`park_id`
 		)
 		values
 		(
@@ -348,7 +356,8 @@
 			#{cntrtMgmtType}, 
 			#{cntrtMgmtCheckType}, 
 			#{cntrtMgmtUnitLevel}, 
-			#{cntrtMgmtState}
+			#{cntrtMgmtState},
+			#{parkId}
 		)
 	</insert>
 	 

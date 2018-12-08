@@ -1,5 +1,6 @@
 package com.chris.smartpark.base.service;
 
+import com.chris.base.common.tree.TreeNode;
 import com.chris.smartpark.base.entity.BaseOrganizationEntity;
 
 import java.util.List;
@@ -27,4 +28,6 @@ public interface BaseOrganizationService {
 	void delete(Long id);
 	
 	void deleteBatch(Long[] ids);
+
+    List<TreeNode> queryBaseOrgHierarchyByParkId(Long parkId);
 }

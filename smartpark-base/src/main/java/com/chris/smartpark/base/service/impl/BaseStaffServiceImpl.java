@@ -1,5 +1,6 @@
 package com.chris.smartpark.base.service.impl;
 
+import com.chris.base.common.utils.CommonUtils;
 import com.chris.base.common.utils.ValidateUtils;
 import com.chris.smartpark.base.dto.BaseStaffDTO;
 import com.google.common.collect.ImmutableMap;
@@ -7,8 +8,10 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.chris.smartpark.base.dao.BaseStaffDao;
 import com.chris.smartpark.base.entity.BaseStaffEntity;
@@ -30,7 +33,28 @@ public class BaseStaffServiceImpl implements BaseStaffService {
 	public List<BaseStaffEntity> queryList(Map<String, Object> map){
 		return baseStaffDao.queryList(map);
 	}
-	
+
+	/**
+	 * 根据组织机构ID查询对应的员工信息列表
+	 * @param orgId
+	 * @return
+	 */
+	@Override
+	public List<BaseStaffDTO> queryStaffListByOrgId(String orgId) {
+		List<BaseStaffEntity> staffList = this.queryList(ImmutableMap.of("sdeptcode", orgId));
+		if (ValidateUtils.isNotEmptyCollection(staffList)) {
+			return staffList.stream().map(staff -> {
+				BaseStaffDTO staffDTO = new BaseStaffDTO(staff.getId(), staff.getUsername(), this.getPrivacyMobile(staff.getMobile()));
+				return staffDTO;
+			}).collect(Collectors.toList());
+		}
+		return Collections.EMPTY_LIST;
+	}
+
+	private String getPrivacyMobile(String mobile) {
+		return mobile.substring(0, 7) + "XXXX";
+	}
+
 	@Override
 	public int queryTotal(Map<String, Object> map){
 		return baseStaffDao.queryTotal(map);

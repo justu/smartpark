@@ -18,8 +18,10 @@ public interface BaseStaffService {
 	BaseStaffEntity queryObject(Long id);
 	
 	List<BaseStaffEntity> queryList(Map<String, Object> map);
-	
-	int queryTotal(Map<String, Object> map);
+
+    List<BaseStaffDTO> queryStaffListByOrgId(String orgId);
+
+    int queryTotal(Map<String, Object> map);
 	
 	void save(BaseStaffEntity baseStaff);
 	

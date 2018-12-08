@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.chris.base.common.utils.ValidateUtils;
 import com.chris.smartpark.base.dto.BaseStaffDTO;
+import com.google.common.collect.ImmutableMap;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -64,7 +65,19 @@ public class BaseStaffController {
 		
 		return CommonResponse.ok().put("baseStaff", baseStaff);
 	}
-	
+
+	/**
+	 * 信息
+	 */
+	@GetMapping("/queryStaffListByOrgId.notoken")
+	public CommonResponse queryStaffListByOrgId(String orgId){
+		if (ValidateUtils.isEmptyString(orgId)) {
+			return CommonResponse.error("组织机构ID不能为空");
+		}
+		List<BaseStaffDTO> staffDTOList = baseStaffService.queryStaffListByOrgId(orgId);
+		return CommonResponse.ok().setData(staffDTOList);
+	}
+
 	/**
 	 * 保存
 	 */

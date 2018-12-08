@@ -85,6 +85,11 @@ public class BaseOrganizationEntity  implements Serializable {
 	//划小承包状态承包对应（待承包、已承包）、未承包
 	private String cntrtMgmtState;
 
+	/**
+	 * 园区ID
+	 */
+	private Long parkId;
+
 	public void setId(Long id) {
 		this.id = id;
 	}
@@ -329,5 +334,13 @@ public class BaseOrganizationEntity  implements Serializable {
 
 	public String getCntrtMgmtState() {
 		return cntrtMgmtState;
+	}
+
+	public Long getParkId() {
+		return parkId;
+	}
+
+	public void setParkId(Long parkId) {
+		this.parkId = parkId;
 	}
 }

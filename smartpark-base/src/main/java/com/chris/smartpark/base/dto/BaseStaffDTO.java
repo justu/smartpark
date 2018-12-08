@@ -54,4 +54,13 @@ public class BaseStaffDTO implements Serializable {
     public void setIdcardnumber(String idcardnumber) {
         this.idcardnumber = idcardnumber;
     }
+
+    public BaseStaffDTO() {
+    }
+
+    public BaseStaffDTO(Long id, String username, String mobile) {
+        this.id = id;
+        this.username = username;
+        this.mobile = mobile;
+    }
 }

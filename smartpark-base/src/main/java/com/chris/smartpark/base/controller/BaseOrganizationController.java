@@ -3,6 +3,8 @@ package com.chris.smartpark.base.controller;
 import java.util.List;
 import java.util.Map;
 
+import com.chris.base.common.tree.TreeNode;
+import com.chris.base.common.utils.ValidateUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -50,8 +52,24 @@ public class BaseOrganizationController {
 		
 		return CommonResponse.ok().put("page", pageUtil);
 	}
-	
-	
+
+	/**
+	 * 根据园区ID查询园区对应的组织机构
+	 * 给第三方提供的接口
+	 * @author chris
+	 * @since Sep 09.18
+	 */
+	@GetMapping("/queryBaseOrgList.notoken")
+	public CommonResponse queryBaseOrgList(Long parkId){
+		if (ValidateUtils.isEmpty(parkId)) {
+			return CommonResponse.error("园区ID不能为空");
+		}
+		List<TreeNode> baseOrgNodes = this.baseOrganizationService.queryBaseOrgHierarchyByParkId(parkId);
+		return CommonResponse.ok().setData(baseOrgNodes);
+	}
+
+
+
 	/**
 	 * 信息
 	 */
