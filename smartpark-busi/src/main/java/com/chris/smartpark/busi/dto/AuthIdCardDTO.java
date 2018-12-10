@@ -14,8 +14,8 @@ public class AuthIdCardDTO implements Serializable {
     @NotBlank(message = "身份证号必填", groups = {AuthIdCardDTO.ValidateIdCard.class,AuthIdCardDTO.ValidateSaveVisitorIdCard.class})
     private String cardNO;
     //身份证ID
-    @NotNull(message = "身份证ID必填", groups = {AuthIdCardDTO.ValidateIdCard.class,AuthIdCardDTO.ValidateSaveVisitorIdCard.class})
-    private int cardID;
+    @NotBlank(message = "身份证ID必填", groups = {AuthIdCardDTO.ValidateIdCard.class,AuthIdCardDTO.ValidateSaveVisitorIdCard.class})
+    private String cardID;
     //来访人姓名
     @NotBlank(message = "来访人姓名必填", groups = {AuthIdCardDTO.ValidateIdCard.class,AuthIdCardDTO.ValidateSaveVisitorIdCard.class})
     private String cardName;
@@ -40,11 +40,11 @@ public class AuthIdCardDTO implements Serializable {
         this.cardNO = cardNO;
     }
 
-    public int getCardID() {
+    public String getCardID() {
         return cardID;
     }
 
-    public void setCardID(int cardID) {
+    public void setCardID(String cardID) {
         this.cardID = cardID;
     }
 
