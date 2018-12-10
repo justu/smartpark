@@ -65,7 +65,7 @@ public class BaseOrganizationController {
 			return CommonResponse.error("园区ID不能为空");
 		}
 		List<TreeNode> baseOrgNodes = this.baseOrganizationService.queryBaseOrgHierarchyByParkId(parkId);
-		return CommonResponse.ok().setData(baseOrgNodes);
+		return CommonResponse.ok().setData(ValidateUtils.isNotEmptyCollection(baseOrgNodes) ? baseOrgNodes.get(0) : null);
 	}
 
 
