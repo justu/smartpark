@@ -9,7 +9,7 @@ import com.chris.base.common.model.SysUpdateInfo;
  * 
  * @author chris
  * @email 258321511@qq.com
- * @since Oct 30.18
+ * @since Dec 13.18
  */
 public class DoorEntity  extends SysUpdateInfo  implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -20,15 +20,15 @@ public class DoorEntity  extends SysUpdateInfo  implements Serializable {
 	private String doorName;
 	//门编号
 	private String doorNo;
-	//门类型
+	//门类型 1通道门 2房间门
 	private String doorType;
 	//所属房间
 	private Long roomId;
 	//所属楼层
 	private Long floorId;
-	//所属公司
+	//所属公司，对应base_organization表ID
 	private Long companyId;
-	//所属部门
+	//所属部门，对应base_organization表ID
 	private Long deptId;
 	//状态 0 废弃 1正常
 	private String status;
@@ -40,6 +40,8 @@ public class DoorEntity  extends SysUpdateInfo  implements Serializable {
 	private String ext2;
 	//扩展字段3
 	private String ext3;
+	//门读头ID，对应sp_door_readno表ID
+	private Long doorReadnoId;
 
 	public void setId(Long id) {
 		this.id = id;
@@ -62,11 +64,11 @@ public class DoorEntity  extends SysUpdateInfo  implements Serializable {
 	public String getDoorNo() {
 		return doorNo;
 	}
-	public void setdoorType(String doorType) {
+	public void setDoorType(String doorType) {
 		this.doorType = doorType;
 	}
 
-	public String getdoorType() {
+	public String getDoorType() {
 		return doorType;
 	}
 	public void setRoomId(Long roomId) {
@@ -90,11 +92,11 @@ public class DoorEntity  extends SysUpdateInfo  implements Serializable {
 	public Long getCompanyId() {
 		return companyId;
 	}
-	public void setdeptId(Long deptId) {
+	public void setDeptId(Long deptId) {
 		this.deptId = deptId;
 	}
 
-	public Long getdeptId() {
+	public Long getDeptId() {
 		return deptId;
 	}
 	public void setStatus(String status) {
@@ -131,5 +133,12 @@ public class DoorEntity  extends SysUpdateInfo  implements Serializable {
 
 	public String getExt3() {
 		return ext3;
+	}
+	public void setDoorReadnoId(Long doorReadnoId) {
+		this.doorReadnoId = doorReadnoId;
+	}
+
+	public Long getDoorReadnoId() {
+		return doorReadnoId;
 	}
 }

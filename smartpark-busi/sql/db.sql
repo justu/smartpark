@@ -180,3 +180,60 @@ CREATE TABLE `sp_group_station` (
   `update_user_id` bigint(20) DEFAULT NULL COMMENT '修改人',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='群组工位表';
+
+
+drop table if EXISTS sp_door_controller;
+
+CREATE TABLE `sp_door_controller` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '门禁控制器id',
+  `controller_name` varchar(50) DEFAULT NULL COMMENT '控制器名称',
+  `controller_no` varchar(50) DEFAULT NULL COMMENT '控制器编号',
+  `controller_ip` varchar(20) DEFAULT NULL COMMENT '控制器IP',
+  `mac_addr` varchar(20) DEFAULT NULL COMMENT '控制器MAC地址',
+  `controller_port` varchar(10) DEFAULT NULL COMMENT '控制器端口',
+  `status` char(1) DEFAULT '1' COMMENT '状态 0 废弃 1正常',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `create_user_id` bigint(20) DEFAULT NULL COMMENT '创建人',
+  `update_time` datetime DEFAULT NULL COMMENT '修改时间',
+  `update_user_id` bigint(20) DEFAULT NULL COMMENT '修改人',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='门禁控制器表';
+
+drop table if EXISTS sp_door_readno;
+
+CREATE TABLE `sp_door_readno` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `read_no` tinyint(5) DEFAULT NULL COMMENT '读头号',
+  `controller_id` bigint(20) DEFAULT NULL COMMENT '门禁控制器ID',
+  `status` char(1) DEFAULT '1' COMMENT '状态 0 无效 1有效',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `create_user_id` bigint(20) DEFAULT NULL COMMENT '创建人',
+  `update_time` datetime DEFAULT NULL COMMENT '修改时间',
+  `update_user_id` bigint(20) DEFAULT NULL COMMENT '修改人',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COMMENT='门读头信息';
+
+drop table if EXISTS sp_door;
+
+CREATE TABLE `sp_door` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `door_name` varchar(50) DEFAULT NULL COMMENT '门名称',
+  `door_no` varchar(20) DEFAULT NULL COMMENT '门编号',
+  `door_type` varchar(20) DEFAULT NULL COMMENT '门类型 1通道门 2房间门',
+  `room_id` bigint(20) DEFAULT NULL COMMENT '所属房间',
+  `floor_id` bigint(20) DEFAULT NULL COMMENT '所属楼层',
+  `company_id` bigint(20) DEFAULT NULL COMMENT '所属公司，对应base_organization表ID',
+  `dept_id` bigint(20) DEFAULT NULL COMMENT '所属部门，对应base_organization表ID',
+  `status` char(1) DEFAULT '1' COMMENT '状态 0 废弃 1正常',
+  `remark` varchar(200) DEFAULT NULL COMMENT '备注',
+  `ext1` varchar(50) DEFAULT NULL COMMENT '扩展字段1',
+  `ext2` varchar(100) DEFAULT NULL COMMENT '扩展字段2',
+  `ext3` varchar(200) DEFAULT NULL COMMENT '扩展字段3',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `create_user_id` bigint(20) DEFAULT NULL COMMENT '创建人',
+  `update_time` datetime DEFAULT NULL COMMENT '修改时间',
+  `update_user_id` bigint(20) DEFAULT NULL COMMENT '修改人',
+  `door_readno_id` bigint(20) DEFAULT NULL COMMENT '门读头ID，对应sp_door_readno表ID',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COMMENT='门定义';
+

@@ -34,14 +34,14 @@ public class EntranceServiceImpl implements EntranceService {
     private OpenDoorLogDao openDoorLogDao;
 
     @Override
-    public List<DoorEntity>  queryUserDoors(String openId) {
+    public List<DoorEntity> queryUserDoors(String openId) {
         //openId 从tb_user 取mobile , 用mobile 从 base_staff 中取出员工id, 根据员工id的工位取出门禁列表
         //参数校验
-        if(ValidateUtils.isEmptyString(openId)){
+        if (ValidateUtils.isEmptyString(openId)) {
             throw new CommonException("参数openId不能为空!");
         }
-        Map<String,Object> params = new HashMap<String,Object>();
-        params.put(VisitorConstants.Keys.OPEN_ID,openId);
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put(VisitorConstants.Keys.OPEN_ID, openId);
         return this.doorDao.queryUserDoor(params);
     }
 
@@ -86,25 +86,25 @@ public class EntranceServiceImpl implements EntranceService {
 
     @Override
     public JSONObject openDoor(Long doorId) {
-        JSONObject returnJo  = new JSONObject();
+        JSONObject returnJo = new JSONObject();
         try {
             //Integer doorId = paramJo.getLong("doorId");
-            if(doorId==null || doorId.intValue()==0){
-                returnJo.put("returnCode","0");
-                returnJo.put("returnMessage","参数doorId不能为空!");
-                returnJo.put("returnData",new JSONObject());
+            if (doorId == null || doorId.intValue() == 0) {
+                returnJo.put("returnCode", "0");
+                returnJo.put("returnMessage", "参数doorId不能为空!");
+                returnJo.put("returnData", new JSONObject());
                 return returnJo;
             }
             //1.获取门禁控制信息
-            Map<String,Object> params = new HashMap<String,Object>();
-            params.put("doorId",doorId);
-            params.put("status","1");//1有效  0 失效
-            List<DoorControllerEntity> doorControllerList=doorControllerDao.queryDoorControllerByDoorId(params);
+            Map<String, Object> params = new HashMap<String, Object>();
+            params.put("doorId", doorId);
+            params.put("status", "1");//1有效  0 失效
+            List<DoorControllerEntity> doorControllerList = doorControllerDao.queryDoorControllerByDoorId(params);
 
-            if(doorControllerList == null || doorControllerList.isEmpty()){
-                returnJo.put("returnCode","0");
-                returnJo.put("returnMessage","未查询到门禁控制器数据数据!");
-                returnJo.put("returnData",new JSONObject());
+            if (doorControllerList == null || doorControllerList.isEmpty()) {
+                returnJo.put("returnCode", "0");
+                returnJo.put("returnMessage", "未查询到门禁控制器数据数据!");
+                returnJo.put("returnData", new JSONObject());
                 return returnJo;
             }
 
@@ -115,22 +115,22 @@ public class EntranceServiceImpl implements EntranceService {
             logEntity.setOpenTime(new Date());
             logEntity.setDoorId(doorId);
             logEntity.setCreateTime(new Date());
-            try{
+            try {
                 openDoorLogDao.save(logEntity);
-            }catch (Exception e){
+            } catch (Exception e) {
                 //日志输出异常
             }
 
-        }catch (Exception e){
-            returnJo.put("returnCode","0");
-            returnJo.put("returnMessage","远程开门失败!"+e.getMessage());
-            returnJo.put("returnData",new JSONObject());
+        } catch (Exception e) {
+            returnJo.put("returnCode", "0");
+            returnJo.put("returnMessage", "远程开门失败!" + e.getMessage());
+            returnJo.put("returnData", new JSONObject());
             return returnJo;
         }
 
-        returnJo.put("returnCode","1");
-        returnJo.put("returnMessage","开门成功!");
-        returnJo.put("returnData",new JSONObject());
+        returnJo.put("returnCode", "1");
+        returnJo.put("returnMessage", "开门成功!");
+        returnJo.put("returnData", new JSONObject());
         return returnJo;
     }
 }
