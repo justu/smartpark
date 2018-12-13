@@ -50,7 +50,7 @@ public class VisitorConstants {
          */
         int APPROVE_OK = 3;
         /**
-         * 待激活
+         * 待激活状态重复此状态不用
          */
         int PENDING_ACTIVE = 4;
         /**
