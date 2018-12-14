@@ -1,6 +1,7 @@
 package com.chris.smartpark.busi.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.chris.base.common.exception.CommonException;
 import com.chris.base.common.utils.CommonResponse;
 import com.chris.base.common.utils.PageUtils;
 import com.chris.base.common.utils.ValidateUtils;
@@ -11,15 +12,15 @@ import com.chris.smartpark.busi.dto.ReservationOrderApproveDTO;
 import com.chris.smartpark.busi.dto.ReservationOrderDTO;
 import com.chris.smartpark.busi.entity.VisitorIdcardEntity;
 import com.chris.smartpark.busi.entity.VisitorReservationEntity;
-import com.chris.smartpark.busi.service.CarInfoService;
-import com.chris.smartpark.busi.service.VisitorInfoService;
 import com.chris.smartpark.busi.service.VisitorReservationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 
@@ -36,10 +37,6 @@ import java.util.Map;
 public class VisitorReservationController {
 	@Autowired
 	private VisitorReservationService visitorReservationService;
-	@Autowired
-	private VisitorInfoService visitorInfoService;
-	@Autowired
-	private CarInfoService carInfoService;
 
 	/**
 	 * 根据条件分页查询员工或管理员对应的预约单
@@ -164,4 +161,20 @@ public class VisitorReservationController {
 		this.visitorReservationService.approve(authorizeDTO);
 		return CommonResponse.ok();
     }
+
+	/**
+	 * 上传文件
+	 */
+	@RequestMapping("/upload")
+	public CommonResponse upload(@RequestParam("file") MultipartFile file, HttpServletRequest request) throws Exception {
+		if (file.isEmpty()) {
+			throw new CommonException("上传文件不能为空！");
+		}
+		String visitorId = request.getParameter("visitorId");
+		if (ValidateUtils.isEmptyString(visitorId)) {
+			throw new CommonException("访客ID不能为空！");
+		}
+		this.visitorReservationService.uploadVisitorPhoto(file, visitorId);
+		return CommonResponse.ok();
+	}
 }

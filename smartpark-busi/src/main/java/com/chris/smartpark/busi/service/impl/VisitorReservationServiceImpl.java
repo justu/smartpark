@@ -8,6 +8,8 @@ import com.chris.base.common.exception.CommonException;
 import com.chris.base.common.utils.*;
 import com.chris.base.modules.app.entity.UserEntity;
 import com.chris.base.modules.app.service.UserService;
+import com.chris.base.modules.oss.entity.SysAttachmentEntity;
+import com.chris.base.modules.oss.service.SysAttachmentService;
 import com.chris.base.modules.sms.entity.SMSEntity;
 import com.chris.base.modules.sys.service.SysConfigService;
 import com.chris.smartpark.base.entity.BaseStaffEntity;
@@ -26,8 +28,10 @@ import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.IOException;
 import java.sql.*;
 import java.util.*;
 
@@ -56,6 +60,11 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
     private VisitorDoorRelService visitorDoorRelService;
     @Autowired
     private SysConfigService sysconfigservice;
+    @Autowired
+    private SysAttachmentService sysAttachmentService;
+
+    @Autowired
+    private CacheDataUtils cacheDataUtils;
 
     /**
      * 查询预约单明细
@@ -865,5 +874,44 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
            return false;
         }
         return true;
+    }
+
+    @Override
+    public void uploadVisitorPhoto(MultipartFile file, String visitorId) throws IOException {
+        String suffix = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".") + 1);
+        this.verifyImageFileType(suffix);
+        this.verifyImageFileSize(file);
+        List<VisitorIdcardEntity> visitorIdcardInfoList = this.visitorIdcardService.queryList(ImmutableMap.of(VisitorConstants.Keys.VISITOR_ID, visitorId));
+        if (ValidateUtils.isEmptyCollection(visitorIdcardInfoList)) {
+            throw new CommonException("访客身份信息不存在！");
+        }
+        SysAttachmentEntity attachmentEntity = this.sysAttachmentService.doUploadFile(file, null);
+        VisitorIdcardEntity visitorIdcardInfo = visitorIdcardInfoList.get(0);
+        visitorIdcardInfo.setIdcardPhotoUrl(attachmentEntity.getUrl());
+        this.visitorIdcardService.update(visitorIdcardInfo);
+    }
+
+    private void verifyImageFileSize(MultipartFile file) {
+        long fileSize = file.getSize() / 1024;
+        long imgFileLimitSize = Long.valueOf(this.cacheDataUtils.getConfigValueByKey(VisitorConstants.Keys.IMAGE_FILE_LIMIT_SIZE));
+        log.error("fileSize = {}, imgFileLimitSize = {}", fileSize, imgFileLimitSize);
+        if (fileSize > imgFileLimitSize) {
+            throw new CommonException("文件大小不能超过" + imgFileLimitSize + "KB！");
+        }
+    }
+
+    private void verifyImageFileType(String suffix) {
+        String imageFileType = this.cacheDataUtils.getConfigValueByKey(VisitorConstants.Keys.IMAGE_FILE_TYPE);
+        String[] imageFileTypes = imageFileType.split(Constant.Symbol.COMMA);
+        boolean result = false;
+        for (int i = 0; i < imageFileTypes.length; i++) {
+            if (ValidateUtils.equals(imageFileTypes[i], suffix)) {
+                result = true;
+                break;
+            }
+        }
+        if (!result) {
+            throw new CommonException("文件仅支持上传[" + imageFileType + "]图片类型！");
+        }
     }
 }

@@ -8,8 +8,10 @@ import com.chris.smartpark.busi.dto.ReservationOrderDTO;
 import com.chris.smartpark.busi.entity.VisitorIdcardEntity;
 import com.chris.smartpark.busi.entity.VisitorReservationEntity;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -73,7 +75,18 @@ public interface VisitorReservationService {
 	 */
     List<VisitorReservationEntity> queryByIdcardAndStatus(String idcardNo, String status);
 
-    //批量导入
+	/**
+	 * 批量导入预约单
+	 * @param excelFile
+	 */
 	@Transactional
 	void batchImportReservation(File excelFile);
+
+	/**
+	 * 上传访客照片
+	 * @param file
+	 * @param visitorId
+	 */
+	@Transactional
+    void uploadVisitorPhoto(MultipartFile file, String visitorId) throws IOException;
 }

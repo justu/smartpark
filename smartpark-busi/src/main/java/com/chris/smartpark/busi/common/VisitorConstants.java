@@ -116,7 +116,9 @@ public class VisitorConstants {
         String TYPE = "type";
         String HOUR = "hour";
         String ORDERNO = "orderNo";
-
+        String VISITOR_ID = "visitorId";
+        String IMAGE_FILE_TYPE = "IMAGE_FILE_TYPE";
+        String IMAGE_FILE_LIMIT_SIZE = "IMAGE_FILE_LIMIT_SIZE";
     }
 
     public interface Page {
