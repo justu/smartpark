@@ -119,6 +119,9 @@ public class VisitorConstants {
         String VISITOR_ID = "visitorId";
         String IMAGE_FILE_TYPE = "IMAGE_FILE_TYPE";
         String IMAGE_FILE_LIMIT_SIZE = "IMAGE_FILE_LIMIT_SIZE";
+        String DOOR_ID = "doorId";
+        String DOOR_CTRL_SEND_PORT = "DOOR_CTRL_SEND_PORT";
+        String DOOR_CTRL_RECEIVE_PORT = "DOOR_CTRL_RECEIVE_PORT";
     }
 
     public interface Page {

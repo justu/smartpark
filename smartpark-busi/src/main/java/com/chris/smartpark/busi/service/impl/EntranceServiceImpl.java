@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.chris.base.common.exception.CommonException;
 import com.chris.base.common.tree.TreeNode;
 import com.chris.base.common.utils.ValidateUtils;
+import com.chris.smartpark.busi.common.DoorControllerProcessor;
 import com.chris.smartpark.busi.common.VisitorConstants;
 import com.chris.smartpark.busi.dao.DoorControllerDao;
 import com.chris.smartpark.busi.dao.DoorDao;
@@ -13,6 +14,7 @@ import com.chris.smartpark.busi.entity.DoorControllerEntity;
 import com.chris.smartpark.busi.entity.DoorEntity;
 import com.chris.smartpark.busi.entity.OpenDoorLogEntity;
 import com.chris.smartpark.busi.service.EntranceService;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -85,52 +87,13 @@ public class EntranceServiceImpl implements EntranceService {
     }
 
     @Override
-    public JSONObject openDoor(Long doorId) {
-        JSONObject returnJo = new JSONObject();
-        try {
-            //Integer doorId = paramJo.getLong("doorId");
-            if (doorId == null || doorId.intValue() == 0) {
-                returnJo.put("returnCode", "0");
-                returnJo.put("returnMessage", "参数doorId不能为空!");
-                returnJo.put("returnData", new JSONObject());
-                return returnJo;
-            }
-            //1.获取门禁控制信息
-            Map<String, Object> params = new HashMap<String, Object>();
-            params.put("doorId", doorId);
-            params.put("status", "1");//1有效  0 失效
-            List<DoorControllerEntity> doorControllerList = doorControllerDao.queryDoorControllerByDoorId(params);
-
-            if (doorControllerList == null || doorControllerList.isEmpty()) {
-                returnJo.put("returnCode", "0");
-                returnJo.put("returnMessage", "未查询到门禁控制器数据数据!");
-                returnJo.put("returnData", new JSONObject());
-                return returnJo;
-            }
-
-            //2.远程开门 Http 考虑做成公共方法
-
-            //3.记录开门日志,日志保存异常不影响开门
-            OpenDoorLogEntity logEntity = new OpenDoorLogEntity();
-            logEntity.setOpenTime(new Date());
-            logEntity.setDoorId(doorId);
-            logEntity.setCreateTime(new Date());
-            try {
-                openDoorLogDao.save(logEntity);
-            } catch (Exception e) {
-                //日志输出异常
-            }
-
-        } catch (Exception e) {
-            returnJo.put("returnCode", "0");
-            returnJo.put("returnMessage", "远程开门失败!" + e.getMessage());
-            returnJo.put("returnData", new JSONObject());
-            return returnJo;
+    public void remoteOpenDoor(Long doorId) {
+        // 根据门ID查询其对应的门禁控制器
+        List<DoorControllerEntity> doorControllers = doorControllerDao.queryDoorControllerByDoorId(ImmutableMap.of(VisitorConstants.Keys.DOOR_ID, doorId));
+        if (ValidateUtils.isEmptyCollection(doorControllers)) {
+            throw new CommonException("门ID[" + doorId + "]未连接门禁控制器");
         }
-
-        returnJo.put("returnCode", "1");
-        returnJo.put("returnMessage", "开门成功!");
-        returnJo.put("returnData", new JSONObject());
-        return returnJo;
+        DoorControllerEntity doorController = doorControllers.get(0);
+        DoorControllerProcessor.remoteOpenDoor(doorController);
     }
 }

@@ -29,6 +29,11 @@ public class DoorControllerEntity  extends SysUpdateInfo  implements Serializabl
 	//状态 0 废弃 1正常
 	private String status;
 
+	/**
+	 * 读头号
+	 */
+	private int readerNo;
+
 	public void setId(Long id) {
 		this.id = id;
 	}
@@ -77,5 +82,13 @@ public class DoorControllerEntity  extends SysUpdateInfo  implements Serializabl
 
 	public String getStatus() {
 		return status;
+	}
+
+	public int getReaderNo() {
+		return readerNo;
+	}
+
+	public void setReaderNo(int readerNo) {
+		this.readerNo = readerNo;
 	}
 }

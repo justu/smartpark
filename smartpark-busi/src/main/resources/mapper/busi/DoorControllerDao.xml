@@ -3,21 +3,6 @@
 
 <mapper namespace="com.chris.smartpark.busi.dao.DoorControllerDao">
 
-	<!-- 可根据自己的需求，是否要使用 -->
-	<resultMap type="com.chris.smartpark.busi.entity.DoorControllerEntity" id="doorControllerMap">
-		<result property="id" column="id"/>
-		<result property="controllerName" column="controller_name"/>
-		<result property="controllerNo" column="controller_no"/>
-		<result property="controllerIp" column="controller_ip"/>
-		<result property="macAddr" column="mac_addr"/>
-		<result property="controllerPort" column="controller_port"/>
-		<result property="status" column="status"/>
-		<result property="createTime" column="create_time"/>
-		<result property="createUserId" column="create_user_id"/>
-		<result property="updateTime" column="update_time"/>
-		<result property="updateUserId" column="update_user_id"/>
-	</resultMap>
-
 	<select id="queryObject" resultType="com.chris.smartpark.busi.entity.DoorControllerEntity">
 		select * from sp_door_controller where id = #{value}
 	</select>
@@ -141,10 +126,12 @@
 	</delete>
 
 	<!-- 根据门禁id查询门禁控制器信息 -->
-	<select id="queryDoorControllerByDoorId" resultMap="doorControllerMap" parameterType="java.util.Map" >
-		select *
+	<select id="queryDoorControllerByDoorId" resultType="com.chris.smartpark.busi.entity.DoorControllerEntity" parameterType="java.util.Map" >
+		select dc.*,dr.read_no as readerNo
 		from sp_door_controller dc
-		where door_id =#{doorId,jdbcType=BIGINT}
+		INNER JOIN sp_door_readno dr ON dr.controller_id = dc.id
+		INNER JOIN sp_door d ON d.door_readno_id = dr.id
+		where d.id =#{doorId,jdbcType=BIGINT}
 		<if test="status != null and status != ''">
 			and status =#{status,jdbcType=VARCHAR}
 		</if>

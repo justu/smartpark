@@ -26,5 +26,5 @@ public interface EntranceService {
     /**
      * 远程开门
      */
-    JSONObject openDoor(Long doorId);
+    void remoteOpenDoor(Long doorId);
 }
