@@ -16,4 +16,6 @@ import java.util.List;
 @Mapper
 public interface VisitorDoorRelDao extends BaseDao<VisitorDoorRelEntity> {
 	void saveBatch(List<VisitorDoorRelEntity> list);
+
+    List<String> queryMappdingDoorIdsByReservationOrderId(Long id);
 }

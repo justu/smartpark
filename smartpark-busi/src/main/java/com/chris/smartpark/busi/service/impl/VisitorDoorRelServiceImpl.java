@@ -58,4 +58,8 @@ public class VisitorDoorRelServiceImpl implements VisitorDoorRelService {
         visitorDoorRelDao.saveBatch(list);
 	}
 
+	@Override
+	public List<String> queryMappdingDoorIdsByReservationOrderId(Long id) {
+		return this.visitorDoorRelDao.queryMappdingDoorIdsByReservationOrderId(id);
+	}
 }

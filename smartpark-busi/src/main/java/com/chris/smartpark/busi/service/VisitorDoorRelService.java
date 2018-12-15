@@ -29,4 +29,11 @@ public interface VisitorDoorRelService {
 	void deleteBatch(Long[] ids);
 
 	void saveBatch(List<VisitorDoorRelEntity> list);
+
+	/**
+	 * 根据预约单ID查询对应门映射的第三方厂家门ID
+	 * @param id
+	 * @return
+	 */
+    List<String> queryMappdingDoorIdsByReservationOrderId(Long id);
 }

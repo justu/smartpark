@@ -33,6 +33,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.sql.*;
+import java.sql.Date;
 import java.util.*;
 
 @Slf4j
@@ -306,89 +307,7 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
                 }
                 //添加送门禁开关
                 if(VisitorConstants.isSendToEntrance.TRUE.equals(sysconfigservice.getValue("SEND_TO_ENTRANCE"))){
-                    //组装入参调用门禁接口授权
-                    java.util.Date startTime = reservationOrder.getAppointStartTime();
-                    java.util.Date endTime = reservationOrder.getAppointEndTime();
-                    // TODO 需要根据访客ID查询访客对应可授权的门禁列表
-                    List<VisitorDoorRelEntity> doorList = visitorDoorRelService.queryList(ImmutableMap.of(VisitorConstants.Keys.RESERVATION_ORDER_ID, reservationOrder.getId()));
-                    List<DoorAuthEntity> doorAuthList = new ArrayList<DoorAuthEntity>();
-                    String sql = "INSERT INTO NDr2_AuthorSet1 ([CardID], [DoorID], [PassWord], [DueDate], [AuthorType], [AuthorStatus], [UserTimeGrp], [DownLoaded], [FirstDownLoaded], [PreventCard], [StartTime]) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-                    for (VisitorDoorRelEntity door : doorList) {
-                        //一个门对应两条数据
-                        DoorAuthEntity door1 = new DoorAuthEntity();
-                        DoorAuthEntity door2 = new DoorAuthEntity();
-                        door1.setCardID(Integer.parseInt(visitorIdcard.getPhysicalCardId()));
-                        door1.setDoorID(Math.toIntExact(door.getDoorId()));
-                        door1.setPassWord("0000");
-                        door1.setDueDate(DateUtils.parseDate("2099-12-31"));
-                        door1.setAuthorType(0);
-                        door1.setAuthorStatus(0);
-                        door1.setUserTimeGrp(0);
-                        door1.setDownLoaded(0);
-                        door1.setFirstDownLoaded(0);
-                        door1.setPreventCard(0);
-                        door1.setStartTime(startTime);
-
-                        BeanUtil.copyProperties(door1, door2);
-                        door2.setAuthorStatus(2);
-                        door2.setStartTime(endTime);
-                        doorAuthList.add(door1);
-                        doorAuthList.add(door2);
-                    }
-                    /**
-                     * 获取数据库连接对象Connection
-                     */
-                    Connection conn = JDBCUtils.getConnection();
-                    Statement stat = null;
-                    PreparedStatement ps = null;
-                    ResultSet rs = null;
-                    try {
-                        /**
-                         * 获取执行sql语句的执行者对象
-                         */
-                        stat = conn.createStatement();
-                        ps = conn.prepareStatement(sql);
-                        //优化插入第一步       设置手动提交
-                        conn.setAutoCommit(false);
-                        int len = doorAuthList.size();
-                        for (int i = 0; i < len; i++) {
-                            ps.setInt(1, doorAuthList.get(i).getCardID());
-                            ps.setInt(2, doorAuthList.get(i).getDoorID());
-                            ps.setString(3, doorAuthList.get(i).getPassWord());
-                            ps.setTimestamp(4, new Timestamp(doorAuthList.get(i).getDueDate().getTime()));
-                            ps.setInt(5, doorAuthList.get(i).getAuthorType());
-                            ps.setInt(6, doorAuthList.get(i).getAuthorStatus());
-                            ps.setInt(7, doorAuthList.get(i).getUserTimeGrp());
-                            ps.setInt(8, doorAuthList.get(i).getDownLoaded());
-                            ps.setInt(9, doorAuthList.get(i).getFirstDownLoaded());
-                            ps.setInt(10, doorAuthList.get(i).getPreventCard());
-                            ps.setDate(11, new java.sql.Date(doorAuthList.get(i).getStartTime().getTime()));
-                            //if(ps.executeUpdate() != 1) r = false;    优化后，不用传统的插入方法了。
-                            //优化插入第二步       插入代码打包，等一定量后再一起插入。
-                            ps.addBatch();
-                            //if(ps.executeUpdate() != 1)result = false;
-                            //每200次提交一次
-                            if ((i != 0 && i % 200 == 0) || i == len - 1) {//可以设置不同的大小；如50，100，200，500，1000等等
-                                ps.executeBatch();
-                                //优化插入第三步       提交，批量插入数据库中。
-                                conn.commit();
-                                ps.clearBatch();        //提交后，Batch清空。
-                            }
-                        }
-                    } catch (Exception e) {
-                        try {
-                            conn.rollback();
-                        } catch (SQLException e1) {
-                            e1.printStackTrace();
-                        }
-                        e.printStackTrace();
-                    } finally {
-                        /**
-                         * 使用JDBCUtilsConfig工具类中的方法close释放资源
-                         */
-                        JDBCUtils.close(rs, stat, conn);
-                    }
-                    log.info("========调用门禁接口授权成功=====");
+                    this.sendPhyIdCard2DoorController(reservationOrder, visitorIdcard);
                 }
                 //更新预约单状态为完成
                 reservationOrder.setStatus(VisitorConstants.ReservationOrderStatus.COMPLETED + "");
@@ -399,7 +318,103 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
             result = CommonResponse.ok("上传失败").put("isSuccess","fasle");
             log.info("失败原因为"+e);
         }
-    return result;
+        return result;
+    }
+
+    /**
+     * 送物理卡到门禁
+     * @param reservationOrder
+     * @param visitorIdcard
+     */
+    private void sendPhyIdCard2DoorController(VisitorReservationEntity reservationOrder, VisitorIdcardEntity visitorIdcard) {
+        //组装入参调用门禁接口授权
+        java.util.Date startTime = reservationOrder.getAppointStartTime();
+        java.util.Date endTime = reservationOrder.getAppointEndTime();
+        // TODO 需要根据访客ID查询访客对应可授权的门禁列表
+        List<String> mappingDoorIds = visitorDoorRelService.queryMappdingDoorIdsByReservationOrderId(reservationOrder.getId());
+        if (ValidateUtils.isEmptyCollection(mappingDoorIds)) {
+            throw new CommonException("门ID未与第三方厂家做映射！");
+        }
+        List<DoorAuthEntity> doorAuthList = new ArrayList<DoorAuthEntity>();
+        for (String mappingDoorId : mappingDoorIds) {
+            //一个门对应两条数据
+            DoorAuthEntity door1 = new DoorAuthEntity();
+            DoorAuthEntity door2 = new DoorAuthEntity();
+            door1.setCardID(Integer.parseInt(visitorIdcard.getPhysicalCardId()));
+            door1.setDoorID(Integer.valueOf(mappingDoorId));
+            door1.setPassWord("0000");
+            door1.setDueDate(DateUtils.parseDate("2099-12-31"));
+            door1.setAuthorType(0);
+            door1.setAuthorStatus(0);
+            door1.setUserTimeGrp(0);
+            door1.setDownLoaded(0);
+            door1.setFirstDownLoaded(0);
+            door1.setPreventCard(0);
+            door1.setStartTime(startTime);
+
+            BeanUtil.copyProperties(door1, door2);
+            door2.setAuthorStatus(2);
+            door2.setStartTime(endTime);
+            doorAuthList.add(door1);
+            doorAuthList.add(door2);
+        }
+        this.saveDoorAuthRecord(doorAuthList);
+        log.info("========调用门禁接口授权成功=====");
+    }
+
+    /**
+     * 保存访客门授权记录
+     * @param doorAuthList
+     */
+    private void saveDoorAuthRecord(List<DoorAuthEntity> doorAuthList) {
+        String sql = "INSERT INTO NDr2_AuthorSet1 ([CardID], [DoorID], [PassWord], [DueDate], [AuthorType], [AuthorStatus], [UserTimeGrp], [DownLoaded], [FirstDownLoaded], [PreventCard], [StartTime]) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        Connection conn = JDBCUtils.getConnection();
+        Statement stat = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            /**
+             * 获取执行sql语句的执行者对象
+             */
+            stat = conn.createStatement();
+            ps = conn.prepareStatement(sql);
+            //优化插入第一步       设置手动提交
+            conn.setAutoCommit(false);
+            int len = doorAuthList.size();
+            for (int i = 0; i < len; i++) {
+                ps.setInt(1, doorAuthList.get(i).getCardID());
+                ps.setInt(2, doorAuthList.get(i).getDoorID());
+                ps.setString(3, doorAuthList.get(i).getPassWord());
+                ps.setTimestamp(4, new Timestamp(doorAuthList.get(i).getDueDate().getTime()));
+                ps.setInt(5, doorAuthList.get(i).getAuthorType());
+                ps.setInt(6, doorAuthList.get(i).getAuthorStatus());
+                ps.setInt(7, doorAuthList.get(i).getUserTimeGrp());
+                ps.setInt(8, doorAuthList.get(i).getDownLoaded());
+                ps.setInt(9, doorAuthList.get(i).getFirstDownLoaded());
+                ps.setInt(10, doorAuthList.get(i).getPreventCard());
+                ps.setDate(11, new Date(doorAuthList.get(i).getStartTime().getTime()));
+                //if(ps.executeUpdate() != 1) r = false;    优化后，不用传统的插入方法了。
+                //优化插入第二步       插入代码打包，等一定量后再一起插入。
+                ps.addBatch();
+                //if(ps.executeUpdate() != 1)result = false;
+                //每200次提交一次
+                if ((i != 0 && i % 200 == 0) || i == len - 1) {//可以设置不同的大小；如50，100，200，500，1000等等
+                    ps.executeBatch();
+                    //优化插入第三步       提交，批量插入数据库中。
+                    conn.commit();
+                    ps.clearBatch();        //提交后，Batch清空。
+                }
+            }
+        } catch (Exception e) {
+            try {
+                conn.rollback();
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+            e.printStackTrace();
+        } finally {
+            JDBCUtils.close(rs, stat, conn);
+        }
     }
 
 
@@ -456,56 +471,7 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
                 /**
                  * 获取数据库连接对象Connection
                  */
-                Connection conn = JDBCUtils.getConnection();
-                Statement stat = null;
-                PreparedStatement ps = null;
-                ResultSet rs = null;
-                try {
-                    /**
-                     * 获取执行sql语句的执行者对象
-                     */
-                    stat = conn.createStatement();
-                    ps = conn.prepareStatement(sql);
-                    //优化插入第一步       设置手动提交
-                    conn.setAutoCommit(false);
-                    int len = doorAuthList.size();
-                    for (int i = 0; i < len; i++) {
-                        ps.setInt(1, doorAuthList.get(i).getCardID());
-                        ps.setInt(2, doorAuthList.get(i).getDoorID());
-                        ps.setString(3, doorAuthList.get(i).getPassWord());
-                        ps.setTimestamp(4, new Timestamp(doorAuthList.get(i).getDueDate().getTime()));
-                        ps.setInt(5, doorAuthList.get(i).getAuthorType());
-                        ps.setInt(6, doorAuthList.get(i).getAuthorStatus());
-                        ps.setInt(7, doorAuthList.get(i).getUserTimeGrp());
-                        ps.setInt(8, doorAuthList.get(i).getDownLoaded());
-                        ps.setInt(9, doorAuthList.get(i).getFirstDownLoaded());
-                        ps.setInt(10, doorAuthList.get(i).getPreventCard());
-                        ps.setDate(11, new java.sql.Date(doorAuthList.get(i).getStartTime().getTime()));
-                        //if(ps.executeUpdate() != 1) r = false;    优化后，不用传统的插入方法了。
-                        //优化插入第二步       插入代码打包，等一定量后再一起插入。
-                        ps.addBatch();
-                        //if(ps.executeUpdate() != 1)result = false;
-                        //每200次提交一次
-                        if ((i != 0 && i % 200 == 0) || i == len - 1) {//可以设置不同的大小；如50，100，200，500，1000等等
-                            ps.executeBatch();
-                            //优化插入第三步       提交，批量插入数据库中。
-                            conn.commit();
-                            ps.clearBatch();        //提交后，Batch清空。
-                        }
-                    }
-                } catch (Exception e) {
-                    try {
-                        conn.rollback();
-                    } catch (SQLException e1) {
-                        e1.printStackTrace();
-                    }
-                    e.printStackTrace();
-                } finally {
-                    /**
-                     * 使用JDBCUtilsConfig工具类中的方法close释放资源
-                     */
-                    JDBCUtils.close(rs, stat, conn);
-                }
+                this.saveDoorAuthRecord(doorAuthList);
                 log.info("========调用门禁接口授权成功=====");
                 //更新预约单状态为完成
                 reservationOrder.setStatus(VisitorConstants.ReservationOrderStatus.COMPLETED + "");
@@ -514,8 +480,6 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
         }
     }
 
-    ;
-
     @Override
     public VisitorReservationEntity queryObjectById(Long id) {
         return visitorReservationDao.queryObject(id);
@@ -523,7 +487,6 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
 
     /**
      * 访客预约审核
-     *
      * @param authorizeDTO
      * @return
      */
