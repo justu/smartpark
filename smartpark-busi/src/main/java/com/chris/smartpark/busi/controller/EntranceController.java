@@ -63,7 +63,7 @@ public class EntranceController {
         if (ValidateUtils.isNotEmptyCollection(doorControllers)) {
             List<DoorControllerDTO> publicDoorControllers = doorControllers.stream().filter(item -> item.getDoorType() == VisitorConstants.DoorType.PUBLIC).collect(Collectors.toList());
             List<DoorControllerDTO> privateDoorControllers = doorControllers.stream().filter(item -> item.getDoorType() == VisitorConstants.DoorType.PRIVATE).collect(Collectors.toList());
-            return CommonResponse.ok().put("public", publicDoorControllers).put("private", privateDoorControllers);
+            return CommonResponse.ok().put("publicDoorControllers", publicDoorControllers).put("privateDoorControllers", privateDoorControllers);
         }
         return CommonResponse.ok();
     }
