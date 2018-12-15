@@ -57,7 +57,7 @@ public class EntranceController {
     }
 
     @GetMapping("/queryDoorControllers")
-//    @Login
+    @Login
     public CommonResponse queryDoorControllers(String openId) {
         List<DoorControllerDTO> doorControllers = this.doorService.queryDoorControllersByOpenId(openId);
         if (ValidateUtils.isNotEmptyCollection(doorControllers)) {
