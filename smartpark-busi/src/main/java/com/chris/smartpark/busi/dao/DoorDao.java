@@ -1,5 +1,6 @@
 package com.chris.smartpark.busi.dao;
 
+import com.chris.smartpark.busi.dto.DoorControllerDTO;
 import com.chris.smartpark.busi.dto.DoorLevelDTO;
 import com.chris.smartpark.busi.entity.DoorEntity;
 import com.chris.base.modules.sys.dao.BaseDao;
@@ -25,4 +26,6 @@ public interface DoorDao extends BaseDao<DoorEntity> {
      * @return
      */
     List<DoorLevelDTO> queryHasPermissionDoorsByOpenId(String openId);
+
+    List<DoorControllerDTO> queryDoorControllersByOpenId(String openId);
 }

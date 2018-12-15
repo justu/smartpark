@@ -4,12 +4,17 @@ import com.alibaba.fastjson.JSONObject;
 import com.chris.base.common.tree.TreeNode;
 import com.chris.base.common.utils.CommonResponse;
 import com.chris.base.common.utils.ValidateUtils;
+import com.chris.base.modules.app.annotation.Login;
+import com.chris.smartpark.busi.common.VisitorConstants;
+import com.chris.smartpark.busi.dto.DoorControllerDTO;
 import com.chris.smartpark.busi.entity.DoorEntity;
+import com.chris.smartpark.busi.service.DoorService;
 import com.chris.smartpark.busi.service.EntranceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 出入管理
@@ -18,7 +23,9 @@ import java.util.List;
 @RequestMapping("/app/entrance")
 public class EntranceController {
     @Autowired
-    EntranceService entranceService;
+    private EntranceService entranceService;
+    @Autowired
+    private DoorService doorService;
 
     /**
      * 用户门禁权限列表
@@ -43,10 +50,22 @@ public class EntranceController {
      * @return
      */
     @GetMapping("/queryDoorNodes")
-//    @Login
+    @Login
     public CommonResponse queryDoorNodes(String openId) {
         List<TreeNode> doorNodes = this.entranceService.queryHasPermissionDoorLevelNodesByOpenId(openId);
         return CommonResponse.ok().setData(doorNodes);
+    }
+
+    @GetMapping("/queryDoorControllers")
+//    @Login
+    public CommonResponse queryDoorControllers(String openId) {
+        List<DoorControllerDTO> doorControllers = this.doorService.queryDoorControllersByOpenId(openId);
+        if (ValidateUtils.isNotEmptyCollection(doorControllers)) {
+            List<DoorControllerDTO> publicDoorControllers = doorControllers.stream().filter(item -> item.getDoorType() == VisitorConstants.DoorType.PUBLIC).collect(Collectors.toList());
+            List<DoorControllerDTO> privateDoorControllers = doorControllers.stream().filter(item -> item.getDoorType() == VisitorConstants.DoorType.PRIVATE).collect(Collectors.toList());
+            return CommonResponse.ok().put("public", publicDoorControllers).put("private", privateDoorControllers);
+        }
+        return CommonResponse.ok();
     }
 
     /**

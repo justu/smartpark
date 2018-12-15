@@ -140,4 +140,9 @@ public class VisitorConstants {
     public interface OpenDoorCommand {
         String SUCCESS = "00";
     }
+
+    public interface DoorType {
+        int PUBLIC = 1;
+        int PRIVATE = 2;
+    }
 }

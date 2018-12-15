@@ -252,4 +252,25 @@
 		ORDER BY f.id,d.id
 	</select>
 
+	<select id="queryDoorControllersByOpenId" parameterType="java.lang.String" resultType="com.chris.smartpark.busi.dto.DoorControllerDTO" >
+		SELECT
+		d.id AS doorId,
+		d.door_name AS doorName,
+		d.door_type AS doorType,
+		r.read_no AS readerNo,
+		dc.id AS doorControllerId
+		FROM sp_station s
+		INNER JOIN sp_user_station us ON us.station_id = s.id
+		INNER JOIN sp_group_station gs ON gs.station_id = s.id
+		INNER JOIN sp_group_door gd ON gd.group_id = gs.group_id
+		INNER JOIN sp_door d ON d.id = gd.door_id
+		INNER JOIN sp_door_readno r ON d.door_readno_id = r.id
+		INNER JOIN sp_door_controller dc ON dc.id = r.controller_id
+		INNER JOIN base_staff staff ON staff.EMPLOYNUM = us.work_no
+		INNER JOIN tb_user u ON u.mobile = staff.MOBILE
+		WHERE u.open_id = #{openId}
+		GROUP BY d.id
+		ORDER BY d.id
+	</select>
+
 </mapper>
