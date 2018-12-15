@@ -124,8 +124,20 @@ public class VisitorConstants {
         String DOOR_CTRL_RECEIVE_PORT = "DOOR_CTRL_RECEIVE_PORT";
     }
 
+
     public interface Page {
         int PAGE_NO = 1;
         int PAGE_SIZE = 10;
+    }
+
+    public interface DoorReaderNo {
+        int NO_ZERO = 0;
+        int NO_ONE = 1;
+        int NO_TWO = 2;
+        int NO_THREEE = 3;
+    }
+
+    public interface OpenDoorCommand {
+        String SUCCESS = "00";
     }
 }

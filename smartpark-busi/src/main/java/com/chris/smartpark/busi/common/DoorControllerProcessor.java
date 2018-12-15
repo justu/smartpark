@@ -2,7 +2,9 @@ package com.chris.smartpark.busi.common;
 
 import com.chris.base.common.exception.CommonException;
 import com.chris.base.common.utils.CacheDataUtils;
+import com.chris.base.common.utils.CommonResponse;
 import com.chris.base.common.utils.SpringContextUtils;
+import com.chris.base.common.utils.ValidateUtils;
 import com.chris.smartpark.busi.entity.DoorControllerEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
@@ -18,7 +20,7 @@ public final class DoorControllerProcessor {
      * 远程开门
      * @param doorController
      */
-    public static void remoteOpenDoor(DoorControllerEntity doorController) {
+    public static CommonResponse remoteOpenDoor(DoorControllerEntity doorController) {
         String deviceIP = doorController.getControllerIp();
         String deviceMacAddr = doorController.getMacAddr();
         int readerNo = doorController.getReaderNo();
@@ -41,7 +43,7 @@ public final class DoorControllerProcessor {
             client.receive(receivePacket);
             String receiveData = bytesToHexString(receivePacket.getData());
             log.error("设备[{}] 接收指令= {}", deviceMacAddr, receiveData);
-            parseReceiveData(receiveData);
+            return parseReceiveData(receiveData);
         } catch (Exception e) {
             e.printStackTrace();
             log.error("远程开门异常！原因：{}", e.getMessage());
@@ -51,8 +53,13 @@ public final class DoorControllerProcessor {
         }
     }
 
-    private static void parseReceiveData(String receiveData) {
-        // TODO 待处理
+    private static CommonResponse parseReceiveData(String receiveData) {
+        String openDoorValue = receiveData.substring(18, 20);
+        if (ValidateUtils.equals(VisitorConstants.OpenDoorCommand.SUCCESS, openDoorValue)) {
+            return CommonResponse.ok();
+        } else {
+            return CommonResponse.error("开门失败！");
+        }
     }
 
     private static byte[] buildSendBuff(int readerNo, String deviceMacAddr) {
@@ -69,7 +76,7 @@ public final class DoorControllerProcessor {
         sendBuf[5] = (byte) (0x2D);
         sendBuf[6] = (byte) 0x00;
         sendBuf[7] = (byte) 0x01;
-        sendBuf[8] = (byte) (readerNo + 1);
+        sendBuf[8] = (byte) (parseReaderNo(readerNo) + 1);
         sendBuf[9] = (byte) 0x00;
         int path = 0;
         for (int i = 0; i < 10; i++) {
@@ -81,6 +88,17 @@ public final class DoorControllerProcessor {
     }
 
 
+    private static int parseReaderNo(int readerNo) {
+        if (VisitorConstants.DoorReaderNo.NO_ZERO == readerNo || VisitorConstants.DoorReaderNo.NO_ONE == readerNo) {
+            return readerNo;
+        } else if (VisitorConstants.DoorReaderNo.NO_TWO == readerNo) {
+            return readerNo + 1;
+        } else if (VisitorConstants.DoorReaderNo.NO_THREEE == readerNo) {
+            return (readerNo << 1) + 1;
+        } else {
+            throw new CommonException("读头号[" + readerNo + "]不正确！");
+        }
+    }
     private static int getSendPort() {
         return Integer.valueOf(getCacheDataUtils().getConfigValueByKey(VisitorConstants.Keys.DOOR_CTRL_SEND_PORT));
     }
@@ -99,8 +117,9 @@ public final class DoorControllerProcessor {
         String sTemp;
         for (int i = 0; i < bArray.length; i++) {
             sTemp = Integer.toHexString(0xFF & bArray[i]);
-            if (sTemp.length() < 2)
+            if (sTemp.length() < 2) {
                 sb.append(0);
+            }
             sb.append(sTemp.toUpperCase());
         }
         return sb.toString();
