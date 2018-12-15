@@ -53,7 +53,7 @@ public class BatchReservationController {
 	@PostMapping("/list")
 	public CommonResponse list(@RequestBody Map<String, Object> params){
 		Query query = new Query(params);
-		List<VisitorReservationEntity> resultList = this.visitorReservationService.queryList(params);
+		List<VisitorReservationEntity> resultList = this.visitorReservationService.queryList(query);
 		int total = this.visitorReservationService.queryTotal(params);
 		PageUtils pageUtil = new PageUtils(resultList, total, query.getLimit(), query.getPage());
 		return CommonResponse.ok().put("page", pageUtil);
