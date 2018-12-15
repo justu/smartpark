@@ -15,6 +15,8 @@ public class DoorControllerDTO implements Serializable {
 
     private int doorType;
 
+    private int mappingDoorId;
+
     public int getDoorId() {
         return doorId;
     }
@@ -53,5 +55,13 @@ public class DoorControllerDTO implements Serializable {
 
     public void setDoorType(int doorType) {
         this.doorType = doorType;
+    }
+
+    public int getMappingDoorId() {
+        return mappingDoorId;
+    }
+
+    public void setMappingDoorId(int mappingDoorId) {
+        this.mappingDoorId = mappingDoorId;
     }
 }

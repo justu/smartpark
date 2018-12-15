@@ -258,7 +258,8 @@
 		d.door_name AS doorName,
 		d.door_type AS doorType,
 		r.read_no AS readerNo,
-		dc.id AS doorControllerId
+		dc.id AS doorControllerId,
+		d.ext1 AS mappingDoorId
 		FROM sp_station s
 		INNER JOIN sp_user_station us ON us.station_id = s.id
 		INNER JOIN sp_group_station gs ON gs.station_id = s.id
