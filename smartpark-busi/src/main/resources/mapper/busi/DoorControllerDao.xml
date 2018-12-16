@@ -135,5 +135,15 @@
 		<if test="status != null and status != ''">
 			and status =#{status,jdbcType=VARCHAR}
 		</if>
+		<if test="openId != null and openId != ''">
+			and d.id in (
+			select gd.door_id from sp_group_door gd
+			INNER JOIN sp_group_station  gs ON gs.group_id = gd.group_id
+			INNER JOIN sp_user_station us ON us.station_id = gs.station_id
+			INNER JOIN base_staff staff ON staff.EMPLOYNUM = us.work_no
+			INNER JOIN tb_user tu ON tu.mobile = staff.MOBILE
+			where tu.open_id = #{openId}
+			)
+		</if>
 	</select>
 </mapper>

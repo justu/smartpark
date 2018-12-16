@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -71,9 +72,9 @@ public class EntranceController {
     /**
      * 远程开门
      */
-    @GetMapping("/remoteOpenDoor")
-    public CommonResponse remoteOpenDoor(Long doorId) {
-        this.entranceService.remoteOpenDoor(doorId);
+    @PostMapping("/remoteOpenDoor")
+    public CommonResponse remoteOpenDoor(@RequestBody Map<String, Object> params) {
+        this.entranceService.remoteOpenDoor(params);
         return CommonResponse.ok();
     }
 }

@@ -1,10 +1,10 @@
 package com.chris.smartpark.busi.service;
 
-import com.alibaba.fastjson.JSONObject;
 import com.chris.base.common.tree.TreeNode;
 import com.chris.smartpark.busi.entity.DoorEntity;
 
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -25,6 +25,7 @@ public interface EntranceService {
 
     /**
      * 远程开门
+     * @param doorId
      */
-    void remoteOpenDoor(Long doorId);
+    void remoteOpenDoor(Map<String, Object> doorId);
 }

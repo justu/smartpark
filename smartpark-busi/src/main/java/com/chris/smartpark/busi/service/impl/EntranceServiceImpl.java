@@ -1,6 +1,5 @@
 package com.chris.smartpark.busi.service.impl;
 
-import com.alibaba.fastjson.JSONObject;
 import com.chris.base.common.exception.CommonException;
 import com.chris.base.common.tree.TreeNode;
 import com.chris.base.common.utils.ValidateUtils;
@@ -12,7 +11,6 @@ import com.chris.smartpark.busi.dao.OpenDoorLogDao;
 import com.chris.smartpark.busi.dto.DoorLevelDTO;
 import com.chris.smartpark.busi.entity.DoorControllerEntity;
 import com.chris.smartpark.busi.entity.DoorEntity;
-import com.chris.smartpark.busi.entity.OpenDoorLogEntity;
 import com.chris.smartpark.busi.service.EntranceService;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
@@ -87,11 +85,24 @@ public class EntranceServiceImpl implements EntranceService {
     }
 
     @Override
-    public void remoteOpenDoor(Long doorId) {
+    public void remoteOpenDoor(Map<String, Object> params) {
+        if (ValidateUtils.isEmpty(params)) {
+            throw new CommonException("请求参数不能为空！");
+        }
+        if (ValidateUtils.isEmpty(params.get(VisitorConstants.Keys.OPEN_ID))) {
+            throw new CommonException("openid不能为空！");
+        }
+        if (ValidateUtils.isEmpty(params.get(VisitorConstants.Keys.DOOR_ID))) {
+            throw new CommonException("门ID不能为空！");
+        }
+        // 首先校验员工是否有对应门的权限
+        Long doorId = Long.valueOf(params.get(VisitorConstants.Keys.DOOR_ID).toString());
+        String openId = params.get(VisitorConstants.Keys.OPEN_ID).toString();
         // 根据门ID查询其对应的门禁控制器
-        List<DoorControllerEntity> doorControllers = doorControllerDao.queryDoorControllerByDoorId(ImmutableMap.of(VisitorConstants.Keys.DOOR_ID, doorId));
+        List<DoorControllerEntity> doorControllers = doorControllerDao.queryDoorControllerByDoorId(
+                ImmutableMap.of(VisitorConstants.Keys.DOOR_ID, doorId, VisitorConstants.Keys.OPEN_ID, openId));
         if (ValidateUtils.isEmptyCollection(doorControllers)) {
-            throw new CommonException("门ID[" + doorId + "]未连接门禁控制器");
+            throw new CommonException("当前员工没有该门禁操作权限");
         }
         DoorControllerEntity doorController = doorControllers.get(0);
         DoorControllerProcessor.remoteOpenDoor(doorController);
