@@ -199,7 +199,7 @@
 	<select id="queryMappdingDoorIdsByReservationOrderId" parameterType="java.lang.Long" resultType="java.lang.String">
 		select d.ext1 from sp_door d,sp_visitor_door_rel dr
 		where d.id = dr.door_id
-		and dr.reservation_id =
+		and dr.reservation_id = #{id}
 	</select>
 
 </mapper>
