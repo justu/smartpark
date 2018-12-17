@@ -33,7 +33,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.sql.*;
-import java.sql.Date;
 import java.util.*;
 
 @Slf4j
@@ -309,7 +308,7 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
                 }
                 //添加送门禁开关
                 if(VisitorConstants.isSendToEntrance.TRUE.equals(sysconfigservice.getValue("SEND_TO_ENTRANCE"))){
-                    this.sendPhyIdCard2DoorController(reservationOrder, visitorIdcard);
+                    this.sendPhyIdCard2DoorCtrlSys(reservationOrder, visitorIdcard);
                 }
                 //更新预约单状态为完成
                 reservationOrder.setStatus(VisitorConstants.ReservationOrderStatus.COMPLETED + "");
@@ -324,11 +323,11 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
     }
 
     /**
-     * 送物理卡到门禁
+     * 送物理卡到门禁系统
      * @param reservationOrder
      * @param visitorIdcard
      */
-    private void sendPhyIdCard2DoorController(VisitorReservationEntity reservationOrder, VisitorIdcardEntity visitorIdcard) {
+    private void sendPhyIdCard2DoorCtrlSys(VisitorReservationEntity reservationOrder, VisitorIdcardEntity visitorIdcard) {
         //组装入参调用门禁接口授权
         java.util.Date startTime = reservationOrder.getAppointStartTime();
         java.util.Date endTime = reservationOrder.getAppointEndTime();
@@ -394,7 +393,7 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
                 ps.setInt(8, doorAuthList.get(i).getDownLoaded());
                 ps.setInt(9, doorAuthList.get(i).getFirstDownLoaded());
                 ps.setInt(10, doorAuthList.get(i).getPreventCard());
-                ps.setString(11, String.valueOf(doorAuthList.get(i).getStartTime()));
+                ps.setTimestamp(11, new Timestamp(doorAuthList.get(i).getStartTime().getTime()));
                 //if(ps.executeUpdate() != 1) r = false;    优化后，不用传统的插入方法了。
                 //优化插入第二步       插入代码打包，等一定量后再一起插入。
                 ps.addBatch();
@@ -412,8 +411,10 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
                 conn.rollback();
             } catch (SQLException e1) {
                 e1.printStackTrace();
+                throw new CommonException("数据回滚异常！");
             }
             e.printStackTrace();
+            throw new CommonException("保存门禁预约记录异常！");
         } finally {
             JDBCUtils.close(rs, stat, conn);
         }
