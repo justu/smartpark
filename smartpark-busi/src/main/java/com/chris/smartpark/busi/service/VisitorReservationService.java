@@ -54,7 +54,7 @@ public interface VisitorReservationService {
 	@Transactional
 	void change2Overdue();
 	@Transactional
-	void createReservationOrder(ReservationOrderDTO reservationOrderDTO);
+    Long createReservationOrder(ReservationOrderDTO reservationOrderDTO);
 	@Transactional
 	void checkIdCardAndGetAuth(VisitorIdcardEntity visitorIdcardEntity);
 

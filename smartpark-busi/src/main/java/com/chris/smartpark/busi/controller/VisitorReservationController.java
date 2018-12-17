@@ -114,8 +114,8 @@ public class VisitorReservationController {
 	public CommonResponse save(@RequestBody  @Validated(ReservationOrderDTO.ValidateSaveReservation.class)ReservationOrderDTO reservationOrderDTO, BindingResult result){
 		log.info("预约单生成入参"+ JSON.toJSONString(reservationOrderDTO));
 		ValidateUtils.validatedParams(result);
-		visitorReservationService.createReservationOrder(reservationOrderDTO);
-		return CommonResponse.ok();
+		long id = visitorReservationService.createReservationOrder(reservationOrderDTO);
+		return CommonResponse.ok().put("id", id);
 	}
 
 	/**
@@ -123,15 +123,15 @@ public class VisitorReservationController {
 	 */
 	@RequestMapping("/localSave")
 	public CommonResponse localSave(@RequestBody  @Validated(ReservationOrderDTO.ValidateLocalSave.class)ReservationOrderDTO reservationOrderDTO, BindingResult result){
-		try{
-		reservationOrderDTO.setIsLocalappoint(VisitorConstants.isLocalappoint.OFFLINE);
-		log.info("预约单生成入参"+ JSON.toJSONString(reservationOrderDTO));
-		ValidateUtils.validatedParams(result);
-		visitorReservationService.createReservationOrder(reservationOrderDTO);
-		}catch (Exception e){
-			return CommonResponse.ok("现场来访上传失败").put("isSuccess","false");
+		try {
+			reservationOrderDTO.setIsLocalappoint(VisitorConstants.isLocalappoint.OFFLINE);
+			log.info("预约单生成入参" + JSON.toJSONString(reservationOrderDTO));
+			ValidateUtils.validatedParams(result);
+			long id = visitorReservationService.createReservationOrder(reservationOrderDTO);
+			return CommonResponse.ok("现场来访上传成功").put("isSuccess", "true").put("id", id);
+		} catch (Exception e) {
+			return CommonResponse.ok("现场来访上传失败").put("isSuccess", "false");
 		}
-		return CommonResponse.ok("现场来访上传成功").put("isSuccess","true");
 	}
 	
 	/**

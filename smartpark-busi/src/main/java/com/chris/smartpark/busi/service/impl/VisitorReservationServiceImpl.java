@@ -169,11 +169,11 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
      * 生成预约单信息
      */
     @Override
-    public void createReservationOrder(ReservationOrderDTO reservationOrderDTO) {
+    public Long createReservationOrder(ReservationOrderDTO reservationOrderDTO) {
         this.validateReservationOrder(reservationOrderDTO);
-        this.saveReservationOrder(reservationOrderDTO);
+        return this.saveReservationOrder(reservationOrderDTO);
     }
-    private void saveReservationOrder(ReservationOrderDTO reservationOrderDTO){
+    private Long saveReservationOrder(ReservationOrderDTO reservationOrderDTO){
         // TODO 查询系统配置判断是否配置了同行人详细信息(需要抽掉一个字典查询公共方法) 暂时放到第二阶段
         //1.保存访客信息（历史信息）
         VisitorInfoEntity visitorInfo = new VisitorInfoEntity();
@@ -226,6 +226,8 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
             this.carInfoService.batchInsert(reservationOrderDTO.getCarInfoEntitys());
         }
         // TODO 4.保存同行人信息（暂缓）
+
+        return reservationOrder.getId();
     }
     /**
      * 校验预约单
