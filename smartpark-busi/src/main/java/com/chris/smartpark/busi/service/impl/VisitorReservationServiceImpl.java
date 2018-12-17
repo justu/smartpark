@@ -394,7 +394,7 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
                 ps.setInt(8, doorAuthList.get(i).getDownLoaded());
                 ps.setInt(9, doorAuthList.get(i).getFirstDownLoaded());
                 ps.setInt(10, doorAuthList.get(i).getPreventCard());
-                ps.setDate(11, new Date(doorAuthList.get(i).getStartTime().getTime()));
+                ps.setString(11, String.valueOf(doorAuthList.get(i).getStartTime()));
                 //if(ps.executeUpdate() != 1) r = false;    优化后，不用传统的插入方法了。
                 //优化插入第二步       插入代码打包，等一定量后再一起插入。
                 ps.addBatch();
