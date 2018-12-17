@@ -307,7 +307,7 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
                     this.visitorIdcardService.update(visitorIdcard);
                 }
                 //添加送门禁开关
-                if(VisitorConstants.isSendToEntrance.TRUE.equals(sysconfigservice.getValue("SEND_TO_ENTRANCE"))){
+                if (VisitorConstants.isSendToEntrance.TRUE.equals(sysconfigservice.getValue("SEND_TO_ENTRANCE"))) {
                     this.sendPhyIdCard2DoorCtrlSys(reservationOrder, visitorIdcard);
                 }
                 //更新预约单状态为完成
@@ -315,9 +315,9 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
                 reservationOrder.setPhysicalCardId(String.valueOf(authIdCardDTO.getCardID()));
                 this.visitorReservationDao.updateStatus(reservationOrder);
             }
-        }catch (Exception e){
-            result = CommonResponse.ok("上传失败").put("isSuccess","fasle");
-            log.info("失败原因为"+e);
+        } catch (Exception e){
+            result = CommonResponse.error("上传失败").put("isSuccess","fasle");
+            log.error("上传失败，原因：{}", e.getMessage());
         }
         return result;
     }
