@@ -368,6 +368,7 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
      * @param doorAuthList
      */
     private void saveDoorAuthRecord(List<DoorAuthEntity> doorAuthList) {
+        log.error("doorAuthList JSON = {}", JSONObject.toJSONString(doorAuthList));
         String sql = "INSERT INTO NDr2_AuthorSet1 ([CardID], [DoorID], [PassWord], [DueDate], [AuthorType], [AuthorStatus], [UserTimeGrp], [DownLoaded], [FirstDownLoaded], [PreventCard], [StartTime]) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         Connection conn = JDBCUtils.getConnection();
         Statement stat = null;
