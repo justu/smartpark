@@ -123,7 +123,8 @@
 			r.remark,
 			v.name AS visitorName,
 			v.phone AS visitorMobile,
-			v.idcard_no AS idcardNo
+			v.idcard_no AS idcardNo,
+			r.reservation_no AS reservationNo
 		 FROM sp_visitor_reservation r
 		INNER JOIN sp_visitor_info_his v ON v.reservation_id = r.id
 		<if test="type == 1">

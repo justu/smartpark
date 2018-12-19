@@ -44,6 +44,8 @@ public class ReservationOrderQryDTO implements Serializable {
      */
     private String remark;
 
+    private String reservationNo;
+
     public Long getId() {
         return id;
     }
@@ -114,5 +116,13 @@ public class ReservationOrderQryDTO implements Serializable {
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    public String getReservationNo() {
+        return reservationNo;
+    }
+
+    public void setReservationNo(String reservationNo) {
+        this.reservationNo = reservationNo;
     }
 }
