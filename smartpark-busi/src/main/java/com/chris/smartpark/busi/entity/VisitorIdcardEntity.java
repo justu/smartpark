@@ -2,8 +2,12 @@ package com.chris.smartpark.busi.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+
+import com.alibaba.fastjson.JSONObject;
 import com.chris.base.common.model.SysUpdateInfo;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.format.annotation.DateTimeFormat;
 
 
 /**
@@ -122,6 +126,7 @@ public class VisitorIdcardEntity  extends SysUpdateInfo  implements Serializable
 	public String getIssuOrganization() {
 		return issuOrganization;
 	}
+	@JsonFormat(pattern="yyyyMMdd",timezone = "GMT+8")
 	public void setEffDate(Date effDate) {
 		this.effDate = effDate;
 	}
@@ -129,6 +134,7 @@ public class VisitorIdcardEntity  extends SysUpdateInfo  implements Serializable
 	public Date getEffDate() {
 		return effDate;
 	}
+	@JsonFormat(pattern="yyyyMMdd",timezone = "GMT+8")
 	public void setExpDate(Date expDate) {
 		this.expDate = expDate;
 	}
@@ -167,5 +173,12 @@ public class VisitorIdcardEntity  extends SysUpdateInfo  implements Serializable
 	/* ********************** 参数校验类 *******************************/
 	public interface ValidateIdentity{
 
+	}
+
+	public static void main(String[] args) {
+		String json = "{\"address\":\"住址\",\"effDate\":\"20180722\",\"expDate\":\"20251125\",\"physicalCardId\":\"20A2C42894518466\",\"idcardNo\":\"342342929384724379\",\"idcardPhotoUrl\":\"身份证照片图片\",\"issuOrganization\":\"签发机关\",\"name\":\"身份证姓名\",\"sex\":1,\"visitorId\":23}";
+		VisitorIdcardEntity v = JSONObject.parseObject(json, VisitorIdcardEntity.class);
+		System.out.println(v.getEffDate());
+		System.out.println(v.getExpDate());
 	}
 }
