@@ -844,11 +844,12 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
     }
 
     @Override
-    public void uploadVisitorPhoto(MultipartFile file, String visitorId) throws IOException {
+    public void uploadVisitorPhoto(MultipartFile file, String reservationOrderId) throws IOException {
         String suffix = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".") + 1);
         this.verifyImageFileType(suffix);
         this.verifyImageFileSize(file);
-        List<VisitorIdcardEntity> visitorIdcardInfoList = this.visitorIdcardService.queryList(ImmutableMap.of(VisitorConstants.Keys.VISITOR_ID, visitorId));
+        List<VisitorIdcardEntity> visitorIdcardInfoList = this.visitorIdcardService.queryList(ImmutableMap.of(VisitorConstants.Keys.RESERVATION_ORDER_ID, reservationOrderId));
+
         if (ValidateUtils.isEmptyCollection(visitorIdcardInfoList)) {
             throw new CommonException("访客身份信息不存在！");
         }

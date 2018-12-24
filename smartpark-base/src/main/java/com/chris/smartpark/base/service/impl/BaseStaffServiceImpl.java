@@ -44,15 +44,11 @@ public class BaseStaffServiceImpl implements BaseStaffService {
 		List<BaseStaffEntity> staffList = this.queryList(ImmutableMap.of("sdeptcode", orgId));
 		if (ValidateUtils.isNotEmptyCollection(staffList)) {
 			return staffList.stream().map(staff -> {
-				BaseStaffDTO staffDTO = new BaseStaffDTO(staff.getId(), staff.getUsername(), this.getPrivacyMobile(staff.getMobile()));
+				BaseStaffDTO staffDTO = new BaseStaffDTO(staff.getId(), staff.getUsername(), staff.getMobile());
 				return staffDTO;
 			}).collect(Collectors.toList());
 		}
 		return Collections.EMPTY_LIST;
-	}
-
-	private String getPrivacyMobile(String mobile) {
-		return mobile.substring(0, 7) + "XXXX";
 	}
 
 	@Override
