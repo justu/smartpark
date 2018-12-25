@@ -1,6 +1,7 @@
 package com.chris.smartpark.busi.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.chris.base.common.exception.CommonException;
 import com.chris.base.common.utils.CommonResponse;
 import com.chris.base.common.utils.PageUtils;
@@ -97,22 +98,25 @@ public class VisitorReservationController {
 
 	/**
 	 * 上传对应预约单的访客信息 将来访者的信息上传到主控平台、或者现场的预约以后进行授权再次刷卡进入
+	 * 提供给第三方调用
 	 */
 	@RequestMapping("/saveVisitorIdCard")
 	public CommonResponse saveVisitorIdCard(@RequestBody @Validated(AuthIdCardDTO.ValidateSaveVisitorIdCard.class)AuthIdCardDTO authIdCardDTO, BindingResult result){
-		log.info("========身份证识别开始将来访者的信息上传到主控平台=====");
+		log.error("========身份证识别开始将来访者的信息上传到主控平台=====");
+		log.error("请求参数 = {}", JSONObject.toJSONString(authIdCardDTO));
 		ValidateUtils.validatedParams(result);
 		CommonResponse res = visitorReservationService.saveCardAndGetAuth(authIdCardDTO);
 		return res;
 	}
 
 	/**
-	 * 远程预约单保存
+	 * 预约单保存
+	 * 由小程序调用
 	 */
 	@RequestMapping("/save")
 	@Login
 	public CommonResponse save(@RequestBody  @Validated(ReservationOrderDTO.ValidateSaveReservation.class)ReservationOrderDTO reservationOrderDTO, BindingResult result){
-		log.info("预约单生成入参"+ JSON.toJSONString(reservationOrderDTO));
+		log.error("线上预约请求参数 = {}", JSONObject.toJSONString(reservationOrderDTO));
 		ValidateUtils.validatedParams(result);
 		long id = visitorReservationService.createReservationOrder(reservationOrderDTO);
 		return CommonResponse.ok().put("id", id);
@@ -120,11 +124,12 @@ public class VisitorReservationController {
 
 	/**
 	 * 现场来访保存预约信息到主控平台
+	 * 提供给第三方调用
 	 */
 	@RequestMapping("/localSave")
 	public CommonResponse localSave(@RequestBody  @Validated(ReservationOrderDTO.ValidateLocalSave.class)ReservationOrderDTO reservationOrderDTO, BindingResult result){
 		reservationOrderDTO.setIsLocalappoint(VisitorConstants.isLocalappoint.OFFLINE);
-		log.error("预约单生成入参" + JSON.toJSONString(reservationOrderDTO));
+		log.error("现场预约请求参数 = {}", JSONObject.toJSONString(reservationOrderDTO));
 		ValidateUtils.validatedParams(result);
 		long id = visitorReservationService.createReservationOrder(reservationOrderDTO);
 		return CommonResponse.ok("现场来访上传成功").put("isSuccess", "true").put("id", id);
@@ -160,17 +165,19 @@ public class VisitorReservationController {
 
 	/**
 	 * 上传文件
+	 * 提供给第三方调用
 	 */
 	@RequestMapping("/upload")
 	public CommonResponse upload(@RequestParam("file") MultipartFile file, HttpServletRequest request) throws Exception {
 		if (file.isEmpty()) {
 			throw new CommonException("上传文件不能为空！");
 		}
-		String visitorId = request.getParameter("visitorId");
-		if (ValidateUtils.isEmptyString(visitorId)) {
-			throw new CommonException("访客ID不能为空！");
+		String reservationOrderId = request.getParameter("visitorId");
+		log.error("upload resevationOrderId = {}", reservationOrderId);
+		if (ValidateUtils.isEmptyString(reservationOrderId)) {
+			throw new CommonException("预约单ID不能为空！");
 		}
-		this.visitorReservationService.uploadVisitorPhoto(file, visitorId);
+		this.visitorReservationService.uploadVisitorPhoto(file, reservationOrderId);
 		return CommonResponse.ok();
 	}
 }

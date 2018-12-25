@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.chris.base.common.tree.TreeNode;
 import com.chris.base.common.utils.ValidateUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,6 +33,7 @@ import com.chris.base.common.utils.CommonResponse;
  */
 @RestController
 @RequestMapping("/base/baseorganization")
+@Slf4j
 public class BaseOrganizationController {
 	@Autowired
 	private BaseOrganizationService baseOrganizationService;
@@ -61,6 +63,7 @@ public class BaseOrganizationController {
 	 */
 	@GetMapping("/queryBaseOrgList.notoken")
 	public CommonResponse queryBaseOrgList(Long parkId){
+		log.error("园区ID = {}", parkId);
 		if (ValidateUtils.isEmpty(parkId)) {
 			return CommonResponse.error("园区ID不能为空");
 		}

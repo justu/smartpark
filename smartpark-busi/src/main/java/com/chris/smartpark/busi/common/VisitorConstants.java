@@ -122,6 +122,7 @@ public class VisitorConstants {
         String DOOR_ID = "doorId";
         String DOOR_CTRL_SEND_PORT = "DOOR_CTRL_SEND_PORT";
         String DOOR_CTRL_RECEIVE_PORT = "DOOR_CTRL_RECEIVE_PORT";
+        String SQLSERVER_CONFIG = "SQLSERVER_CONFIG";
     }
 
 

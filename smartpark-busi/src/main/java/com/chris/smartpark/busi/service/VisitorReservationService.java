@@ -84,9 +84,9 @@ public interface VisitorReservationService {
 
 	/**
 	 * 上传访客照片
-	 * @param file
-	 * @param visitorId
+	 * @param file 文件对象
+	 * @param reservationOrderId 预约单ID
 	 */
 	@Transactional
-    void uploadVisitorPhoto(MultipartFile file, String visitorId) throws IOException;
+    void uploadVisitorPhoto(MultipartFile file, String reservationOrderId) throws IOException;
 }

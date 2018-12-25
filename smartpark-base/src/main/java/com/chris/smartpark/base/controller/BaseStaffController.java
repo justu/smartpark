@@ -6,6 +6,7 @@ import java.util.Map;
 import com.chris.base.common.utils.ValidateUtils;
 import com.chris.smartpark.base.dto.BaseStaffDTO;
 import com.google.common.collect.ImmutableMap;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,6 +34,7 @@ import com.chris.base.common.utils.CommonResponse;
  */
 @RestController
 @RequestMapping("/base/basestaff")
+@Slf4j
 public class BaseStaffController {
 	@Autowired
 	private BaseStaffService baseStaffService;
@@ -67,10 +69,12 @@ public class BaseStaffController {
 	}
 
 	/**
-	 * 信息
+	 * 根据组织机构ID查询员工列表
+	 * 由第三方调用
 	 */
 	@GetMapping("/queryStaffListByOrgId.notoken")
 	public CommonResponse queryStaffListByOrgId(String orgId){
+		log.error("组织机构ID = {}", orgId);
 		if (ValidateUtils.isEmptyString(orgId)) {
 			return CommonResponse.error("组织机构ID不能为空");
 		}
