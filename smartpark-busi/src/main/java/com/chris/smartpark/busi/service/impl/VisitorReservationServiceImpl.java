@@ -523,20 +523,20 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
         log.error("请求参数：{}", JSONObject.toJSONString(authorizeDTO));
         this.validateParams(authorizeDTO);
         //1.查询预约单
-        VisitorReservationEntity visitorReservationOrder = visitorReservationDao.queryObject(authorizeDTO.getReservationId());
-        if (ValidateUtils.notEquals(VisitorConstants.ReservationOrderStatus.PENDING_APPROVE + "", visitorReservationOrder.getStatus())) {
+        VisitorReservationEntity reservationOrder = visitorReservationDao.queryObject(authorizeDTO.getReservationId());
+        if (ValidateUtils.notEquals(VisitorConstants.ReservationOrderStatus.PENDING_APPROVE + "", reservationOrder.getStatus())) {
             //不是待审核状态无需处理
             throw new CommonException("当前预约单已经审核，请查看预约单详情！");
         }
         // 根据访客ID查询访客信息
-        VisitorInfoEntity visitorInfo = this.visitorInfoService.queryObject(visitorReservationOrder.getVisitorId());
+        VisitorInfoEntity visitorInfo = this.visitorInfoService.queryObject(reservationOrder.getVisitorId());
         // 根据openId查询用户信息(员工或管理员)
         UserEntity user = this.userService.queryUserByOpenId(authorizeDTO.getOpenId());
         // 审核不通过处理
         if (ValidateUtils.equals(VisitorConstants.ApproveResult.REJECT, authorizeDTO.getApproveReslut())) {
             //更新预约单状态为审核不通过
-            visitorReservationOrder.setStatus(VisitorConstants.ReservationOrderStatus.APPROVE_REJECT + "");
-            this.visitorReservationDao.updateStatus(visitorReservationOrder);
+            reservationOrder.setStatus(VisitorConstants.ReservationOrderStatus.APPROVE_REJECT + "");
+            this.visitorReservationDao.updateStatus(reservationOrder);
             //发送审核结果短信给访客
             this.sendApproveRejectSMS(authorizeDTO, visitorInfo);
         } else if (ValidateUtils.equals(VisitorConstants.ApproveResult.OK, authorizeDTO.getApproveReslut())) {
@@ -547,29 +547,29 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
              * 3、同步信息到车管系统（如果有车辆信息）
              * 4、如果是线下预约，则需要将门禁信息送门禁系统
              */
-            this.saveVisitorDoorRelation(authorizeDTO, visitorReservationOrder);
+            this.saveVisitorDoorRelation(authorizeDTO, reservationOrder);
             // TODO 送人脸识别系统（第一阶段暂不实现）
             log.error("送人脸识别系统");
 
-            List<CarInfoEntity> carInfoList = this.carInfoService.queryList(ImmutableMap.of(VisitorConstants.Keys.RESERVATION_ORDER_ID, visitorReservationOrder.getId()));
+            List<CarInfoEntity> carInfoList = this.carInfoService.queryList(ImmutableMap.of(VisitorConstants.Keys.RESERVATION_ORDER_ID, reservationOrder.getId()));
             if (ValidateUtils.isNotEmptyCollection(carInfoList)) {
                 // 存在车辆信息则需要送车管系统
                 // TODO 送车管系统（第一阶段暂不实现）
                 log.error("送车管系统开始......");
             }
-            if (VisitorConstants.ReservationOrderType.OFFLINE == visitorReservationOrder.getType()) {
+            if (VisitorConstants.ReservationOrderType.OFFLINE == reservationOrder.getType()) {
                 // 线下预约的预约单需要送门禁
-                // TODO 调用李森写好的服务
+                this.sendPhyIdCard2DoorCtrlSys(reservationOrder, this.queryVisitorIdcardListByOrderId(reservationOrder.getId() + "").get(0));
             }
             //4.更新预约信息
-            visitorReservationOrder.setActStartTime(authorizeDTO.getActStartTime());
-            visitorReservationOrder.setActEndTime(authorizeDTO.getActEndTime());
-            visitorReservationOrder.setStatus(VisitorConstants.ReservationOrderStatus.APPROVE_OK + "");
-            this.visitorReservationDao.update(visitorReservationOrder);
+            reservationOrder.setActStartTime(authorizeDTO.getActStartTime());
+            reservationOrder.setActEndTime(authorizeDTO.getActEndTime());
+            reservationOrder.setStatus(VisitorConstants.ReservationOrderStatus.APPROVE_OK + "");
+            this.visitorReservationDao.update(reservationOrder);
             //5.发送审核成功短信给访客
             this.sendApproveOKSMS(authorizeDTO, visitorInfo, user);
         }
-        this.saveAuthenticationRecord(authorizeDTO, visitorReservationOrder, user);
+        this.saveAuthenticationRecord(authorizeDTO, reservationOrder, user);
         log.error("授权结束......");
     }
 
@@ -872,7 +872,7 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
         String suffix = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".") + 1);
         this.verifyImageFileType(suffix);
         this.verifyImageFileSize(file);
-        List<VisitorIdcardEntity> visitorIdcardInfoList = this.visitorIdcardService.queryList(ImmutableMap.of(VisitorConstants.Keys.RESERVATION_ORDER_ID, reservationOrderId));
+        List<VisitorIdcardEntity> visitorIdcardInfoList = this.queryVisitorIdcardListByOrderId(reservationOrderId);
 
         if (ValidateUtils.isEmptyCollection(visitorIdcardInfoList)) {
 
@@ -882,6 +882,15 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
         VisitorIdcardEntity visitorIdcardInfo = visitorIdcardInfoList.get(0);
         visitorIdcardInfo.setIdcardPhotoUrl(attachmentEntity.getUrl());
         this.visitorIdcardService.update(visitorIdcardInfo);
+    }
+
+    /**
+     * 根据预约单号查询访客身份信息列表
+     * @param reservationOrderId
+     * @return
+     */
+    private List<VisitorIdcardEntity> queryVisitorIdcardListByOrderId(String reservationOrderId) {
+        return this.visitorIdcardService.queryList(ImmutableMap.of(VisitorConstants.Keys.RESERVATION_ORDER_ID, reservationOrderId));
     }
 
     private void verifyImageFileSize(MultipartFile file) {

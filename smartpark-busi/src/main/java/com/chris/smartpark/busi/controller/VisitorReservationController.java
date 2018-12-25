@@ -124,7 +124,7 @@ public class VisitorReservationController {
 	@RequestMapping("/localSave")
 	public CommonResponse localSave(@RequestBody  @Validated(ReservationOrderDTO.ValidateLocalSave.class)ReservationOrderDTO reservationOrderDTO, BindingResult result){
 		reservationOrderDTO.setIsLocalappoint(VisitorConstants.isLocalappoint.OFFLINE);
-		log.info("预约单生成入参" + JSON.toJSONString(reservationOrderDTO));
+		log.error("预约单生成入参" + JSON.toJSONString(reservationOrderDTO));
 		ValidateUtils.validatedParams(result);
 		long id = visitorReservationService.createReservationOrder(reservationOrderDTO);
 		return CommonResponse.ok("现场来访上传成功").put("isSuccess", "true").put("id", id);

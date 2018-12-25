@@ -189,9 +189,9 @@
 			#{ext1}, 
 			#{ext2}, 
 			#{ext3}, 
-			#{createTime}, 
+			now(),
 			#{createUserId}, 
-			#{updateTime}, 
+			now(),
 			#{updateUserId}
 		)
 	</insert>
