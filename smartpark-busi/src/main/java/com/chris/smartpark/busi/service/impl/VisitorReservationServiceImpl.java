@@ -376,10 +376,11 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
     }
 
     public static void main(String[] args) {
-//        convertPhyCardId("122E100244C3874A");
+        int cardId = new VisitorReservationServiceImpl().convertPhyCardId("1164B001ACB58707");
 //        convertPhyCardId("20A2C42894518466");
-        System.out.println("vvvv = " + VisitorUtils.hex2Int("845194"));
-        System.out.println("value = " + VisitorUtils.hex2Int("87b5ac"));
+        /*System.out.println("vvvv = " + VisitorUtils.hex2Int("845194"));
+        System.out.println("value = " + VisitorUtils.hex2Int("87b5ac"));*/
+        System.out.println("cardId = " + cardId);
     }
 
 

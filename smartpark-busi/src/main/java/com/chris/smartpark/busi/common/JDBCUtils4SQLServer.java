@@ -61,18 +61,9 @@ public final class JDBCUtils4SQLServer {
                 ps.setInt(9, doorAuthList.get(i).getFirstDownLoaded());
                 ps.setInt(10, doorAuthList.get(i).getPreventCard());
                 ps.setTimestamp(11, new Timestamp(doorAuthList.get(i).getStartTime().getTime()));
-                //if(ps.executeUpdate() != 1) r = false;    优化后，不用传统的插入方法了。
-                //优化插入第二步       插入代码打包，等一定量后再一起插入。
                 ps.addBatch();
-                //if(ps.executeUpdate() != 1)result = false;
-                //每200次提交一次
-                if ((i != 0 && i % 200 == 0) || i == len - 1) {//可以设置不同的大小；如50，100，200，500，1000等等
-                    ps.executeBatch();
-                    //优化插入第三步       提交，批量插入数据库中。
-                    conn.commit();
-                    ps.clearBatch();        //提交后，Batch清空。
-                }
             }
+            ps.executeBatch();
         } catch (SQLException e) {
             e.printStackTrace();
             log.error("更新 SQL 操作异常，原因：{}", e.getMessage());

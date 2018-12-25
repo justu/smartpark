@@ -1,20 +1,22 @@
 package com.chris.smartpark;
 
+import cn.afterturn.easypoi.excel.entity.result.ExcelImportResult;
 import com.alibaba.fastjson.JSONObject;
 import com.chris.BusiApplication;
 import com.chris.base.common.utils.DateUtils;
 import com.chris.base.common.utils.HttpContextUtils;
 import com.chris.base.common.utils.PageUtils;
 import com.chris.base.common.utils.VerifyCodeUtils;
+import com.chris.base.modules.sys.service.SysConfigService;
 import com.chris.smartpark.base.dto.BaseStaffDTO;
 import com.chris.smartpark.base.service.BaseStaffService;
+import com.chris.smartpark.busi.common.BeanUtil;
+import com.chris.smartpark.busi.common.JDBCParam;
+import com.chris.smartpark.busi.common.JDBCUtils4SQLServer;
 import com.chris.smartpark.busi.common.VisitorConstants;
 import com.chris.smartpark.busi.dto.ReservationOrderApproveDTO;
 import com.chris.smartpark.busi.dto.ReservationOrderDTO;
-import com.chris.smartpark.busi.entity.CarInfoEntity;
-import com.chris.smartpark.busi.entity.VisitorIdcardEntity;
-import com.chris.smartpark.busi.entity.VisitorInfoEntity;
-import com.chris.smartpark.busi.entity.VisitorInfoHisEntity;
+import com.chris.smartpark.busi.entity.*;
 import com.chris.smartpark.busi.service.EntranceService;
 import com.chris.smartpark.busi.service.VisitorInfoHisService;
 import com.chris.smartpark.busi.service.VisitorInfoService;
@@ -50,6 +52,9 @@ public class VisitorTest {
 
 	@Autowired
 	private VisitorInfoHisService visitorInfoHisService;
+
+	@Autowired
+	private SysConfigService sysConfigService;
 
 	@Test
 	public void queryVisitorInfo() {
@@ -190,6 +195,41 @@ public class VisitorTest {
     public void queryVisitorHisByIdcardNo() {
         VisitorInfoHisEntity visitor = this.visitorInfoHisService.queryByIdcardNo("342225199109102078");
         System.out.println("根据身份证号查询访客实例信息 = " + JSONObject.toJSONString(visitor));
+    }
+
+    /**
+     * 同步门禁信息
+     */
+    @Test
+    public void syncDoorCtrl() throws Exception{
+        String json = this.sysConfigService.getValue(VisitorConstants.Keys.SQLSERVER_CONFIG);
+        JDBCParam jdbcParam = JSONObject.parseObject(json, JDBCParam.class);
+        jdbcParam.setSql("INSERT INTO NDr2_AuthorSet1 ([CardID], [DoorID], [PassWord], [DueDate], [AuthorType], [AuthorStatus], [UserTimeGrp], [DownLoaded], [FirstDownLoaded], [PreventCard], [StartTime]) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        List<DoorAuthEntity> doorAuthList = this.buildDoorAuthList();
+        JDBCUtils4SQLServer.saveDoorAuthoRecords(jdbcParam, doorAuthList);
+        System.out.println("同步门禁信息成功！");
+    }
+
+    private List<DoorAuthEntity> buildDoorAuthList() {
+        //一个门对应两条数据
+        DoorAuthEntity door1 = new DoorAuthEntity();
+        DoorAuthEntity door2 = new DoorAuthEntity();
+        door1.setCardID(8893868);
+        door1.setDoorID(77);
+        door1.setPassWord("0000");
+        door1.setDueDate(DateUtils.parseDate("2099-12-31"));
+        door1.setAuthorType(0);
+        door1.setAuthorStatus(0);
+        door1.setUserTimeGrp(0);
+        door1.setDownLoaded(0);
+        door1.setFirstDownLoaded(0);
+        door1.setPreventCard(0);
+        door1.setStartTime(DateUtils.parseDate("2018-12-28 09:15:00", "yyyy-MM-dd HH:mm:ss"));
+
+        BeanUtil.copyProperties(door1, door2);
+        door2.setAuthorStatus(2);
+        door2.setStartTime(DateUtils.parseDate("2018-12-28 19:35:00", "yyyy-MM-dd HH:mm:ss"));
+        return Lists.newArrayList(door1, door2);
     }
 
 }
