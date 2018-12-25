@@ -40,7 +40,7 @@
 				AND visitor_id = #{visitorId}
 			</if>
 			<if test="reservationId != null and reservationId !='' ">
-				AND visitor_id in (select visitor_id from sp_visitor_info_his where reservation_id = #{reservationId})
+				AND idcard_no in (select idcard_no from sp_visitor_info_his where reservation_id = #{reservationId})
 			</if>
 				<if test="physicalCardId != null and physicalCardId !='' ">
 				AND physical_card_id = #{physicalCardId}

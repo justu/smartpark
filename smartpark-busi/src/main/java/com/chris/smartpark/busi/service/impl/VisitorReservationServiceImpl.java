@@ -341,7 +341,7 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
             //一个门对应两条数据
             DoorAuthEntity door1 = new DoorAuthEntity();
             DoorAuthEntity door2 = new DoorAuthEntity();
-            door1.setCardID(Integer.parseInt(visitorIdcard.getPhysicalCardId()));
+            door1.setCardID(this.convertPhyCardId(visitorIdcard.getPhysicalCardId()));
             door1.setDoorID(Integer.valueOf(mappingDoorId));
             door1.setPassWord("0000");
             door1.setDueDate(DateUtils.parseDate("2099-12-31"));
@@ -362,6 +362,30 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
         this.saveDoorAuthRecord(doorAuthList);
         log.info("========调用门禁接口授权成功=====");
     }
+
+    /**
+     * 转换物理卡ID
+     * @param physicalCardId
+     * @return
+     */
+    private int convertPhyCardId(String physicalCardId) {
+        String firstChar = physicalCardId.substring(8, 10);
+        String secondChar = physicalCardId.substring(10, 12);
+        String thirdChar = physicalCardId.substring(12, 14);
+        String cardId = thirdChar + secondChar + firstChar;
+        int resultValue = VisitorUtils.hex2Int(cardId);
+        log.error("物理卡ID[{}]转换后的值为[{}]", physicalCardId, resultValue);
+        return resultValue;
+    }
+
+    public static void main(String[] args) {
+//        convertPhyCardId("122E100244C3874A");
+//        convertPhyCardId("20A2C42894518466");
+        System.out.println("vvvv = " + VisitorUtils.hex2Int("845194"));
+        System.out.println("value = " + VisitorUtils.hex2Int("87b5ac"));
+    }
+
+
 
     /**
      * 保存访客门授权记录
@@ -851,6 +875,7 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
         List<VisitorIdcardEntity> visitorIdcardInfoList = this.visitorIdcardService.queryList(ImmutableMap.of(VisitorConstants.Keys.RESERVATION_ORDER_ID, reservationOrderId));
 
         if (ValidateUtils.isEmptyCollection(visitorIdcardInfoList)) {
+
             throw new CommonException("访客身份信息不存在！");
         }
         SysAttachmentEntity attachmentEntity = this.sysAttachmentService.doUploadFile(file, null);
