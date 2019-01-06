@@ -7,11 +7,11 @@
     <resultMap type="com.chris.smartpark.busi.entity.VisitorInfoEntity" id="visitorInfoMap">
         <result property="id" column="id"/>
         <result property="name" column="name"/>
-        <result property="gender" column="gender"/>
-        <result property="nation" column="nation"/>
-        <result property="birthday" column="birthday"/>
         <result property="idcardNo" column="idcard_no"/>
+        <result property="phone" column="phone"/>
+        <result property="type" column="type"/>
         <result property="photoUrl" column="photo_url"/>
+        <result property="company" column="company"/>
         <result property="remark" column="remark"/>
         <result property="ext1" column="ext1"/>
         <result property="ext2" column="ext2"/>
@@ -25,6 +25,9 @@
 	<select id="queryObject" resultType="com.chris.smartpark.busi.entity.VisitorInfoEntity">
 		select * from sp_visitor_info where id = #{value}
 	</select>
+	<select id="selectByIdcardNo" resultType="com.chris.smartpark.busi.entity.VisitorInfoEntity" parameterType="java.lang.String">
+		select * from sp_visitor_info where idcard_no = #{idcardNo}
+	</select>
 
 	<select id="queryList" resultType="com.chris.smartpark.busi.entity.VisitorInfoEntity">
 		select * from sp_visitor_info where 1=1
@@ -34,20 +37,20 @@
 				<if test="name != null and name !='' ">
 				AND name = #{name}
 			</if>
-				<if test="gender != null and gender !='' ">
-				AND gender = #{gender}
-			</if>
-				<if test="nation != null and nation !='' ">
-				AND nation = #{nation}
-			</if>
-				<if test="birthday != null and birthday !='' ">
-				AND birthday = #{birthday}
-			</if>
 				<if test="idcardNo != null and idcardNo !='' ">
 				AND idcard_no = #{idcardNo}
 			</if>
+				<if test="phone != null and phone !='' ">
+				AND phone = #{phone}
+			</if>
+				<if test="type != null and type !='' ">
+				AND type = #{type}
+			</if>
 				<if test="photoUrl != null and photoUrl !='' ">
 				AND photo_url = #{photoUrl}
+			</if>
+				<if test="company != null and company !='' ">
+				AND company = #{company}
 			</if>
 				<if test="remark != null and remark !='' ">
 				AND remark = #{remark}
@@ -82,20 +85,20 @@
 				<if test="name != null and name !='' ">
                 AND name = #{name}
             </if>
-				<if test="gender != null and gender !='' ">
-                AND gender = #{gender}
-            </if>
-				<if test="nation != null and nation !='' ">
-                AND nation = #{nation}
-            </if>
-				<if test="birthday != null and birthday !='' ">
-                AND birthday = #{birthday}
-            </if>
 				<if test="idcardNo != null and idcardNo !='' ">
                 AND idcard_no = #{idcardNo}
             </if>
+				<if test="phone != null and phone !='' ">
+                AND phone = #{phone}
+            </if>
+				<if test="type != null and type !='' ">
+                AND type = #{type}
+            </if>
 				<if test="photoUrl != null and photoUrl !='' ">
                 AND photo_url = #{photoUrl}
+            </if>
+				<if test="company != null and company !='' ">
+                AND company = #{company}
             </if>
 				<if test="remark != null and remark !='' ">
                 AND remark = #{remark}
@@ -115,11 +118,11 @@
 		insert into sp_visitor_info
 		(
 			`name`, 
-			`gender`, 
-			`nation`, 
-			`birthday`, 
 			`idcard_no`, 
+			`phone`, 
+			`type`, 
 			`photo_url`, 
+			`company`, 
 			`remark`, 
 			`ext1`, 
 			`ext2`, 
@@ -132,16 +135,16 @@
 		values
 		(
 			#{name}, 
-			#{gender}, 
-			#{nation}, 
-			#{birthday}, 
 			#{idcardNo}, 
+			#{phone}, 
+			#{type}, 
 			#{photoUrl}, 
+			#{company}, 
 			#{remark}, 
 			#{ext1}, 
 			#{ext2}, 
 			#{ext3}, 
-			#{createTime}, 
+			now(),
 			#{createUserId}, 
 			#{updateTime}, 
 			#{updateUserId}
@@ -149,14 +152,14 @@
 	</insert>
 	 
 	<update id="update" parameterType="com.chris.smartpark.busi.entity.VisitorInfoEntity">
-		update sp_visitor_info 
+		update sp_visitor_info
 		<set>
 			<if test="name != null">`name` = #{name}, </if>
-			<if test="gender != null">`gender` = #{gender}, </if>
-			<if test="nation != null">`nation` = #{nation}, </if>
-			<if test="birthday != null">`birthday` = #{birthday}, </if>
 			<if test="idcardNo != null">`idcard_no` = #{idcardNo}, </if>
+			<if test="phone != null">`phone` = #{phone}, </if>
+			<if test="type != null">`type` = #{type}, </if>
 			<if test="photoUrl != null">`photo_url` = #{photoUrl}, </if>
+			<if test="company != null">`company` = #{company}, </if>
 			<if test="remark != null">`remark` = #{remark}, </if>
 			<if test="ext1 != null">`ext1` = #{ext1}, </if>
 			<if test="ext2 != null">`ext2` = #{ext2}, </if>

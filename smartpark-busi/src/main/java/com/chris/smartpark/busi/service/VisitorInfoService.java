@@ -6,25 +6,28 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 访客表
+ * 访客信息表
  * 
  * @author chris
  * @email 258321511@qq.com
- * @since Oct 07.18
+ * @since Nov 11.18
  */
 public interface VisitorInfoService {
 	
-	VisitorInfoEntity queryObject(Integer id);
+	VisitorInfoEntity queryObject(Long id);
 	
 	List<VisitorInfoEntity> queryList(Map<String, Object> map);
 	
 	int queryTotal(Map<String, Object> map);
-	
+
+	VisitorInfoEntity selectByIdcardNo(VisitorInfoEntity visitorInfo);
+
 	void save(VisitorInfoEntity visitorInfo);
 	
 	void update(VisitorInfoEntity visitorInfo);
 	
-	void delete(Integer id);
+	void delete(Long id);
 	
-	void deleteBatch(Integer[] ids);
+	void deleteBatch(Long[] ids);
+
 }

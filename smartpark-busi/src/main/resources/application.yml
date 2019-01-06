@@ -53,3 +53,9 @@ chris:
     interface:
       url:
         accessControl: http://192.168.1.2:8080/ocs
+#文件上传
+multipart:
+    enabled: true
+    #location: roy-upload-tmp
+    max-file-size: 100MB
+    max-request-size: 100MB
