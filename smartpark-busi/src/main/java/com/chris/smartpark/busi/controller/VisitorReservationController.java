@@ -2,6 +2,7 @@ package com.chris.smartpark.busi.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.chris.base.common.annotation.SysLog;
 import com.chris.base.common.exception.CommonException;
 import com.chris.base.common.utils.CommonResponse;
 import com.chris.base.common.utils.PageUtils;
@@ -78,6 +79,7 @@ public class VisitorReservationController {
 	 * 信息
 	 */
 	@RequestMapping("/authentication")
+	@SysLog("身份证识别和门禁授权")
 	public CommonResponse authentication(@RequestBody @Validated(VisitorIdcardEntity.ValidateIdentity.class)VisitorIdcardEntity visitorIdcardEntity,BindingResult result){
 		log.info("========身份证识别开始并同步信息到门禁系统=====");
 		ValidateUtils.validatedParams(result);
@@ -101,6 +103,7 @@ public class VisitorReservationController {
 	 * 提供给第三方调用
 	 */
 	@RequestMapping("/saveVisitorIdCard")
+	@SysLog("生成线上预约单并授权")
 	public CommonResponse saveVisitorIdCard(@RequestBody @Validated(AuthIdCardDTO.ValidateSaveVisitorIdCard.class)AuthIdCardDTO authIdCardDTO, BindingResult result){
 		log.error("========身份证识别开始将来访者的信息上传到主控平台=====");
 		log.error("请求参数 = {}", JSONObject.toJSONString(authIdCardDTO));
@@ -115,6 +118,7 @@ public class VisitorReservationController {
 	 */
 	@RequestMapping("/save")
 	@Login
+	@SysLog("预约单生成（小程序）")
 	public CommonResponse save(@RequestBody  @Validated(ReservationOrderDTO.ValidateSaveReservation.class)ReservationOrderDTO reservationOrderDTO, BindingResult result){
 		log.error("线上预约请求参数 = {}", JSONObject.toJSONString(reservationOrderDTO));
 		ValidateUtils.validatedParams(result);
@@ -127,6 +131,7 @@ public class VisitorReservationController {
 	 * 提供给第三方调用
 	 */
 	@RequestMapping("/localSave")
+	@SysLog("预约单生成（线下）")
 	public CommonResponse localSave(@RequestBody  @Validated(ReservationOrderDTO.ValidateLocalSave.class)ReservationOrderDTO reservationOrderDTO, BindingResult result){
 		reservationOrderDTO.setIsLocalappoint(VisitorConstants.isLocalappoint.OFFLINE);
 		log.error("现场预约请求参数 = {}", JSONObject.toJSONString(reservationOrderDTO));
@@ -158,6 +163,7 @@ public class VisitorReservationController {
      */
     @RequestMapping("/approve")
 	@Login
+	@SysLog("预约单审核")
     public CommonResponse approve(@RequestBody ReservationOrderApproveDTO authorizeDTO){
 		this.visitorReservationService.approve(authorizeDTO);
 		return CommonResponse.ok();

@@ -1,6 +1,7 @@
 package com.chris.smartpark.busi.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.chris.base.common.annotation.SysLog;
 import com.chris.base.common.tree.TreeNode;
 import com.chris.base.common.utils.CommonResponse;
 import com.chris.base.common.utils.ValidateUtils;
@@ -73,6 +74,7 @@ public class EntranceController {
      * 远程开门
      */
     @PostMapping("/remoteOpenDoor")
+    @SysLog("远程开门")
     public CommonResponse remoteOpenDoor(@RequestBody Map<String, Object> params) {
         this.entranceService.remoteOpenDoor(params);
         return CommonResponse.ok();

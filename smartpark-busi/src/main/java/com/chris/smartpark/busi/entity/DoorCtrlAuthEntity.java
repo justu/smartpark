@@ -1,108 +1,111 @@
 package com.chris.smartpark.busi.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by lisen on 2018/12/2.
  */
-public class DoorAuthEntity {
-    private int CardID ;
-    private int DoorID ;
-    private String PassWord ;
-    private Date DueDate ;
-    private int AuthorType ;
-    private int AuthorStatus ;
-    private int UserTimeGrp;
-    private int DownLoaded ;
-    private int FirstDownLoaded ;
-    private int PreventCard ;
-    private Date StartTime ;
+public class DoorCtrlAuthEntity implements Serializable {
+    private static final long serialVersionUID = 1L;
+
+    private int cardID;
+    private int doorID;
+    private String password;
+    private Date dueDate;
+    private int authorType;
+    private int authorStatus;
+    private int userTimeGrp;
+    private int downLoaded;
+    private int firstDownLoaded;
+    private int preventCard;
+    private Date startTime;
 
     public int getCardID() {
-        return CardID;
+        return cardID;
     }
 
     public void setCardID(int cardID) {
-        CardID = cardID;
+        this.cardID = cardID;
     }
 
     public int getDoorID() {
-        return DoorID;
+        return doorID;
     }
 
     public void setDoorID(int doorID) {
-        DoorID = doorID;
+        this.doorID = doorID;
     }
 
-    public String getPassWord() {
-        return PassWord;
+    public String getPassword() {
+        return password;
     }
 
-    public void setPassWord(String passWord) {
-        PassWord = passWord;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public Date getDueDate() {
-        return DueDate;
+        return dueDate;
     }
 
     public void setDueDate(Date dueDate) {
-        DueDate = dueDate;
+        this.dueDate = dueDate;
     }
 
     public int getAuthorType() {
-        return AuthorType;
+        return authorType;
     }
 
     public void setAuthorType(int authorType) {
-        AuthorType = authorType;
+        this.authorType = authorType;
     }
 
     public int getAuthorStatus() {
-        return AuthorStatus;
+        return authorStatus;
     }
 
     public void setAuthorStatus(int authorStatus) {
-        AuthorStatus = authorStatus;
+        this.authorStatus = authorStatus;
     }
 
     public int getUserTimeGrp() {
-        return UserTimeGrp;
+        return userTimeGrp;
     }
 
     public void setUserTimeGrp(int userTimeGrp) {
-        UserTimeGrp = userTimeGrp;
+        this.userTimeGrp = userTimeGrp;
     }
 
     public int getDownLoaded() {
-        return DownLoaded;
+        return downLoaded;
     }
 
     public void setDownLoaded(int downLoaded) {
-        DownLoaded = downLoaded;
+        this.downLoaded = downLoaded;
     }
 
     public int getFirstDownLoaded() {
-        return FirstDownLoaded;
+        return firstDownLoaded;
     }
 
     public void setFirstDownLoaded(int firstDownLoaded) {
-        FirstDownLoaded = firstDownLoaded;
+        this.firstDownLoaded = firstDownLoaded;
     }
 
     public int getPreventCard() {
-        return PreventCard;
+        return preventCard;
     }
 
     public void setPreventCard(int preventCard) {
-        PreventCard = preventCard;
+        this.preventCard = preventCard;
     }
 
     public Date getStartTime() {
-        return StartTime;
+        return startTime;
     }
 
     public void setStartTime(Date startTime) {
-        StartTime = startTime;
+        this.startTime = startTime;
     }
 }

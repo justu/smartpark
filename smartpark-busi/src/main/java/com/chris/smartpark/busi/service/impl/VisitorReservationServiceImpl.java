@@ -12,6 +12,7 @@ import com.chris.base.modules.oss.entity.SysAttachmentEntity;
 import com.chris.base.modules.oss.service.SysAttachmentService;
 import com.chris.base.modules.sms.entity.SMSEntity;
 import com.chris.base.modules.sys.service.SysConfigService;
+import com.chris.smartpark.base.dto.EsbResponse;
 import com.chris.smartpark.base.entity.BaseStaffEntity;
 import com.chris.smartpark.base.service.BaseStaffService;
 import com.chris.smartpark.busi.common.*;
@@ -20,6 +21,7 @@ import com.chris.smartpark.busi.dao.VisitorDoorRelDao;
 import com.chris.smartpark.busi.dao.VisitorReservationDao;
 import com.chris.smartpark.busi.dto.*;
 import com.chris.smartpark.busi.entity.*;
+import com.chris.smartpark.busi.facade.EsbFacade;
 import com.chris.smartpark.busi.service.*;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
@@ -62,6 +64,9 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
 
     @Autowired
     private CacheDataUtils cacheDataUtils;
+
+    @Autowired
+    private EsbFacade esbFacade;
 
     /**
      * 查询预约单明细
@@ -333,14 +338,14 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
         if (ValidateUtils.isEmptyCollection(mappingDoorIds)) {
             throw new CommonException("门ID未与第三方厂家做映射！");
         }
-        List<DoorAuthEntity> doorAuthList = new ArrayList<>();
+        List<DoorCtrlAuthEntity> doorAuthList = new ArrayList<>();
         for (String mappingDoorId : mappingDoorIds) {
             //一个门对应两条数据
-            DoorAuthEntity door1 = new DoorAuthEntity();
-            DoorAuthEntity door2 = new DoorAuthEntity();
+            DoorCtrlAuthEntity door1 = new DoorCtrlAuthEntity();
+            DoorCtrlAuthEntity door2 = new DoorCtrlAuthEntity();
             door1.setCardID(this.convertPhyCardId(visitorIdcard.getPhysicalCardId()));
             door1.setDoorID(Integer.valueOf(mappingDoorId));
-            door1.setPassWord("0000");
+            door1.setPassword("0000");
             door1.setDueDate(DateUtils.parseDate("2099-12-31"));
             door1.setAuthorType(0);
             door1.setAuthorStatus(0);
@@ -387,29 +392,15 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
 
     /**
      * 保存访客门授权记录
-     * @param doorAuthList
+     * @param doorCtrlAuthList
      */
-    private void saveDoorAuthRecords(List<DoorAuthEntity> doorAuthList) {
-        log.error("doorAuthList JSON = {}", JSONObject.toJSONString(doorAuthList));
-        String sql = "INSERT INTO NDr2_AuthorSet1 ([CardID], [DoorID], [PassWord], [DueDate], [AuthorType], [AuthorStatus], [UserTimeGrp], [DownLoaded], [FirstDownLoaded], [PreventCard], [StartTime]) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        JDBCParam jdbcParam = this.buildJDBCParam();
-        jdbcParam.setSql(sql);
-        try {
-            JDBCUtils4SQLServer.saveDoorAuthoRecords(jdbcParam, doorAuthList);
-        } catch (Exception e) {
-            e.printStackTrace();
-            log.error("保存访客门授权记录异常！原因：{}", e.getMessage());
-            throw new CommonException("保存访客门授权记录失败！");
+    private void saveDoorAuthRecords(List<DoorCtrlAuthEntity> doorCtrlAuthList) {
+        EsbResponse resp = this.esbFacade.doorCtrlAuthAndReserve(doorCtrlAuthList);
+        if (!resp.isOK()) {
+            log.error(resp.getMsg());
+            throw new CommonException(resp.getMsg());
         }
     }
-
-    private JDBCParam buildJDBCParam() {
-        String json = this.sysconfigservice.getValue(VisitorConstants.Keys.SQLSERVER_CONFIG);
-        log.error("jdbcParam json = {}", json);
-        JDBCParam jdbcParam = JSONObject.parseObject(json, JDBCParam.class);
-        return jdbcParam;
-    }
-
 
     /**
      * 身份鉴权送门禁
@@ -438,15 +429,15 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
                 java.util.Date endTime = reservationOrder.getAppointEndTime();
                 // TODO 需要根据访客ID查询访客对应可授权的门禁列表
                 List<VisitorDoorRelEntity> doorList = visitorDoorRelService.queryList(ImmutableMap.of(VisitorConstants.Keys.RESERVATION_ORDER_ID, reservationOrder.getId()));
-                List<DoorAuthEntity> doorAuthList = new ArrayList<DoorAuthEntity>();
+                List<DoorCtrlAuthEntity> doorAuthList = new ArrayList<DoorCtrlAuthEntity>();
                 String sql = "INSERT INTO NDr2_AuthorSet1 ([CardID], [DoorID], [PassWord], [DueDate], [AuthorType], [AuthorStatus], [UserTimeGrp], [DownLoaded], [FirstDownLoaded], [PreventCard], [StartTime]) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                 for (VisitorDoorRelEntity door : doorList) {
                     //一个门对应两条数据
-                    DoorAuthEntity door1 = new DoorAuthEntity();
-                    DoorAuthEntity door2 = new DoorAuthEntity();
+                    DoorCtrlAuthEntity door1 = new DoorCtrlAuthEntity();
+                    DoorCtrlAuthEntity door2 = new DoorCtrlAuthEntity();
                     door1.setCardID(Integer.parseInt(visitorIdcard.getPhysicalCardId()));
                     door1.setDoorID(Math.toIntExact(door.getDoorId()));
-                    door1.setPassWord("0000");
+                    door1.setPassword("0000");
                     door1.setDueDate(DateUtils.parseDate("2099-12-31"));
                     door1.setAuthorType(0);
                     door1.setAuthorStatus(0);

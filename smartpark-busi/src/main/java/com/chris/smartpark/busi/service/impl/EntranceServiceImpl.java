@@ -3,7 +3,7 @@ package com.chris.smartpark.busi.service.impl;
 import com.chris.base.common.exception.CommonException;
 import com.chris.base.common.tree.TreeNode;
 import com.chris.base.common.utils.ValidateUtils;
-import com.chris.smartpark.busi.common.DoorControllerProcessor;
+import com.chris.smartpark.base.dto.EsbResponse;
 import com.chris.smartpark.busi.common.VisitorConstants;
 import com.chris.smartpark.busi.dao.DoorControllerDao;
 import com.chris.smartpark.busi.dao.DoorDao;
@@ -11,15 +11,18 @@ import com.chris.smartpark.busi.dao.OpenDoorLogDao;
 import com.chris.smartpark.busi.dto.DoorLevelDTO;
 import com.chris.smartpark.busi.entity.DoorControllerEntity;
 import com.chris.smartpark.busi.entity.DoorEntity;
+import com.chris.smartpark.busi.facade.EsbFacade;
 import com.chris.smartpark.busi.service.EntranceService;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service("entranceService")
 public class EntranceServiceImpl implements EntranceService {
     //日志处理
@@ -32,6 +35,9 @@ public class EntranceServiceImpl implements EntranceService {
 
     @Autowired
     private OpenDoorLogDao openDoorLogDao;
+
+    @Autowired
+    private EsbFacade esbFacade;
 
     @Override
     public List<DoorEntity> queryUserDoors(String openId) {
@@ -105,6 +111,10 @@ public class EntranceServiceImpl implements EntranceService {
             throw new CommonException("当前员工没有该门禁操作权限");
         }
         DoorControllerEntity doorController = doorControllers.get(0);
-        DoorControllerProcessor.remoteOpenDoor(doorController);
+        EsbResponse resp = this.esbFacade.remoteOpenDoor(doorController);
+        if (!resp.isOK()) {
+            log.error(resp.getMsg());
+            throw new CommonException(resp.getMsg());
+        }
     }
 }

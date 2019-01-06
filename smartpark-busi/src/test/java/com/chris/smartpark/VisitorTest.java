@@ -1,22 +1,18 @@
 package com.chris.smartpark;
 
-import cn.afterturn.easypoi.excel.entity.result.ExcelImportResult;
 import com.alibaba.fastjson.JSONObject;
 import com.chris.BusiApplication;
-import com.chris.base.common.utils.DateUtils;
-import com.chris.base.common.utils.HttpContextUtils;
-import com.chris.base.common.utils.PageUtils;
-import com.chris.base.common.utils.VerifyCodeUtils;
+import com.chris.base.common.utils.*;
 import com.chris.base.modules.sys.service.SysConfigService;
 import com.chris.smartpark.base.dto.BaseStaffDTO;
+import com.chris.smartpark.base.dto.EsbResponse;
 import com.chris.smartpark.base.service.BaseStaffService;
 import com.chris.smartpark.busi.common.BeanUtil;
-import com.chris.smartpark.busi.common.JDBCParam;
-import com.chris.smartpark.busi.common.JDBCUtils4SQLServer;
 import com.chris.smartpark.busi.common.VisitorConstants;
 import com.chris.smartpark.busi.dto.ReservationOrderApproveDTO;
 import com.chris.smartpark.busi.dto.ReservationOrderDTO;
 import com.chris.smartpark.busi.entity.*;
+import com.chris.smartpark.busi.facade.EsbFacade;
 import com.chris.smartpark.busi.service.EntranceService;
 import com.chris.smartpark.busi.service.VisitorInfoHisService;
 import com.chris.smartpark.busi.service.VisitorInfoService;
@@ -55,6 +51,9 @@ public class VisitorTest {
 
 	@Autowired
 	private SysConfigService sysConfigService;
+
+	@Autowired
+    private EsbFacade esbFacade;
 
 	@Test
 	public void queryVisitorInfo() {
@@ -198,25 +197,35 @@ public class VisitorTest {
     }
 
     /**
-     * 同步门禁信息
+     * 门禁授权并预约
      */
     @Test
-    public void syncDoorCtrl() throws Exception{
-        String json = this.sysConfigService.getValue(VisitorConstants.Keys.SQLSERVER_CONFIG);
-        JDBCParam jdbcParam = JSONObject.parseObject(json, JDBCParam.class);
-        jdbcParam.setSql("INSERT INTO NDr2_AuthorSet1 ([CardID], [DoorID], [PassWord], [DueDate], [AuthorType], [AuthorStatus], [UserTimeGrp], [DownLoaded], [FirstDownLoaded], [PreventCard], [StartTime]) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        List<DoorAuthEntity> doorAuthList = this.buildDoorAuthList();
-        JDBCUtils4SQLServer.saveDoorAuthoRecords(jdbcParam, doorAuthList);
-        System.out.println("同步门禁信息成功！");
+    public void doorCtrlAuthAndReserve() throws Exception{
+        List<DoorCtrlAuthEntity> params = Lists.newArrayList();
+        DoorCtrlAuthEntity param = new DoorCtrlAuthEntity();
+        param.setCardID(7788520);
+        param.setDoorID(77);
+        param.setPassword("000");
+        param.setDueDate(new Date());
+        param.setAuthorType(1);
+        param.setAuthorStatus(1);
+        param.setUserTimeGrp(2);
+        param.setDownLoaded(2);
+        param.setFirstDownLoaded(3);
+        param.setPreventCard(1);
+        param.setStartTime(new Date());
+        params.add(param);
+        EsbResponse resp = this.esbFacade.doorCtrlAuthAndReserve(params);
+        System.out.println("门禁授权并同步结果 = " + JSONObject.toJSONString(resp));
     }
 
-    private List<DoorAuthEntity> buildDoorAuthList() {
+    private List<DoorCtrlAuthEntity> buildDoorAuthList() {
         //一个门对应两条数据
-        DoorAuthEntity door1 = new DoorAuthEntity();
-        DoorAuthEntity door2 = new DoorAuthEntity();
+        DoorCtrlAuthEntity door1 = new DoorCtrlAuthEntity();
+        DoorCtrlAuthEntity door2 = new DoorCtrlAuthEntity();
         door1.setCardID(8893868);
         door1.setDoorID(77);
-        door1.setPassWord("0000");
+        door1.setPassword("0000");
         door1.setDueDate(DateUtils.parseDate("2099-12-31"));
         door1.setAuthorType(0);
         door1.setAuthorStatus(0);
