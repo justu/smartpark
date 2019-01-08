@@ -284,7 +284,7 @@
 			<if test="updateTime != null">`update_time` = #{updateTime}, </if>
 			<if test="updateUserId != null">`update_user_id` = #{updateUserId}, </if>
 			<if test="openId != null">`open_id` = #{openId}, </if>
-			<if test="physicalCardId != null">`physical_card_id` = #{physicalCardId}</if>
+			<if test="physicalCardId != null">`physical_card_id` = #{physicalCardId},</if>
 			<if test="isSendNotice != null">`is_send_notice` = #{isSendNotice}</if>
 		</set>
 		where id = #{id}
