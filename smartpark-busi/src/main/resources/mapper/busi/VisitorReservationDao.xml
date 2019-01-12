@@ -124,14 +124,15 @@
 			v.name AS visitorName,
 			v.phone AS visitorMobile,
 			v.idcard_no AS idcardNo,
-			r.reservation_no AS reservationNo
+			r.reservation_no AS reservationNo,
+			s.USERNAME AS staffName
 		 FROM sp_visitor_reservation r
 		INNER JOIN sp_visitor_info_his v ON v.reservation_id = r.id
+		INNER JOIN base_staff s ON s.id = r.staff_id
 		<if test="type == 1">
 			WHERE r.open_id = #{openId}
 		</if>
 		<if test="type == 2">
-			INNER JOIN base_staff s ON s.id = r.staff_id
 			INNER JOIN tb_user u ON u.mobile = s.MOBILE
 			WHERE u.open_id = #{openId}
 		</if>

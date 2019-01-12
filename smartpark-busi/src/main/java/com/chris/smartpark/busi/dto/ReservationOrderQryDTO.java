@@ -46,6 +46,11 @@ public class ReservationOrderQryDTO implements Serializable {
 
     private String reservationNo;
 
+    /**
+     * 被访人姓名
+     */
+    private String staffName;
+
     public Long getId() {
         return id;
     }
@@ -124,5 +129,13 @@ public class ReservationOrderQryDTO implements Serializable {
 
     public void setReservationNo(String reservationNo) {
         this.reservationNo = reservationNo;
+    }
+
+    public String getStaffName() {
+        return staffName;
+    }
+
+    public void setStaffName(String staffName) {
+        this.staffName = staffName;
     }
 }

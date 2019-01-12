@@ -204,7 +204,7 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
         reservationOrder.setStatus(VisitorConstants.ReservationOrderStatus.PENDING_APPROVE + "");
         reservationOrder.setReservationNo(VisitorUtils.getReservationNo());
         //如果为现场预约则预约单类型为线下预约
-        if(reservationOrderDTO.getIsLocalappoint()==VisitorConstants.isLocalappoint.OFFLINE){
+        if(reservationOrderDTO.getIsLocalappoint() == VisitorConstants.isLocalappoint.OFFLINE){
             reservationOrder.setType(VisitorConstants.ReservationOrderType.OFFLINE);
         }
         this.save(reservationOrder);
@@ -248,7 +248,7 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
             throw new CommonException("手机号格式不正确！");
         }
         //校验验证码是否正确
-        if (reservationOrderDTO.getIsLocalappoint()==VisitorConstants.isLocalappoint.ONLINE && !VisitorUtils.isVerifyCodeOK(reservationOrderDTO.getPhone(), reservationOrderDTO.getVerifyCode(), Constant.SMSTemplateCode.RESERVATION_VERIFY_CODE.getTemplateCode())) {
+        if (reservationOrderDTO.getIsLocalappoint() == VisitorConstants.isLocalappoint.ONLINE && !VisitorUtils.isVerifyCodeOK(reservationOrderDTO.getPhone(), reservationOrderDTO.getVerifyCode(), Constant.SMSTemplateCode.RESERVATION_VERIFY_CODE.getTemplateCode())) {
             throw new CommonException("验证码不正确！");
         }
         //校验员工手机号是否存在
@@ -424,44 +424,51 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
                     visitorIdcard.setId(idcardList.get(0).getId());
                     this.visitorIdcardService.update(visitorIdcard);
                 }
-                //组装入参调用门禁接口授权
-                java.util.Date startTime = reservationOrder.getAppointStartTime();
-                java.util.Date endTime = reservationOrder.getAppointEndTime();
-                // TODO 需要根据访客ID查询访客对应可授权的门禁列表
-                List<VisitorDoorRelEntity> doorList = visitorDoorRelService.queryList(ImmutableMap.of(VisitorConstants.Keys.RESERVATION_ORDER_ID, reservationOrder.getId()));
-                List<DoorCtrlAuthEntity> doorAuthList = new ArrayList<DoorCtrlAuthEntity>();
-                String sql = "INSERT INTO NDr2_AuthorSet1 ([CardID], [DoorID], [PassWord], [DueDate], [AuthorType], [AuthorStatus], [UserTimeGrp], [DownLoaded], [FirstDownLoaded], [PreventCard], [StartTime]) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-                for (VisitorDoorRelEntity door : doorList) {
-                    //一个门对应两条数据
-                    DoorCtrlAuthEntity door1 = new DoorCtrlAuthEntity();
-                    DoorCtrlAuthEntity door2 = new DoorCtrlAuthEntity();
-                    door1.setCardID(Integer.parseInt(visitorIdcard.getPhysicalCardId()));
-                    door1.setDoorID(Math.toIntExact(door.getDoorId()));
-                    door1.setPassword("0000");
-                    door1.setDueDate(DateUtils.parseDate("2099-12-31"));
-                    door1.setAuthorType(0);
-                    door1.setAuthorStatus(0);
-                    door1.setUserTimeGrp(0);
-                    door1.setDownLoaded(0);
-                    door1.setFirstDownLoaded(0);
-                    door1.setPreventCard(0);
-                    door1.setStartTime(startTime);
-
-                    BeanUtil.copyProperties(door1, door2);
-                    door2.setAuthorStatus(2);
-                    door2.setStartTime(endTime);
-                    doorAuthList.add(door2);
-                }
-                /**
-                 * 获取数据库连接对象Connection
-                 */
-                this.saveDoorAuthRecords(doorAuthList);
+                List<DoorCtrlAuthEntity> doorCtrlAuthList = this.buildDoorCtrlAuthParams(visitorIdcard, reservationOrder);
+                this.saveDoorAuthRecords(doorCtrlAuthList);
                 log.info("========调用门禁接口授权成功=====");
                 //更新预约单状态为完成
                 reservationOrder.setStatus(VisitorConstants.ReservationOrderStatus.COMPLETED + "");
                 this.visitorReservationDao.updateStatus(reservationOrder);
             }
         }
+    }
+
+    /**
+     * 构建门禁授权对象参数
+     * @param visitorIdcard
+     * @param reservationOrder
+     * @return
+     */
+    private List<DoorCtrlAuthEntity> buildDoorCtrlAuthParams(VisitorIdcardEntity visitorIdcard, VisitorReservationEntity reservationOrder) {
+        //组装入参调用门禁接口授权
+        Date startTime = reservationOrder.getAppointStartTime();
+        Date endTime = reservationOrder.getAppointEndTime();
+        // TODO 需要根据访客ID查询访客对应可授权的门禁列表
+        List<VisitorDoorRelEntity> doorList = this.visitorDoorRelService.queryList(ImmutableMap.of(VisitorConstants.Keys.RESERVATION_ORDER_ID, reservationOrder.getId()));
+        List<DoorCtrlAuthEntity> doorAuthList = Lists.newArrayList();
+        for (VisitorDoorRelEntity door : doorList) {
+            //一个门对应两条数据
+            DoorCtrlAuthEntity door1 = new DoorCtrlAuthEntity();
+            DoorCtrlAuthEntity door2 = new DoorCtrlAuthEntity();
+            door1.setCardID(this.convertPhyCardId(visitorIdcard.getPhysicalCardId()));
+            door1.setDoorID(Math.toIntExact(door.getDoorId()));
+            door1.setPassword("0000");
+            door1.setDueDate(DateUtils.parseDate("2099-12-31"));
+            door1.setAuthorType(0);
+            door1.setAuthorStatus(0);
+            door1.setUserTimeGrp(0);
+            door1.setDownLoaded(0);
+            door1.setFirstDownLoaded(0);
+            door1.setPreventCard(0);
+            door1.setStartTime(startTime);
+
+            BeanUtil.copyProperties(door1, door2);
+            door2.setAuthorStatus(2);
+            door2.setStartTime(endTime);
+            doorAuthList.add(door2);
+        }
+        return doorAuthList;
     }
 
     @Override

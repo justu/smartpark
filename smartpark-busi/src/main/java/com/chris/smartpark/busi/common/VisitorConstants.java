@@ -50,17 +50,13 @@ public class VisitorConstants {
          */
         int APPROVE_OK = 3;
         /**
-         * 待激活状态重复此状态不用
-         */
-        int PENDING_ACTIVE = 4;
-        /**
          * 已完成
          */
-        int COMPLETED = 5;
+        int COMPLETED = 4;
         /**
          * 已过期
          */
-        int EXPIRED = 6;
+        int EXPIRED = 5;
     }
 
     /**
