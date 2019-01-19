@@ -21,9 +21,11 @@ public interface VisitorReservationDao extends BaseDao<VisitorReservationEntity>
     List<VisitorReservationEntity> queryEffectRecord(String idcardNo);
 
     /**
-     * 更新预约单状态
+     * 更新预约单审核不通过原因和状态
      * @param visitorReservationEntity
      */
+    void updateRejectReasonAndStatus(VisitorReservationEntity visitorReservationEntity);
+
     void updateStatus(VisitorReservationEntity visitorReservationEntity);
 
     List<VisitorReservationEntity> queryByIdcardAndStatus(@Param("idcardNo") String idcardNo, @Param("status") String status);

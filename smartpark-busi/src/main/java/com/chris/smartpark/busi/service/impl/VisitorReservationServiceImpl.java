@@ -82,6 +82,9 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
             throw new CommonException("预约单不存在！");
         }
         BeanUtil.copyProperties(reservationOrder, reservationOrderDTO);
+        if (ValidateUtils.isNotEmptyString(reservationOrder.getExt1())) {
+            reservationOrderDTO.setRejectReason(reservationOrder.getExt1());
+        }
 
         //访客
         VisitorInfoHisEntity visitorHisInfo = this.visitorInfoHisService.queryByReservationId(reservationOrder.getId());
@@ -499,7 +502,8 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
         if (ValidateUtils.equals(VisitorConstants.ApproveResult.REJECT, authorizeDTO.getApproveReslut())) {
             //更新预约单状态为审核不通过
             reservationOrder.setStatus(VisitorConstants.ReservationOrderStatus.APPROVE_REJECT + "");
-            this.visitorReservationDao.updateStatus(reservationOrder);
+            reservationOrder.setExt1(authorizeDTO.getRejectReaon());
+            this.visitorReservationDao.updateRejectReasonAndStatus(reservationOrder);
             //发送审核结果短信给访客
             this.sendApproveRejectSMS(authorizeDTO, visitorInfo);
         } else if (ValidateUtils.equals(VisitorConstants.ApproveResult.OK, authorizeDTO.getApproveReslut())) {

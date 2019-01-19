@@ -306,4 +306,8 @@
 		update sp_visitor_reservation set update_time = now(),status = #{status},physical_card_id = #{physicalCardId} where id = #{id}
 	</update>
 
+	<update id="updateRejectReasonAndStatus" parameterType="com.chris.smartpark.busi.entity.VisitorReservationEntity">
+		update sp_visitor_reservation set update_time = now(),status = #{status},ext1 = #{ext1} where id = #{id}
+	</update>
+
 </mapper>

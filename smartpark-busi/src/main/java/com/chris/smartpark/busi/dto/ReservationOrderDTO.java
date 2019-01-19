@@ -62,6 +62,15 @@ public class ReservationOrderDTO extends SysUpdateInfo implements Serializable {
 
     private String openId;
 
+    /**
+     * 拒绝原因
+     */
+    private String rejectReason;
+
+    private String reservationNo;
+
+    private String status;
+
     public String getName() {
         return name;
     }
@@ -206,5 +215,27 @@ public class ReservationOrderDTO extends SysUpdateInfo implements Serializable {
 
     }
 
+    public String getRejectReason() {
+        return rejectReason;
+    }
 
+    public void setRejectReason(String rejectReason) {
+        this.rejectReason = rejectReason;
+    }
+
+    public String getReservationNo() {
+        return reservationNo;
+    }
+
+    public void setReservationNo(String reservationNo) {
+        this.reservationNo = reservationNo;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 }

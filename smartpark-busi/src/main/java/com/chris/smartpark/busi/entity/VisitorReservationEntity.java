@@ -47,7 +47,9 @@ public class VisitorReservationEntity  extends SysUpdateInfo  implements Seriali
 	private String remark;
 	//同行人数
 	private Integer companions;
-	//扩展字段1
+	/**
+	 * 审核不通过原因
+	 */
 	private String ext1;
 	//扩展字段2
 	private String ext2;
