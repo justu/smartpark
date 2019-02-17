@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
  * 员工工位表
  * 
  * @author chris
- * @email 258321511@qq.com
+ * @email forzamilan0607@gmail.com
  * @since Oct 30.18
  */
 @Mapper

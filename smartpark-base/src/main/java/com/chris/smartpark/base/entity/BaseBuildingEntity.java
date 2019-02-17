@@ -8,7 +8,7 @@ import com.chris.base.common.model.SysUpdateInfo;
  * 园区楼宇信息表
  * 
  * @author chris
- * @email 258321511@qq.com
+ * @email forzamilan0607@gmail.com
  * @since Oct 16.18
  */
 public class BaseBuildingEntity  extends SysUpdateInfo  implements Serializable {

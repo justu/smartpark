@@ -1,25 +1,33 @@
 package com.chris.smartpark.busi.service.impl;
+import java.util.Date;
 
 import com.chris.base.common.exception.CommonException;
 import com.chris.base.common.tree.TreeNode;
+import com.chris.base.common.utils.DateUtils;
 import com.chris.base.common.utils.ValidateUtils;
+import com.chris.base.modules.app.cache.AppLoginUser;
+import com.chris.base.modules.app.cache.AppLoginUserCacheUtils;
 import com.chris.smartpark.base.dto.EsbResponse;
 import com.chris.smartpark.busi.common.VisitorConstants;
 import com.chris.smartpark.busi.dao.DoorControllerDao;
 import com.chris.smartpark.busi.dao.DoorDao;
-import com.chris.smartpark.busi.dao.OpenDoorLogDao;
 import com.chris.smartpark.busi.dto.DoorLevelDTO;
 import com.chris.smartpark.busi.entity.DoorControllerEntity;
 import com.chris.smartpark.busi.entity.DoorEntity;
+import com.chris.smartpark.busi.entity.OpenDoorLogEntity;
 import com.chris.smartpark.busi.facade.EsbFacade;
 import com.chris.smartpark.busi.service.EntranceService;
+import com.chris.smartpark.busi.service.OpenDoorLogService;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -34,7 +42,7 @@ public class EntranceServiceImpl implements EntranceService {
     private DoorControllerDao doorControllerDao;
 
     @Autowired
-    private OpenDoorLogDao openDoorLogDao;
+    private OpenDoorLogService openDoorLogService;
 
     @Autowired
     private EsbFacade esbFacade;
@@ -90,6 +98,10 @@ public class EntranceServiceImpl implements EntranceService {
         }).collect(Collectors.toList());
     }
 
+    /**
+     * 远程开门
+     * @param params
+     */
     @Override
     public void remoteOpenDoor(Map<String, Object> params) {
         if (ValidateUtils.isEmpty(params)) {
@@ -112,9 +124,36 @@ public class EntranceServiceImpl implements EntranceService {
         }
         DoorControllerEntity doorController = doorControllers.get(0);
         EsbResponse resp = this.esbFacade.remoteOpenDoor(doorController);
+        this.recordOpenDoorLog(doorId, openId, doorController, resp);
         if (!resp.isOK()) {
             log.error(resp.getMsg());
             throw new CommonException(resp.getMsg());
         }
+    }
+
+    /**
+     * 记录开门日志
+     * @param doorId
+     * @param openId
+     * @param doorController
+     * @param resp
+     */
+    private void recordOpenDoorLog(Long doorId, String openId, DoorControllerEntity doorController, EsbResponse resp) {
+        AppLoginUser appLoginUser = AppLoginUserCacheUtils.getAppLoginUser(openId);
+        // 记录开门日志
+        OpenDoorLogEntity openDoorLogEntity = new OpenDoorLogEntity();
+        openDoorLogEntity.setDoorId(doorId);
+        openDoorLogEntity.setUserId(appLoginUser.getUserId());
+        Date currentDate = DateUtils.currentDate();
+        openDoorLogEntity.setOpenTime(currentDate);
+        openDoorLogEntity.setCreateTime(currentDate);
+        openDoorLogEntity.setOpenResult(resp.isOK() ? VisitorConstants.OpenDoorResult.SUCCESS : VisitorConstants.OpenDoorResult.FAILURE);
+        openDoorLogEntity.setOpenResultDesc(resp.isOK() ? VisitorConstants.OpenDoorResult.DESC_SUCCESS : VisitorConstants.OpenDoorResult.DESC_FAILURE);
+        openDoorLogEntity.setRemark(resp.getMsg());
+        String detail = "ID=" + doorController.getId() + ",NAME=" + doorController.getControllerName() + ",READNO=" + doorController.getReaderNo() +
+                ",MAC_ADDR=" + doorController.getMacAddr() + ",IP:" + doorController.getControllerIp() + ",PORT=" + doorController.getControllerPort();
+        openDoorLogEntity.setExt3(detail);
+        openDoorLogEntity.setCreateUserId(appLoginUser.getUserId());
+        this.openDoorLogService.save(openDoorLogEntity);
     }
 }

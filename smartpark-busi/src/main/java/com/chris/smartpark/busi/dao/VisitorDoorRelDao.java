@@ -10,7 +10,7 @@ import java.util.List;
  * 访客门禁关系表
  * 
  * @author chris
- * @email 258321511@qq.com
+ * @email forzamilan0607@gmail.com
  * @since Nov 09.18
  */
 @Mapper

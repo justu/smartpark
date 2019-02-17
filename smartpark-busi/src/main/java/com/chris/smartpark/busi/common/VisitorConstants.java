@@ -140,4 +140,11 @@ public class VisitorConstants {
         int PUBLIC = 1;
         int PRIVATE = 2;
     }
+
+    public interface OpenDoorResult {
+        String SUCCESS = "1";
+        String FAILURE = "0";
+        String DESC_SUCCESS = "成功";
+        String DESC_FAILURE = "失败";
+    }
 }

@@ -2,8 +2,10 @@ package com.chris.smartpark;
 
 import com.alibaba.fastjson.JSONObject;
 import com.chris.BusiApplication;
-import com.chris.base.common.utils.*;
-import com.chris.base.modules.sys.service.SysConfigService;
+import com.chris.base.common.utils.DateUtils;
+import com.chris.base.common.utils.HttpContextUtils;
+import com.chris.base.common.utils.PageUtils;
+import com.chris.base.common.utils.VerifyCodeUtils;
 import com.chris.smartpark.base.dto.BaseStaffDTO;
 import com.chris.smartpark.base.dto.EsbResponse;
 import com.chris.smartpark.base.service.BaseStaffService;
@@ -13,7 +15,6 @@ import com.chris.smartpark.busi.dto.ReservationOrderApproveDTO;
 import com.chris.smartpark.busi.dto.ReservationOrderDTO;
 import com.chris.smartpark.busi.entity.*;
 import com.chris.smartpark.busi.facade.EsbFacade;
-import com.chris.smartpark.busi.service.EntranceService;
 import com.chris.smartpark.busi.service.VisitorInfoHisService;
 import com.chris.smartpark.busi.service.VisitorInfoService;
 import com.chris.smartpark.busi.service.VisitorReservationService;
@@ -44,13 +45,7 @@ public class VisitorTest {
 	private BaseStaffService baseStaffService;
 
 	@Autowired
-	private EntranceService entranceService;
-
-	@Autowired
 	private VisitorInfoHisService visitorInfoHisService;
-
-	@Autowired
-	private SysConfigService sysConfigService;
 
 	@Autowired
     private EsbFacade esbFacade;
@@ -240,5 +235,4 @@ public class VisitorTest {
         door2.setStartTime(DateUtils.parseDate("2018-12-28 19:35:00", "yyyy-MM-dd HH:mm:ss"));
         return Lists.newArrayList(door1, door2);
     }
-
 }

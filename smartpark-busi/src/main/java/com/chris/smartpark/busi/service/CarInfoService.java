@@ -9,7 +9,7 @@ import java.util.Map;
  * 车辆信息表
  * 
  * @author chris
- * @email 258321511@qq.com
+ * @email forzamilan0607@gmail.com
  * @since Nov 04.18
  */
 public interface CarInfoService {

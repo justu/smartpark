@@ -8,7 +8,7 @@ import com.chris.base.common.model.SysUpdateInfo;
  * 园区楼层信息表
  * 
  * @author chris
- * @email 258321511@qq.com
+ * @email forzamilan0607@gmail.com
  * @since Oct 16.18
  */
 public class BaseFloorEntity  extends SysUpdateInfo  implements Serializable {

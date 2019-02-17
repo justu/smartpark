@@ -8,7 +8,7 @@ import com.chris.base.common.model.SysUpdateInfo;
  * ibms子系统表
  * 
  * @author chris
- * @email 258321511@qq.com
+ * @email forzamilan0607@gmail.com
  * @since Oct 06.18
  */
 public class IBMSSubsystemEntity  extends SysUpdateInfo  implements Serializable {

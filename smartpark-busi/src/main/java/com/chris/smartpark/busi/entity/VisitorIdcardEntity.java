@@ -14,7 +14,7 @@ import org.springframework.format.annotation.DateTimeFormat;
  * 访客身份信息表
  * 
  * @author chris
- * @email 258321511@qq.com
+ * @email forzamilan0607@gmail.com
  * @since Nov 11.18
  */
 public class VisitorIdcardEntity  extends SysUpdateInfo  implements Serializable {

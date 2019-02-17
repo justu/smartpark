@@ -13,7 +13,7 @@ import java.util.Map;
  * 访客预约登记单
  * 
  * @author chris
- * @email 258321511@qq.com
+ * @email forzamilan0607@gmail.com
  * @since Nov 04.18
  */
 @Mapper

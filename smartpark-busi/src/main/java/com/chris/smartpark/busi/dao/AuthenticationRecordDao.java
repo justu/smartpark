@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
  * 预约审核表
  * 
  * @author chris
- * @email 258321511@qq.com
+ * @email forzamilan0607@gmail.com
  * @since Nov 11.18
  */
 @Mapper

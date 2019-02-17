@@ -9,7 +9,7 @@ import com.chris.base.common.model.SysUpdateInfo;
  * 设备基本信息
  * 
  * @author chris
- * @email 258321511@qq.com
+ * @email forzamilan0607@gmail.com
  * @since Oct 22.18
  */
 public class BaseDeviceInfoEntity  extends SysUpdateInfo  implements Serializable {

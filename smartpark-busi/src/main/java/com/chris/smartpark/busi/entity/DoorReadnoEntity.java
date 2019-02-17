@@ -8,7 +8,7 @@ import com.chris.base.common.model.SysUpdateInfo;
  * 门读头信息
  * 
  * @author chris
- * @email 258321511@qq.com
+ * @email forzamilan0607@gmail.com
  * @since Dec 13.18
  */
 public class DoorReadnoEntity  extends SysUpdateInfo  implements Serializable {

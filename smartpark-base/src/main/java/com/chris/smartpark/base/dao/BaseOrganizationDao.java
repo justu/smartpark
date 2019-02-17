@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
  * 组织机构
  * 
  * @author chris
- * @email 258321511@qq.com
+ * @email forzamilan0607@gmail.com
  * @since Nov 15.18
  */
 @Mapper

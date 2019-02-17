@@ -24,7 +24,7 @@ import com.chris.base.common.utils.CommonResponse;
  * 设备基本信息
  * 
  * @author chris
- * @email 258321511@qq.com
+ * @email forzamilan0607@gmail.com
  * @since Oct 22.18
  */
 @RestController

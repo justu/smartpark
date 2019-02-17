@@ -9,7 +9,7 @@ import com.chris.base.common.model.SysUpdateInfo;
  * 开门日志表
  * 
  * @author chris
- * @email 258321511@qq.com
+ * @email forzamilan0607@gmail.com
  * @since Oct 30.18
  */
 public class OpenDoorLogEntity  extends SysUpdateInfo  implements Serializable {
@@ -37,11 +37,15 @@ public class OpenDoorLogEntity  extends SysUpdateInfo  implements Serializable {
 	private Long relId;
 	//备注
 	private String remark;
-	//扩展字段1
+	/**
+	 * 扩展字段1
+	 */
 	private String ext1;
 	//扩展字段2
 	private String ext2;
-	//扩展字段3
+	/**
+	 * 控制器相关详细信息
+	 */
 	private String ext3;
 
 	public void setId(Long id) {

@@ -3,17 +3,24 @@ package com.chris.smartpark;
 import com.alibaba.fastjson.JSONObject;
 import com.chris.BusiApplication;
 import com.chris.base.common.tree.TreeNode;
+import com.chris.base.common.utils.DateUtils;
+import com.chris.base.modules.app.cache.AppLoginUser;
+import com.chris.base.modules.app.entity.UserEntity;
 import com.chris.smartpark.base.dto.EsbResponse;
+import com.chris.smartpark.busi.common.VisitorConstants;
 import com.chris.smartpark.busi.entity.DoorControllerEntity;
 import com.chris.smartpark.busi.entity.DoorEntity;
+import com.chris.smartpark.busi.entity.OpenDoorLogEntity;
 import com.chris.smartpark.busi.facade.EsbFacade;
 import com.chris.smartpark.busi.service.EntranceService;
+import com.chris.smartpark.busi.service.OpenDoorLogService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.Date;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
@@ -24,6 +31,9 @@ public class EntranceTest {
 
     @Autowired
     private EsbFacade esbFacade;
+
+    @Autowired
+    private OpenDoorLogService openDoorLogService;
 
     @Test
     public void queryUserDoor() {
@@ -46,6 +56,42 @@ public class EntranceTest {
         param.setReaderNo(0);
         EsbResponse resp = this.esbFacade.remoteOpenDoor(param);
         System.out.println("远程开门结果 = " + JSONObject.toJSONString(resp));
+    }
+
+    /**
+     * 保存开门日志
+     */
+    @Test
+    public void saveOpenDoorLog() {
+        UserEntity user = new UserEntity();
+        user.setUserId(27L);
+        user.setMobile("17601540345");
+        user.setUsername("17601540345");
+        user.setOpenId("obETm5dkiNlfhrX1A4ztTuU4vmHQ");
+        AppLoginUser appLoginUser = new AppLoginUser(user);
+        // 记录开门日志
+        OpenDoorLogEntity openDoorLogEntity = new OpenDoorLogEntity();
+        openDoorLogEntity.setDoorId(4L);
+        openDoorLogEntity.setUserId(appLoginUser.getUserId());
+        Date currentDate = DateUtils.currentDate();
+        openDoorLogEntity.setOpenTime(currentDate);
+        openDoorLogEntity.setCreateTime(currentDate);
+        openDoorLogEntity.setOpenResult(VisitorConstants.OpenDoorResult.SUCCESS);
+        openDoorLogEntity.setOpenResultDesc(VisitorConstants.OpenDoorResult.DESC_SUCCESS);
+        DoorControllerEntity doorController = new DoorControllerEntity();
+        doorController.setId(2L);
+        doorController.setControllerName("达实门禁控制器1");
+        doorController.setControllerIp("192.168.1.150");
+        doorController.setMacAddr("861CB1");
+        doorController.setControllerPort("18001");
+        doorController.setReaderNo(0);
+        String detail = "ID=" + doorController.getId() + ",NAME=" + doorController.getControllerName() + ",READNO=" + doorController.getReaderNo() +
+                ",MAC_ADDR=" + doorController.getMacAddr() + ",IP:" + doorController.getControllerIp() + ",PORT=" + doorController.getControllerPort();
+        openDoorLogEntity.setExt3(detail);
+        openDoorLogEntity.setCreateUserId(appLoginUser.getUserId());
+        System.out.println("远程开门日志对象请求JSON：" + JSONObject.toJSONString(openDoorLogEntity));
+        this.openDoorLogService.save(openDoorLogEntity);
+        System.out.println("保存远程开门日志信息成功！");
     }
 
 }

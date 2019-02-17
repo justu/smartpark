@@ -8,7 +8,7 @@ import java.util.Date;
  * 设备报警记录表
  *
  * @author chris
- * @email 258321511@qq.com
+ * @email forzamilan0607@gmail.com
  * @since Oct 16.18
  */
 public class IBMSDevAlarmRecordEntity implements Serializable {

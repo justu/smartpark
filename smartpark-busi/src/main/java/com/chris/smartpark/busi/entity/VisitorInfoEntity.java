@@ -10,7 +10,7 @@ import com.chris.base.common.model.SysUpdateInfo;
  * 访客信息表
  * 
  * @author chris
- * @email 258321511@qq.com
+ * @email forzamilan0607@gmail.com
  * @since Nov 11.18
  */
 public class VisitorInfoEntity  extends SysUpdateInfo  implements Serializable {

@@ -15,7 +15,7 @@ import java.util.Map;
  * 设备采集记录表
  *
  * @author chris
- * @email 258321511@qq.com
+ * @email forzamilan0607@gmail.com
  * @since Oct 16.18
  */
 @Mapper

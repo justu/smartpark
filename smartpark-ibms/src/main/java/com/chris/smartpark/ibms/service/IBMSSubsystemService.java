@@ -10,7 +10,7 @@ import java.util.Map;
  * ibms子系统表
  * 
  * @author chris
- * @email 258321511@qq.com
+ * @email forzamilan0607@gmail.com
  * @since Oct 06.18
  */
 public interface IBMSSubsystemService {

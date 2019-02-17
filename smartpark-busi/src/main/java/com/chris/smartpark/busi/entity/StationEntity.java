@@ -8,7 +8,7 @@ import com.chris.base.common.model.SysUpdateInfo;
  * 工位表
  * 
  * @author chris
- * @email 258321511@qq.com
+ * @email forzamilan0607@gmail.com
  * @since Oct 30.18
  */
 public class StationEntity  extends SysUpdateInfo  implements Serializable {
