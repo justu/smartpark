@@ -4,7 +4,7 @@
 	<groupId>com.chris.smartpark</groupId>
 	<artifactId>smartpark-parent</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.2-SNAPSHOT</version>
+    <version>1.0.3-SNAPSHOT</version>
 
     <modules>
         <module>smartpark-base</module>
@@ -20,7 +20,7 @@
 
 	<properties>
 		<java.version>1.8</java.version>
-		<chrisbase.version>1.0.2-SNAPSHOT</chrisbase.version>
+		<chrisbase.version>1.0.3-SNAPSHOT</chrisbase.version>
 	</properties>
 
 	<distributionManagement>

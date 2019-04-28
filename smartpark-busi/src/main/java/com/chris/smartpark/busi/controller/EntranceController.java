@@ -1,14 +1,17 @@
 package com.chris.smartpark.busi.controller;
 
-import com.alibaba.fastjson.JSONObject;
 import com.chris.base.common.annotation.SysLog;
 import com.chris.base.common.tree.TreeNode;
 import com.chris.base.common.utils.CommonResponse;
+import com.chris.base.common.utils.PageUtils;
+import com.chris.base.common.utils.Query;
 import com.chris.base.common.utils.ValidateUtils;
 import com.chris.base.modules.app.annotation.Login;
 import com.chris.smartpark.busi.common.VisitorConstants;
 import com.chris.smartpark.busi.dto.DoorControllerDTO;
+import com.chris.smartpark.busi.entity.AccessRecordEntity;
 import com.chris.smartpark.busi.entity.DoorEntity;
+import com.chris.smartpark.busi.service.AccessRecordService;
 import com.chris.smartpark.busi.service.DoorService;
 import com.chris.smartpark.busi.service.EntranceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,10 +27,15 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/app/entrance")
 public class EntranceController {
+
     @Autowired
     private EntranceService entranceService;
+
     @Autowired
     private DoorService doorService;
+
+    @Autowired
+    private AccessRecordService accessRecordService;
 
     /**
      * 用户门禁权限列表
@@ -78,5 +86,22 @@ public class EntranceController {
     public CommonResponse remoteOpenDoor(@RequestBody Map<String, Object> params) {
         this.entranceService.remoteOpenDoor(params);
         return CommonResponse.ok();
+    }
+
+    /**
+     * 出入记录查询
+     */
+    @PostMapping("/accessrecord/list")
+//    @Login
+    public CommonResponse list(@RequestBody Map<String, Object> params){
+        //查询列表数据
+        Query query = new Query(params);
+
+        List<AccessRecordEntity> accessRecordList = this.accessRecordService.queryList(query);
+        int total = this.accessRecordService.queryTotal(query);
+
+        PageUtils pageUtil = new PageUtils(accessRecordList, total, query.getLimit(), query.getPage());
+
+        return CommonResponse.ok().put("page", pageUtil);
     }
 }

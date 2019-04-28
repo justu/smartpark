@@ -312,7 +312,7 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
                     this.visitorIdcardService.update(visitorIdcard);
                 }
                 //添加送门禁开关
-                if (VisitorConstants.isSendToEntrance.TRUE.equals(sysconfigservice.getValue("SEND_TO_ENTRANCE"))) {
+                if (VisitorConstants.SendDoorCtrlFlag.YES.equals(sysconfigservice.getValue("SEND_TO_ENTRANCE"))) {
                     this.sendPhyIdCard2DoorCtrlSys(reservationOrder, visitorIdcard);
                 }
                 //更新预约单状态为完成
@@ -670,7 +670,7 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
                 templateParam.put(VisitorConstants.Keys.ORDERNO, res.getReservationNo());
                 smsEntity.setTemplateParam(templateParam.toJSONString());
                 SendSMSUtils.sendSms(smsEntity);
-                res.setIsSendNotice(VisitorConstants.isSendNotice.YES);
+                res.setIsSendNotice(VisitorConstants.IsSendNotice.YES);
                 res.setUpdateTime(DateUtils.currentDate());
                 //更新标识
                 visitorReservationDao.update(res);

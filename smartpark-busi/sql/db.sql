@@ -211,7 +211,7 @@ CREATE TABLE `sp_door_readno` (
   `update_time` datetime DEFAULT NULL COMMENT '修改时间',
   `update_user_id` bigint(20) DEFAULT NULL COMMENT '修改人',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COMMENT='门读头信息';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='门读头信息';
 
 drop table if EXISTS sp_door;
 
@@ -235,5 +235,45 @@ CREATE TABLE `sp_door` (
   `update_user_id` bigint(20) DEFAULT NULL COMMENT '修改人',
   `door_readno_id` bigint(20) DEFAULT NULL COMMENT '门读头ID，对应sp_door_readno表ID',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COMMENT='门定义';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='门定义';
 
+
+create table sp_access_record
+(
+   id                   bigint not null auto_increment comment 'id',
+   car_no               varchar(10) comment '车牌号',
+	 user_id						bigint(20) comment '用户ID',
+   user_name                 varchar(20) comment '姓名',
+	 owner_type						tinyint(1) comment '所属人类别，1：内部员工，2：外部员工 3：外包 4：访客',
+   mobile                varchar(20) comment '手机号',
+	 dept_name						varchar(20) comment '部门',
+	 identity_type        tinyint(1) comment '标识类型，1：工号 2：身份证',
+	 identity_value       varchar(30) comment 'identity_type=1，则为工号值，identity_type＝2，则为身份证号码',
+	 capture_img          varchar(255) comment '抓拍图片',
+   access_time          datetime comment '出入时间',
+	 access_type					tinyint(1) comment '出入类别，1：进 0：出',
+	 channel_id						bigint(20) comment '通道ID',
+	 channel_name					varchar(30) comment '通道名称',
+   ext1                 varchar(50) comment '扩展字段1',
+   ext2                 varchar(50) comment '扩展字段2',
+   ext3                 varchar(50) comment '扩展字段3',
+   create_time          datetime comment '创建时间',
+   primary key (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='出入记录表';
+
+create table sp_work_order
+(
+   id                   bigint not null auto_increment comment 'id',
+   title                varchar(100) comment '标题',
+   content              text comment '工单内容',
+	 work_order_type			int(10) comment '工单类型',
+	 status			          int(10) comment '状态',
+   ext1                 varchar(50) comment '扩展字段1',
+   ext2                 varchar(50) comment '扩展字段2',
+   ext3                 varchar(50) comment '扩展字段3',
+   create_time          datetime comment '创建时间',
+	 `create_user_id` bigint(20) DEFAULT NULL COMMENT '创建人',
+   `update_time` datetime DEFAULT NULL COMMENT '修改时间',
+   `update_user_id` bigint(20) DEFAULT NULL COMMENT '修改人',
+   primary key (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='工单表';

@@ -1,17 +1,17 @@
 package com.chris.smartpark.busi.common;
 
 public class VisitorConstants {
-    public interface isSendToEntrance{
+
+    public interface SendDoorCtrlFlag {
         /**
          * 送门禁开关 送
          */
-        String TRUE = "true";        /**
+        String YES = "true";        /**
          * 不送
          */
-        String FALSE = "false";
-
+        String NO = "false";
     }
-    public interface isSendNotice{
+    public interface IsSendNotice {
         /**
          * 是否已发送短信给受访者
          */
@@ -146,5 +146,10 @@ public class VisitorConstants {
         String FAILURE = "0";
         String DESC_SUCCESS = "成功";
         String DESC_FAILURE = "失败";
+    }
+
+    public interface Action {
+        int CREATE = 1;
+        int MODIFY = 2;
     }
 }
