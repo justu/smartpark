@@ -23,6 +23,7 @@
         <result property="ext2" column="ext2"/>
         <result property="ext3" column="ext3"/>
         <result property="createTime" column="create_time"/>
+        <result property="carNumber" column="car_number"/>
     </resultMap>
 
 	<select id="queryObject" resultType="com.chris.smartpark.busi.entity.AccessRecordEntity">
@@ -61,10 +62,23 @@
 				<if test="captureImg != null and captureImg !='' ">
 				AND capture_img = #{captureImg}
 			</if>
-				<if test="accessTime != null and accessTime !='' ">
-				AND access_time = #{accessTime}
+			<if test="enterTime != null and enterTime !='' ">
+				AND ((access_time &gt;= #{enterTime} AND access_type = 1)
+				<if test="outTime == null and outTime =='' ">
+					)
+				</if>
 			</if>
-				<if test="accessType != null and accessType !='' ">
+			<if test="outTime != null and outTime !='' ">
+				<choose>
+					<when test="enterTime != null and enterTime !=''">
+						OR (access_time &lt;= #{outTime} AND access_type = 0))
+					</when>
+					<otherwise>
+						AND (access_time &lt;= #{outTime} AND access_type = 0)
+					</otherwise>
+				</choose>
+			</if>
+		    <if test="accessType != null and accessType !='' ">
 				AND access_type = #{accessType}
 			</if>
 				<if test="channelId != null and channelId !='' ">
@@ -73,8 +87,11 @@
 				<if test="channelName != null and channelName !='' ">
 				AND channel_name = #{channelName}
 			</if>
-				<if test="ext1 != null and ext1 !='' ">
-				AND ext1 = #{ext1}
+			<if test="carNumber != null and carNumber !='' ">
+				AND car_number = #{carNumber}
+			</if>
+			<if test="ext1 != null and ext1 !='' ">
+				AND INSTR(ext1, #{ext1}) &gt; 0
 			</if>
 				<if test="ext2 != null and ext2 !='' ">
 				AND ext2 = #{ext2}
@@ -127,9 +144,22 @@
 				<if test="captureImg != null and captureImg !='' ">
                 AND capture_img = #{captureImg}
             </if>
-				<if test="accessTime != null and accessTime !='' ">
-                AND access_time = #{accessTime}
-            </if>
+			<if test="enterTime != null and enterTime !='' ">
+				AND ((access_time &gt;= #{enterTime} AND access_type = 1)
+				<if test="outTime == null and outTime =='' ">
+					)
+				</if>
+			</if>
+			<if test="outTime != null and outTime !='' ">
+				<choose>
+					<when test="enterTime != null and enterTime !=''">
+						OR (access_time &lt;= #{outTime} AND access_type = 0))
+					</when>
+					<otherwise>
+						AND (access_time &lt;= #{outTime} AND access_type = 0)
+					</otherwise>
+				</choose>
+			</if>
 				<if test="accessType != null and accessType !='' ">
                 AND access_type = #{accessType}
             </if>
@@ -139,9 +169,12 @@
 				<if test="channelName != null and channelName !='' ">
                 AND channel_name = #{channelName}
             </if>
-				<if test="ext1 != null and ext1 !='' ">
-                AND ext1 = #{ext1}
-            </if>
+			<if test="carNumber != null and carNumber !='' ">
+				AND car_number = #{carNumber}
+			</if>
+			<if test="ext1 != null and ext1 !='' ">
+				AND INSTR(ext1, #{ext1}) &gt; 0
+			</if>
 				<if test="ext2 != null and ext2 !='' ">
                 AND ext2 = #{ext2}
             </if>
@@ -166,7 +199,8 @@
 			`access_type`, 
 			`channel_id`, 
 			`channel_name`, 
-			`ext1`, 
+			`car_number`,
+			`ext1`,
 			`ext2`, 
 			`ext3`, 
 			`create_time`
@@ -186,7 +220,8 @@
 			#{accessType}, 
 			#{channelId}, 
 			#{channelName}, 
-			#{ext1}, 
+			#{carNumber},
+			#{ext1},
 			#{ext2}, 
 			#{ext3}, 
 			#{createTime}
@@ -209,6 +244,7 @@
 			<if test="accessType != null">`access_type` = #{accessType}, </if>
 			<if test="channelId != null">`channel_id` = #{channelId}, </if>
 			<if test="channelName != null">`channel_name` = #{channelName}, </if>
+			<if test="carNumber != null">`car_number` = #{carNumber}, </if>
 			<if test="ext1 != null">`ext1` = #{ext1}, </if>
 			<if test="ext2 != null">`ext2` = #{ext2}, </if>
 			<if test="ext3 != null">`ext3` = #{ext3}, </if>

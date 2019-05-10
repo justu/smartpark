@@ -125,7 +125,8 @@
 			v.phone AS visitorMobile,
 			v.idcard_no AS idcardNo,
 			r.reservation_no AS reservationNo,
-			s.USERNAME AS staffName
+			s.USERNAME AS staffName,
+			s.mobile AS staffMobile
 		 FROM sp_visitor_reservation r
 		INNER JOIN sp_visitor_info_his v ON v.reservation_id = r.id
 		INNER JOIN base_staff s ON s.id = r.staff_id
@@ -135,6 +136,9 @@
 		<if test="type == 2">
 			INNER JOIN tb_user u ON u.mobile = s.MOBILE
 			WHERE u.open_id = #{openId}
+		</if>
+		<if test="status != null">
+			AND r.status = #{status}
 		</if>
 		ORDER BY r.create_time desc
 		<if test="offset != null and limit != null">
@@ -153,10 +157,10 @@
 			INNER JOIN tb_user u ON u.mobile = s.MOBILE
 			WHERE u.open_id = #{openId}
 		</if>
-		ORDER BY r.create_time desc
-		<if test="offset != null and limit != null">
-			limit #{offset}, #{limit}
+		<if test="status != null">
+			AND r.status = #{status}
 		</if>
+		ORDER BY r.create_time desc
 	</select>
 	
  	<select id="queryTotal" resultType="int">

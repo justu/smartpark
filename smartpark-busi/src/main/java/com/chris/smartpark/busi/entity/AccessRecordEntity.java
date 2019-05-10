@@ -40,6 +40,12 @@ public class AccessRecordEntity  implements Serializable {
 	private Long channelId;
 	//通道名称
 	private String channelName;
+
+	/**
+	 * 车牌号
+	 */
+	private String carNumber;
+
 	//扩展字段1
 	private String ext1;
 	//扩展字段2
@@ -167,5 +173,13 @@ public class AccessRecordEntity  implements Serializable {
 
 	public Date getCreateTime() {
 		return createTime;
+	}
+
+	public String getCarNumber() {
+		return carNumber;
+	}
+
+	public void setCarNumber(String carNumber) {
+		this.carNumber = carNumber;
 	}
 }

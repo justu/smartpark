@@ -1,6 +1,7 @@
 package com.chris.smartpark.busi.controller;
 
 import com.chris.base.common.annotation.SysLog;
+import com.chris.base.common.exception.CommonException;
 import com.chris.base.common.tree.TreeNode;
 import com.chris.base.common.utils.CommonResponse;
 import com.chris.base.common.utils.PageUtils;
@@ -92,8 +93,9 @@ public class EntranceController {
      * 出入记录查询
      */
     @PostMapping("/accessrecord/list")
-//    @Login
+    @Login
     public CommonResponse list(@RequestBody Map<String, Object> params){
+        this.validate(params);
         //查询列表数据
         Query query = new Query(params);
 
@@ -103,5 +105,12 @@ public class EntranceController {
         PageUtils pageUtil = new PageUtils(accessRecordList, total, query.getLimit(), query.getPage());
 
         return CommonResponse.ok().put("page", pageUtil);
+    }
+
+    private void validate(Map<String, Object> params) {
+        if (ValidateUtils.isEmpty(params.get("carNumber")) && ValidateUtils.isEmpty(params.get("mobile")) && ValidateUtils.isEmpty(params.get("userName"))
+                && ValidateUtils.isEmpty(params.get("ext1")) && ValidateUtils.isEmpty(params.get("enterTime")) && ValidateUtils.isEmpty(params.get("outTime"))) {
+            throw new CommonException("车牌号、姓名、手机号、出入口、进入时间、出去时间请至少输入1个条件");
+        }
     }
 }
