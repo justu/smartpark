@@ -1,7 +1,10 @@
 package com.chris.smartpark.busi.entity;
 
 import java.io.Serializable;
+import java.util.List;
+
 import com.chris.base.common.model.SysUpdateInfo;
+import com.chris.base.modules.oss.entity.SysAttachmentEntity;
 
 
 /**
@@ -30,6 +33,10 @@ public class WorkOrderEntity  extends SysUpdateInfo  implements Serializable {
 	private String ext2;
 	//扩展字段3
 	private String ext3;
+
+	private String openId;
+
+	private List<SysAttachmentEntity> attachmentList;
 
 	public void setId(Long id) {
 		this.id = id;
@@ -86,5 +93,21 @@ public class WorkOrderEntity  extends SysUpdateInfo  implements Serializable {
 
 	public String getExt3() {
 		return ext3;
+	}
+
+	public List<SysAttachmentEntity> getAttachmentList() {
+		return attachmentList;
+	}
+
+	public void setAttachmentList(List<SysAttachmentEntity> attachmentList) {
+		this.attachmentList = attachmentList;
+	}
+
+	public String getOpenId() {
+		return openId;
+	}
+
+	public void setOpenId(String openId) {
+		this.openId = openId;
 	}
 }

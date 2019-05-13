@@ -6,7 +6,10 @@ import java.util.Map;
 import com.chris.base.common.exception.CommonException;
 import com.chris.base.common.utils.ValidateUtils;
 import com.chris.base.modules.app.annotation.Login;
+import com.chris.base.modules.app.cache.AppLoginUser;
+import com.chris.base.modules.app.cache.AppLoginUserCacheUtils;
 import com.chris.smartpark.busi.common.VisitorConstants;
+import com.google.common.collect.Maps;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,14 +44,30 @@ public class WorkOrderController {
 	 * 工单查询
 	 */
 	@PostMapping("/list")
-//	@Login
+	@Login
 	public CommonResponse list(@RequestBody Map<String, Object> params){
+		Map<String, Object> qryParams = Maps.newHashMap();
+		if (ValidateUtils.isNotEmpty(params.get("page"))) {
+			qryParams.put("page", params.get("page"));
+		}
+		if (ValidateUtils.isNotEmpty(params.get("limit"))) {
+			qryParams.put("limit", params.get("limit"));
+		}
+		if (ValidateUtils.isNotEmpty(params.get("workOrderType"))) {
+			qryParams.put("workOrderType", params.get("workOrderType").toString());
+		}
+		if (ValidateUtils.isNotEmpty(params.get("openId"))) {
+			AppLoginUser appLoginUser = AppLoginUserCacheUtils.getAppLoginUser(params.get("openId").toString());
+			if (ValidateUtils.isNotEmpty(appLoginUser)) {
+				qryParams.put("createUserId", appLoginUser.getUserId().toString());
+			}
+		}
+
 		//查询列表数据
-        Query query = new Query(params);
+        Query query = new Query(qryParams);
 
 		List<WorkOrderEntity> workOrderList = workOrderService.queryList(query);
 		int total = workOrderService.queryTotal(query);
-		
 		PageUtils pageUtil = new PageUtils(workOrderList, total, query.getLimit(), query.getPage());
 		
 		return CommonResponse.ok().put("page", pageUtil);
@@ -58,7 +77,7 @@ public class WorkOrderController {
 	 * 保存
 	 */
 	@PostMapping("/save")
-	//	@Login
+	@Login
 	public CommonResponse save(@RequestBody WorkOrderEntity workOrder){
 		this.validateWorkOrder(workOrder, VisitorConstants.Action.CREATE);
 		this.workOrderService.save(workOrder);
@@ -69,7 +88,7 @@ public class WorkOrderController {
 	 * 修改
 	 */
 	@PostMapping("/update")
-	//	@Login
+	@Login
 	public CommonResponse update(@RequestBody WorkOrderEntity workOrder){
 		this.validateWorkOrder(workOrder, VisitorConstants.Action.MODIFY);
 		this.workOrderService.update(workOrder);
@@ -88,8 +107,8 @@ public class WorkOrderController {
 		if (ValidateUtils.isEmptyString(workOrder.getContent())) {
 			throw new CommonException("内容为空");
 		}
-		if (ValidateUtils.isEmpty(workOrder.getCreateUserId())) {
-			throw new CommonException("创建人为空");
+		if (ValidateUtils.isEmptyString(workOrder.getOpenId())) {
+			throw new CommonException("openId为空");
 		}
 	}
 

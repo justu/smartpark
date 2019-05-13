@@ -40,8 +40,11 @@
 				<if test="workOrderType != null and workOrderType !='' ">
 				AND t.work_order_type = #{workOrderType}
 			</if>
-				<if test="status != null and status !='' ">
+            <if test="status != null and status !='' ">
 				AND t.status = #{status}
+			</if>
+            <if test="createUserId != null and createUserId !='' ">
+				AND t.create_user_id = #{createUserId}
 			</if>
 		        <choose>
             <when test="sidx != null and sidx.trim() != ''">
@@ -75,6 +78,9 @@
             </if>
 				<if test="status != null and status !='' ">
                 AND t.status = #{status}
+            </if>
+            <if test="createUserId != null and createUserId !='' ">
+                AND t.create_user_id = #{createUserId}
             </if>
 			</select>
 	 
