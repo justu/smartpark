@@ -177,6 +177,7 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
         this.validateReservationOrder(reservationOrderDTO);
         return this.saveReservationOrder(reservationOrderDTO);
     }
+
     private Long saveReservationOrder(ReservationOrderDTO reservationOrderDTO){
         // TODO 查询系统配置判断是否配置了同行人详细信息(需要抽掉一个字典查询公共方法) 暂时放到第二阶段
         //1.保存访客信息（历史信息）
