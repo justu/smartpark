@@ -3,6 +3,7 @@ package com.chris.smartpark.busi.controller;
 import java.util.List;
 import java.util.Map;
 
+import com.chris.smartpark.busi.common.VisitorConstants;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -43,7 +44,7 @@ public class VisitorInfoHisController {
 		
 		PageUtils pageUtil = new PageUtils(visitorInfoHisList, total, query.getLimit(), query.getPage());
 		
-		return CommonResponse.ok().put("page", pageUtil);
+		return CommonResponse.ok().put(VisitorConstants.Keys.PAGE, pageUtil);
 	}
 	
 	

@@ -8,6 +8,7 @@ import com.chris.base.common.utils.CommonResponse;
 import com.chris.base.common.utils.PageUtils;
 import com.chris.base.common.utils.Query;
 import com.chris.base.common.utils.ValidateUtils;
+import com.chris.smartpark.busi.common.VisitorConstants;
 import com.chris.smartpark.busi.dto.*;
 import com.chris.smartpark.busi.entity.VisitorReservationEntity;
 import com.chris.smartpark.busi.service.CarInfoService;
@@ -56,7 +57,7 @@ public class BatchReservationController {
 		List<VisitorReservationEntity> resultList = this.visitorReservationService.queryList(query);
 		int total = this.visitorReservationService.queryTotal(params);
 		PageUtils pageUtil = new PageUtils(resultList, total, query.getLimit(), query.getPage());
-		return CommonResponse.ok().put("page", pageUtil);
+		return CommonResponse.ok().put(VisitorConstants.Keys.PAGE, pageUtil);
 	}
 	@PostMapping("/batchImport")
 	public CommonResponse batchImport(@RequestParam("file") MultipartFile file) {

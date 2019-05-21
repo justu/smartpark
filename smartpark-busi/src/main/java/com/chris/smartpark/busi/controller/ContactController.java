@@ -6,6 +6,10 @@ import com.chris.base.common.utils.PageUtils;
 import com.chris.base.common.utils.Query;
 import com.chris.base.common.utils.ValidateUtils;
 import com.chris.base.modules.app.annotation.Login;
+import com.chris.base.modules.app.cache.AppLoginUser;
+import com.chris.base.modules.app.cache.AppLoginUserCacheUtils;
+import com.chris.smartpark.busi.common.VisitorConstants;
+import com.chris.smartpark.busi.common.VisitorUtils;
 import com.chris.smartpark.busi.entity.ContactEntity;
 import com.chris.smartpark.busi.service.ContactService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,9 +42,14 @@ public class ContactController {
 	@PostMapping("/list")
 	@Login
 	public CommonResponse list(@RequestBody Map<String, Object> params){
-		if (ValidateUtils.isEmpty(params.get("openId"))) {
+		if (ValidateUtils.isEmpty(params.get(VisitorConstants.Keys.OPEN_ID))) {
 			throw new CommonException("微信openId为空");
 		}
+		if (VisitorUtils.isAdminRole(params.get(VisitorConstants.Keys.OPEN_ID).toString())) {
+			// 管理员角色可以查询所有
+			params.remove(VisitorConstants.Keys.OPEN_ID);
+		}
+
 		//查询列表数据
         Query query = new Query(params);
 
@@ -49,7 +58,7 @@ public class ContactController {
 		
 		PageUtils pageUtil = new PageUtils(contactList, total, query.getLimit(), query.getPage());
 		
-		return CommonResponse.ok().put("page", pageUtil);
+		return CommonResponse.ok().put(VisitorConstants.Keys.PAGE, pageUtil);
 	}
 	
 	

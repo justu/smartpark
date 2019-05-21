@@ -1,8 +1,11 @@
 package com.chris.smartpark.busi.common;
 
+import com.chris.base.common.utils.Constant;
 import com.chris.base.common.utils.DateUtils;
 import com.chris.base.common.utils.SendSMSUtils;
 import com.chris.base.common.utils.ValidateUtils;
+import com.chris.base.modules.app.cache.AppLoginUser;
+import com.chris.base.modules.app.cache.AppLoginUserCacheUtils;
 
 public final class VisitorUtils {
 
@@ -63,5 +66,18 @@ public final class VisitorUtils {
             }
         }
         return -1;
+    }
+
+    /**
+     * 是否为管理员角色
+     * @param openId
+     * @return
+     */
+    public static boolean isAdminRole(String openId) {
+        AppLoginUser loginUser = AppLoginUserCacheUtils.getAppLoginUser(openId);
+        if (ValidateUtils.isNotEmpty(loginUser)) {
+            return ValidateUtils.equals(Constant.WXRole.ADMIN, loginUser.getRoleId());
+        }
+        return false;
     }
 }

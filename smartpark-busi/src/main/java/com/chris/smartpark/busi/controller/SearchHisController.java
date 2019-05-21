@@ -6,6 +6,8 @@ import java.util.Map;
 import com.chris.base.common.exception.CommonException;
 import com.chris.base.common.utils.ValidateUtils;
 import com.chris.base.modules.app.annotation.Login;
+import com.chris.smartpark.busi.common.VisitorConstants;
+import com.chris.smartpark.busi.common.VisitorUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,8 +45,12 @@ public class SearchHisController {
 	@PostMapping("/list")
 	@Login
 	public CommonResponse list(@RequestBody Map<String, Object> params){
-		if (ValidateUtils.isEmpty(params.get("openId"))) {
+		if (ValidateUtils.isEmpty(params.get(VisitorConstants.Keys.OPEN_ID))) {
 			throw new CommonException("openId为空");
+		}
+		if (VisitorUtils.isAdminRole(params.get(VisitorConstants.Keys.OPEN_ID).toString())) {
+			// 管理员角色可以查询所有
+			params.remove(VisitorConstants.Keys.OPEN_ID);
 		}
 		//查询列表数据
         Query query = new Query(params);
@@ -54,7 +60,7 @@ public class SearchHisController {
 		
 		PageUtils pageUtil = new PageUtils(searchHisList, total, query.getLimit(), query.getPage());
 		
-		return CommonResponse.ok().put("page", pageUtil);
+		return CommonResponse.ok().put(VisitorConstants.Keys.PAGE, pageUtil);
 	}
 	
 	

@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.chris.base.common.utils.*;
 import com.chris.base.modules.app.annotation.Login;
+import com.chris.smartpark.busi.common.VisitorConstants;
 import com.chris.smartpark.busi.entity.VisitorInfoHisEntity;
 import com.chris.smartpark.busi.service.VisitorInfoHisService;
 import com.google.common.collect.ImmutableMap;
@@ -46,7 +47,7 @@ public class VisitorInfoController {
 		
 		PageUtils pageUtil = new PageUtils(visitorInfoList, total, query.getLimit(), query.getPage());
 		
-		return CommonResponse.ok().put("page", pageUtil);
+		return CommonResponse.ok().put(VisitorConstants.Keys.PAGE, pageUtil);
 	}
 
 	/**

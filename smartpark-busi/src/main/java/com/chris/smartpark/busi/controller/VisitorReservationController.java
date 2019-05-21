@@ -61,7 +61,7 @@ public class VisitorReservationController {
 			params.put(VisitorConstants.Keys.LIMIT, VisitorConstants.Page.PAGE_SIZE + "");
 		}
 		PageUtils pageUtil = this.visitorReservationService.queryReservationOrdersByOpenId(params);
-		return CommonResponse.ok().put("page", pageUtil);
+		return CommonResponse.ok().put(VisitorConstants.Keys.PAGE, pageUtil);
 	}
 
 

@@ -104,7 +104,7 @@ public class EntranceController {
 
         PageUtils pageUtil = new PageUtils(accessRecordList, total, query.getLimit(), query.getPage());
 
-        return CommonResponse.ok().put("page", pageUtil);
+        return CommonResponse.ok().put(VisitorConstants.Keys.PAGE, pageUtil);
     }
 
     private void validate(Map<String, Object> params) {

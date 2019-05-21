@@ -47,8 +47,8 @@ public class WorkOrderController {
 	@Login
 	public CommonResponse list(@RequestBody Map<String, Object> params){
 		Map<String, Object> qryParams = Maps.newHashMap();
-		if (ValidateUtils.isNotEmpty(params.get("page"))) {
-			qryParams.put("page", params.get("page"));
+		if (ValidateUtils.isNotEmpty(params.get(VisitorConstants.Keys.PAGE))) {
+			qryParams.put(VisitorConstants.Keys.PAGE, params.get(VisitorConstants.Keys.PAGE));
 		}
 		if (ValidateUtils.isNotEmpty(params.get("limit"))) {
 			qryParams.put("limit", params.get("limit"));
@@ -56,8 +56,8 @@ public class WorkOrderController {
 		if (ValidateUtils.isNotEmpty(params.get("workOrderType"))) {
 			qryParams.put("workOrderType", params.get("workOrderType").toString());
 		}
-		if (ValidateUtils.isNotEmpty(params.get("openId"))) {
-			AppLoginUser appLoginUser = AppLoginUserCacheUtils.getAppLoginUser(params.get("openId").toString());
+		if (ValidateUtils.isNotEmpty(params.get(VisitorConstants.Keys.OPEN_ID))) {
+			AppLoginUser appLoginUser = AppLoginUserCacheUtils.getAppLoginUser(params.get(VisitorConstants.Keys.OPEN_ID).toString());
 			if (ValidateUtils.isNotEmpty(appLoginUser)) {
 				qryParams.put("createUserId", appLoginUser.getUserId().toString());
 			}
@@ -70,7 +70,7 @@ public class WorkOrderController {
 		int total = workOrderService.queryTotal(query);
 		PageUtils pageUtil = new PageUtils(workOrderList, total, query.getLimit(), query.getPage());
 		
-		return CommonResponse.ok().put("page", pageUtil);
+		return CommonResponse.ok().put(VisitorConstants.Keys.PAGE, pageUtil);
 	}
 
 	/**
