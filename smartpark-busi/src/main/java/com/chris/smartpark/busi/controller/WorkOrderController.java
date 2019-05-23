@@ -9,6 +9,7 @@ import com.chris.base.modules.app.annotation.Login;
 import com.chris.base.modules.app.cache.AppLoginUser;
 import com.chris.base.modules.app.cache.AppLoginUserCacheUtils;
 import com.chris.smartpark.busi.common.VisitorConstants;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,8 +67,8 @@ public class WorkOrderController {
 		//查询列表数据
         Query query = new Query(qryParams);
 
-		List<WorkOrderEntity> workOrderList = workOrderService.queryList(query);
 		int total = workOrderService.queryTotal(query);
+		List<WorkOrderEntity> workOrderList = total > 0 ? workOrderService.queryList(query) : Lists.newArrayList();
 		PageUtils pageUtil = new PageUtils(workOrderList, total, query.getLimit(), query.getPage());
 		
 		return CommonResponse.ok().put(VisitorConstants.Keys.PAGE, pageUtil);

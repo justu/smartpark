@@ -1,15 +1,17 @@
 package com.chris.smartpark.busi.service.impl;
 
+import com.chris.smartpark.busi.common.VisitorConstants;
+import com.chris.smartpark.busi.common.VisitorUtils;
+import com.chris.smartpark.busi.dao.DoorDao;
 import com.chris.smartpark.busi.dto.DoorControllerDTO;
+import com.chris.smartpark.busi.entity.DoorEntity;
+import com.chris.smartpark.busi.service.DoorService;
+import com.google.common.collect.Maps;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
-
-import com.chris.smartpark.busi.dao.DoorDao;
-import com.chris.smartpark.busi.entity.DoorEntity;
-import com.chris.smartpark.busi.service.DoorService;
 
 
 
@@ -55,6 +57,11 @@ public class DoorServiceImpl implements DoorService {
 
 	@Override
 	public List<DoorControllerDTO> queryDoorControllersByOpenId(String openId) {
-		return this.doorDao.queryDoorControllersByOpenId(openId);
+		Map<String, Object> params = Maps.newHashMap();
+		if (!VisitorUtils.isAdminRole(openId)) {
+			// 不是管理员角色，需要关联 openid 查询
+			params.put(VisitorConstants.Keys.OPEN_ID, openId);
+		}
+		return this.doorDao.queryDoorControllersByOpenId(params);
 	}
 }

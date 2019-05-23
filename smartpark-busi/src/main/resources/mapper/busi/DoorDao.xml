@@ -252,7 +252,7 @@
 		ORDER BY f.id,d.id
 	</select>
 
-	<select id="queryDoorControllersByOpenId" parameterType="java.lang.String" resultType="com.chris.smartpark.busi.dto.DoorControllerDTO" >
+	<select id="queryDoorControllersByOpenId" resultType="com.chris.smartpark.busi.dto.DoorControllerDTO" >
 		SELECT
 		d.id AS doorId,
 		d.door_name AS doorName,
@@ -269,7 +269,10 @@
 		INNER JOIN sp_door_controller dc ON dc.id = r.controller_id
 		INNER JOIN base_staff staff ON staff.EMPLOYNUM = us.work_no
 		INNER JOIN tb_user u ON u.mobile = staff.MOBILE
-		WHERE u.open_id = #{openId}
+		WHERE 1=1
+		<if test="openId != null and openId != '' ">
+			AND u.open_id = #{openId}
+		</if>
 		GROUP BY d.id
 		ORDER BY d.id
 	</select>

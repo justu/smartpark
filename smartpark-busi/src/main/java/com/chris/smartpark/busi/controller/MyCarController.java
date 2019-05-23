@@ -8,6 +8,7 @@ import com.chris.base.common.utils.ValidateUtils;
 import com.chris.base.modules.app.annotation.Login;
 import com.chris.smartpark.busi.common.VisitorConstants;
 import com.chris.smartpark.busi.common.VisitorUtils;
+import com.google.common.collect.Lists;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -55,9 +56,9 @@ public class MyCarController {
 		//查询列表数据
         Query query = new Query(params);
 
-		List<MyCarEntity> myCarList = myCarService.queryList(query);
 		int total = myCarService.queryTotal(query);
-		
+		List<MyCarEntity> myCarList = total > 0 ? myCarService.queryList(query) : Lists.newArrayList();
+
 		PageUtils pageUtil = new PageUtils(myCarList, total, query.getLimit(), query.getPage());
 		
 		return CommonResponse.ok().put(VisitorConstants.Keys.PAGE, pageUtil);

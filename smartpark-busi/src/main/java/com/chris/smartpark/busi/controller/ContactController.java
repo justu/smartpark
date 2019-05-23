@@ -12,6 +12,7 @@ import com.chris.smartpark.busi.common.VisitorConstants;
 import com.chris.smartpark.busi.common.VisitorUtils;
 import com.chris.smartpark.busi.entity.ContactEntity;
 import com.chris.smartpark.busi.service.ContactService;
+import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -53,9 +54,9 @@ public class ContactController {
 		//查询列表数据
         Query query = new Query(params);
 
-		List<ContactEntity> contactList = contactService.queryList(query);
 		int total = contactService.queryTotal(query);
-		
+		List<ContactEntity> contactList = total > 0 ? contactService.queryList(query) : Lists.newArrayList();
+
 		PageUtils pageUtil = new PageUtils(contactList, total, query.getLimit(), query.getPage());
 		
 		return CommonResponse.ok().put(VisitorConstants.Keys.PAGE, pageUtil);

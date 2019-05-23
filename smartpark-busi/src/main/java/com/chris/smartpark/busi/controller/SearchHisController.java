@@ -8,6 +8,7 @@ import com.chris.base.common.utils.ValidateUtils;
 import com.chris.base.modules.app.annotation.Login;
 import com.chris.smartpark.busi.common.VisitorConstants;
 import com.chris.smartpark.busi.common.VisitorUtils;
+import com.google.common.collect.Lists;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -55,9 +56,9 @@ public class SearchHisController {
 		//查询列表数据
         Query query = new Query(params);
 
-		List<SearchHisEntity> searchHisList = searchHisService.queryList(query);
 		int total = searchHisService.queryTotal(query);
-		
+		List<SearchHisEntity> searchHisList = total > 0 ? searchHisService.queryList(query) : Lists.newArrayList();
+
 		PageUtils pageUtil = new PageUtils(searchHisList, total, query.getLimit(), query.getPage());
 		
 		return CommonResponse.ok().put(VisitorConstants.Keys.PAGE, pageUtil);

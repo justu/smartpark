@@ -30,6 +30,9 @@
 		LEFT JOIN tb_user u2 ON t.update_user_id = u2.user_id
 		LEFT JOIN (select name,value FROM sys_data_dict where type = 'CAR_BRAND') d1 ON t.car_brand = d1.value
 		LEFT JOIN (select name,value FROM sys_data_dict where type = 'CAR_COLOR') d2 ON t.car_color = d2.value
+		<if test="staffName != null or mobile != null">
+			INNER JOIN (select u.open_id,u.mobile,s.USERNAME FROM tb_user u,base_staff s where u.mobile = s.MOBILE) u ON t.open_id = u.open_id
+		</if>
 		WHERE 1=1
 			<if test="id != null and id !='' ">
 				AND t.id = #{id}
@@ -48,6 +51,12 @@
 			</if>
 			<if test="openId != null and openId !='' ">
 				AND t.open_id = #{openId}
+			</if>
+			<if test="staffName != null and staffName !='' ">
+				AND u.USERNAME = #{staffName}
+			</if>
+			<if test="mobile != null and mobile != '' ">
+				AND u.mobile = #{mobile}
 			</if>
 		    <choose>
 				<when test="sidx != null and sidx.trim() != ''">
@@ -68,6 +77,9 @@
 		LEFT JOIN tb_user u2 ON t.update_user_id = u2.user_id
 		LEFT JOIN (select name,value FROM sys_data_dict where type = 'CAR_BRAND') d1 ON t.car_brand = d1.value
 		LEFT JOIN (select name,value FROM sys_data_dict where type = 'CAR_COLOR') d2 ON t.car_color = d2.value
+		<if test="staffName != null or mobile != null">
+			INNER JOIN (select u.open_id,u.mobile,s.USERNAME FROM tb_user u,base_staff s where u.mobile = s.MOBILE) u ON t.open_id = u.open_id
+		</if>
 		WHERE 1=1
 			<if test="id != null and id !='' ">
 				AND t.id = #{id}
@@ -87,7 +99,13 @@
 			<if test="openId != null and openId !='' ">
 				AND t.open_id = #{openId}
 			</if>
-			</select>
+			<if test="staffName != null and staffName !='' ">
+				AND u.USERNAME = #{staffName}
+			</if>
+			<if test="mobile != null and mobile != '' ">
+				AND u.mobile = #{mobile}
+			</if>
+	</select>
 	 
 	<insert id="save" parameterType="com.chris.smartpark.busi.entity.MyCarEntity" useGeneratedKeys="true" keyProperty="id">
 		insert into sp_my_car
