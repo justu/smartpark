@@ -59,16 +59,16 @@ public class ContactServiceImpl implements ContactService {
 			throw new CommonException("联系人姓名为空");
 		}
 		if (ValidateUtils.isEmptyString(contact.getIdcardNo())) {
-			throw new CommonException("联系人身份证号为空");
+			throw new CommonException("联系人身份证号码为空");
 		}
 		if (!CommonValidator.isIDCard(contact.getIdcardNo())) {
-			throw new CommonException("联系人身份证号不是有效的");
+			throw new CommonException("联系人身份证号码格式不正确");
 		}
 		if (ValidateUtils.isEmptyString(contact.getMobile())) {
 			throw new CommonException("联系人手机号为空");
 		}
 		if (!CommonValidator.isMobile(contact.getMobile())) {
-			throw new CommonException("联系人手机号不是有效的");
+			throw new CommonException("联系人手机号格式不正确");
 		}
 		if (ValidateUtils.isEmptyString(contact.getOpenId())) {
 			throw new CommonException("openId为空");

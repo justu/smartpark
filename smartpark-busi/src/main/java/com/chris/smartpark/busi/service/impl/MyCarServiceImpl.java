@@ -5,6 +5,7 @@ import com.chris.base.common.utils.ValidateUtils;
 import com.chris.base.modules.app.cache.AppLoginUser;
 import com.chris.base.modules.app.cache.AppLoginUserCacheUtils;
 import com.chris.smartpark.busi.common.VisitorConstants;
+import com.chris.smartpark.busi.common.VisitorUtils;
 import com.google.common.collect.ImmutableMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -56,6 +57,9 @@ public class MyCarServiceImpl implements MyCarService {
 		}
 		if (ValidateUtils.isEmptyString(myCar.getCarNo())) {
 			throw new CommonException("车牌号为空");
+		}
+		if (!VisitorUtils.isValidCarNo(myCar.getCarNo())) {
+			throw new CommonException("车牌号格式不正确");
 		}
 		if (ValidateUtils.isEmpty(myCar.getCarBrand())) {
 			throw new CommonException("汽车品牌为空");

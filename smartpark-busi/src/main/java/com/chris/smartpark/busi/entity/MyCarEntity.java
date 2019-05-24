@@ -39,6 +39,12 @@ public class MyCarEntity  extends SysUpdateInfo  implements Serializable {
 	 */
 	private String color;
 
+	private String staffName;
+
+	private String mobile;
+
+	private String idcardNo;
+
 	public void setId(Long id) {
 		this.id = id;
 	}
@@ -103,5 +109,29 @@ public class MyCarEntity  extends SysUpdateInfo  implements Serializable {
 
 	public void setColor(String color) {
 		this.color = color;
+	}
+
+	public String getStaffName() {
+		return staffName;
+	}
+
+	public void setStaffName(String staffName) {
+		this.staffName = staffName;
+	}
+
+	public String getMobile() {
+		return mobile;
+	}
+
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
+
+	public String getIdcardNo() {
+		return idcardNo;
+	}
+
+	public void setIdcardNo(String idcardNo) {
+		this.idcardNo = idcardNo;
 	}
 }
