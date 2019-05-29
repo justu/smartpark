@@ -29,4 +29,6 @@ public interface TbUserService {
 	void deleteBatch(Long[] userIds);
 
     void setRole(TbUserEntity tbUser);
+
+    void updateUsernameByOpenId(TbUserEntity user);
 }

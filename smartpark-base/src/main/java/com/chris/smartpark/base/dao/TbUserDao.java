@@ -13,5 +13,6 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface TbUserDao extends BaseDao<TbUserEntity> {
-	
+
+    void updateUsernameByOpenId(TbUserEntity user);
 }

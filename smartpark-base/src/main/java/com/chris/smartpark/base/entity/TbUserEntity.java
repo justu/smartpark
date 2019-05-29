@@ -31,6 +31,14 @@ public class TbUserEntity  implements Serializable {
 
 	private String roleName;
 
+	public TbUserEntity() {
+	}
+
+	public TbUserEntity(String openId, String username) {
+		this.openId = openId;
+		this.username = username;
+	}
+
 	public void setUserId(Long userId) {
 		this.userId = userId;
 	}

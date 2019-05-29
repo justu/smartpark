@@ -81,4 +81,9 @@ public class TbUserServiceImpl implements TbUserService {
 			this.sysUserRoleService.saveOrUpdate(user.getUserId(), ImmutableList.of(Constant.WXRole.ADMIN), 2);
 		}
 	}
+
+	@Override
+	public void updateUsernameByOpenId(TbUserEntity user) {
+		this.tbUserDao.updateUsernameByOpenId(user);
+	}
 }

@@ -110,4 +110,8 @@
 		</foreach>
 	</delete>
 
+	<update id="updateUsernameByOpenId" parameterType="com.chris.smartpark.base.entity.TbUserEntity">
+		update tb_user set username = #{username} where open_id = #{openId}
+	</update>
+
 </mapper>

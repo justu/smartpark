@@ -1,8 +1,10 @@
 package com.chris.smartpark.base.controller;
 
+import com.chris.base.common.exception.CommonException;
 import com.chris.base.common.utils.CommonResponse;
 import com.chris.base.common.utils.PageUtils;
 import com.chris.base.common.utils.Query;
+import com.chris.base.common.utils.ValidateUtils;
 import com.chris.smartpark.base.entity.TbUserEntity;
 import com.chris.smartpark.base.service.TbUserService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -96,6 +98,22 @@ public class TbUserController {
 	public CommonResponse delete(@RequestBody Long[] userIds){
 		tbUserService.deleteBatch(userIds);
 		
+		return CommonResponse.ok();
+	}
+
+	/**
+	 * 删除
+	 */
+	@RequestMapping("/setUsername.notoken")
+	public CommonResponse setUsername(@RequestBody Map<String, Object> params){
+		if (ValidateUtils.isEmpty(params.get("openId"))) {
+			throw new CommonException("openId为空");
+		}
+		if (ValidateUtils.isEmpty(params.get("username"))) {
+			throw new CommonException("用户名为空");
+		}
+		TbUserEntity user = new TbUserEntity(params.get("openId").toString(), params.get("username").toString());
+		tbUserService.updateUsernameByOpenId(user);
 		return CommonResponse.ok();
 	}
 	
