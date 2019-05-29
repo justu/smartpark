@@ -883,4 +883,14 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
             throw new CommonException("文件仅支持上传[" + imageFileType + "]图片类型！");
         }
     }
+
+    @Override
+    public PageUtils searchReservationOrders(Map<String, Object> params) {
+        //查询列表数据
+        Query query = new Query(params);
+        int total = this.visitorReservationDao.countReservationOrders(query);
+        List<ReservationOrderQryDTO> resultList = total > 0 ? this.visitorReservationDao.searchReservationOrders(query) : Lists.newArrayList();
+        PageUtils pageUtil = new PageUtils(resultList, total, query.getLimit(), query.getPage());
+        return pageUtil;
+    }
 }

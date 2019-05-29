@@ -314,4 +314,35 @@
 		update sp_visitor_reservation set update_time = now(),status = #{status},ext1 = #{ext1} where id = #{id}
 	</update>
 
+	<select id="countReservationOrders" resultType="int" >
+		SELECT COUNT(1) FROM sp_visitor_reservation r
+		INNER JOIN sp_visitor_info_his v ON v.reservation_id = r.id
+	</select>
+
+	<select id="searchReservationOrders" resultType="com.chris.smartpark.busi.dto.ReservationOrderQryDTO" >
+		SELECT
+			r.id,
+			r.status,
+			r.appoint_start_time AS appointStartTime,
+			r.appoint_end_time AS appointEndTime,
+			r.remark,
+			v.name AS visitorName,
+			v.phone AS visitorMobile,
+			v.idcard_no AS idcardNo,
+			r.reservation_no AS reservationNo,
+			s.USERNAME AS staffName,
+			s.mobile AS staffMobile
+		FROM sp_visitor_reservation r
+		INNER JOIN sp_visitor_info_his v ON v.reservation_id = r.id
+		INNER JOIN base_staff s ON s.id = r.staff_id
+		WHERE 1=1
+		<if test="status != null">
+			AND r.status = #{status}
+		</if>
+		ORDER BY r.create_time desc
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
 </mapper>

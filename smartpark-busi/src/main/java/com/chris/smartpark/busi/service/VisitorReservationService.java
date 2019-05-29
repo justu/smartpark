@@ -89,4 +89,6 @@ public interface VisitorReservationService {
 	 */
 	@Transactional
     void uploadVisitorPhoto(MultipartFile file, String reservationOrderId) throws IOException;
+
+    PageUtils searchReservationOrders(Map<String, Object> params);
 }

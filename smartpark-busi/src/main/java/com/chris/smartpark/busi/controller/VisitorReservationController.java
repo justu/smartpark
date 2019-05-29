@@ -1,6 +1,5 @@
 package com.chris.smartpark.busi.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.chris.base.common.annotation.SysLog;
 import com.chris.base.common.exception.CommonException;
@@ -16,6 +15,7 @@ import com.chris.smartpark.busi.entity.VisitorIdcardEntity;
 import com.chris.smartpark.busi.entity.VisitorReservationEntity;
 import com.chris.smartpark.busi.service.VisitorReservationService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -64,6 +64,19 @@ public class VisitorReservationController {
 		return CommonResponse.ok().put(VisitorConstants.Keys.PAGE, pageUtil);
 	}
 
+	@PostMapping("/searchReservationOrder")
+	@RequiresPermissions("busi:reversationorder:list")
+	public CommonResponse searchReservationOrder(@RequestBody Map<String, Object> params){
+		if (ValidateUtils.isEmpty(params.get(VisitorConstants.Keys.PAGE))) {
+			params.put(VisitorConstants.Keys.PAGE, VisitorConstants.Page.PAGE_NO + "");
+		}
+		if (ValidateUtils.isEmpty(params.get(VisitorConstants.Keys.LIMIT))) {
+			params.put(VisitorConstants.Keys.LIMIT, VisitorConstants.Page.PAGE_SIZE + "");
+		}
+		PageUtils pageUtil = this.visitorReservationService.searchReservationOrders(params);
+		return CommonResponse.ok().put(VisitorConstants.Keys.PAGE, pageUtil);
+	}
+
 
 	
 	/**
@@ -105,8 +118,7 @@ public class VisitorReservationController {
 	@RequestMapping("/saveVisitorIdCard")
 	@SysLog("生成线上预约单并授权")
 	public CommonResponse saveVisitorIdCard(@RequestBody @Validated(AuthIdCardDTO.ValidateSaveVisitorIdCard.class)AuthIdCardDTO authIdCardDTO, BindingResult result){
-		log.error("========身份证识别开始将来访者的信息上传到主控平台=====");
-		log.error("请求参数 = {}", JSONObject.toJSONString(authIdCardDTO));
+		log.error("========身份证识别开始将来访者的信息上传到主控平台=====, 请求参数 = {}", JSONObject.toJSONString(authIdCardDTO));
 		ValidateUtils.validatedParams(result);
 		CommonResponse res = visitorReservationService.saveCardAndGetAuth(authIdCardDTO);
 		return res;

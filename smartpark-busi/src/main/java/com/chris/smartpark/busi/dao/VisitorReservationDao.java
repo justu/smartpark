@@ -1,5 +1,6 @@
 package com.chris.smartpark.busi.dao;
 
+import com.chris.base.common.utils.Query;
 import com.chris.smartpark.busi.dto.ReservationOrderQryDTO;
 import com.chris.smartpark.busi.entity.VisitorReservationEntity;
 import com.chris.base.modules.sys.dao.BaseDao;
@@ -37,4 +38,8 @@ public interface VisitorReservationDao extends BaseDao<VisitorReservationEntity>
     List<VisitorReservationEntity> queryByStatusAndTime2(@Param("beforeHours") String beforeHours);
 
     int countReservationOrdersByOpenId(Map<String, Object> params);
+
+    int countReservationOrders(Query query);
+
+    List<ReservationOrderQryDTO> searchReservationOrders(Query query);
 }
