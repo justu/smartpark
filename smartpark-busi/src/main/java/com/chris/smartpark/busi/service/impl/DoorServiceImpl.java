@@ -1,5 +1,6 @@
 package com.chris.smartpark.busi.service.impl;
 
+import com.chris.base.common.utils.ValidateUtils;
 import com.chris.smartpark.busi.common.VisitorConstants;
 import com.chris.smartpark.busi.common.VisitorUtils;
 import com.chris.smartpark.busi.dao.DoorDao;
@@ -10,6 +11,7 @@ import com.google.common.collect.Maps;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -63,5 +65,28 @@ public class DoorServiceImpl implements DoorService {
 			params.put(VisitorConstants.Keys.OPEN_ID, openId);
 		}
 		return this.doorDao.queryDoorControllersByOpenId(params);
+	}
+
+	@Override
+	public List<Map<String, Object>> searchDoorCtrlList(Map<String, Object> params) {
+		List<Map<String, Object>> resultList = this.doorDao.searchDoorCtrlList(params);
+		if (ValidateUtils.isNotEmptyCollection(resultList) && params.containsKey(VisitorConstants.Keys.OPEN_ID)) {
+			List<DoorControllerDTO> doorCtrlList = this.queryDoorControllersByOpenId(params.get(VisitorConstants.Keys.OPEN_ID).toString());
+			if (ValidateUtils.isEmptyCollection(doorCtrlList)) {
+				return Collections.EMPTY_LIST;
+			}
+			//  过滤掉无权限的门禁
+			resultList.removeIf(item -> !this.hasAuthorizedDoorCtrl(doorCtrlList, item.get("doorId").toString()));
+		}
+		return resultList;
+	}
+
+	private boolean hasAuthorizedDoorCtrl(List<DoorControllerDTO> doorCtrlList, String doorCtrlId) {
+		for (DoorControllerDTO doorCtrl : doorCtrlList) {
+			if (ValidateUtils.equals(doorCtrl.getDoorId() + "", doorCtrlId)) {
+				return true;
+			}
+        }
+		return false;
 	}
 }

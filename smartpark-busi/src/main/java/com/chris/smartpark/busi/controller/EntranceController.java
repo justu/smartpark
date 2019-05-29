@@ -3,12 +3,10 @@ package com.chris.smartpark.busi.controller;
 import com.chris.base.common.annotation.SysLog;
 import com.chris.base.common.exception.CommonException;
 import com.chris.base.common.tree.TreeNode;
-import com.chris.base.common.utils.CommonResponse;
-import com.chris.base.common.utils.PageUtils;
-import com.chris.base.common.utils.Query;
-import com.chris.base.common.utils.ValidateUtils;
+import com.chris.base.common.utils.*;
 import com.chris.base.modules.app.annotation.Login;
 import com.chris.smartpark.busi.common.VisitorConstants;
+import com.chris.smartpark.busi.common.VisitorUtils;
 import com.chris.smartpark.busi.dto.DoorControllerDTO;
 import com.chris.smartpark.busi.entity.AccessRecordEntity;
 import com.chris.smartpark.busi.entity.DoorEntity;
@@ -65,6 +63,28 @@ public class EntranceController {
     public CommonResponse queryDoorNodes(String openId) {
         List<TreeNode> doorNodes = this.entranceService.queryHasPermissionDoorLevelNodesByOpenId(openId);
         return CommonResponse.ok().setData(doorNodes);
+    }
+
+    /**
+     * 搜索门禁
+     * @param params
+     * @return
+     */
+    @RequestMapping("/searchDoorCtrl")
+    @Login
+    public CommonResponse searchDoorCtrl(@RequestBody Map<String, Object> params) {
+        if (ValidateUtils.isEmpty(params.get("openId"))) {
+            throw new CommonException("openId为空");
+        }
+        if (ValidateUtils.isEmpty(params.get("keyword"))) {
+            throw new CommonException("关键字为空");
+        }
+        if (VisitorUtils.isAdminRole(params.get("openId").toString())) {
+            // TODO 管理员角色
+            params.remove("openId");
+        }
+        List<Map<String, Object>> resultList = this.doorService.searchDoorCtrlList(params);
+        return CommonResponse.ok().setData(resultList);
     }
 
     @GetMapping("/queryDoorControllers")

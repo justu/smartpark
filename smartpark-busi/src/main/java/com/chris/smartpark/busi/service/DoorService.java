@@ -30,4 +30,6 @@ public interface DoorService {
 	void deleteBatch(Long[] ids);
 
 	List<DoorControllerDTO> queryDoorControllersByOpenId(String openId);
+
+    List<Map<String,Object>> searchDoorCtrlList(Map<String, Object> params);
 }

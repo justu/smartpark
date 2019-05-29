@@ -117,6 +117,7 @@ public class VisitorConstants {
         String IMAGE_FILE_LIMIT_SIZE = "IMAGE_FILE_LIMIT_SIZE";
         String DOOR_ID = "doorId";
         String ESB_SERVER = "ESB_SERVER";
+        String KEY_WORD = "keyword";
     }
 
 

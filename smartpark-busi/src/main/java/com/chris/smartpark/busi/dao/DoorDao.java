@@ -28,4 +28,6 @@ public interface DoorDao extends BaseDao<DoorEntity> {
     List<DoorLevelDTO> queryHasPermissionDoorsByOpenId(String openId);
 
     List<DoorControllerDTO> queryDoorControllersByOpenId(Map<String,Object> params);
+
+    List<Map<String, Object>> searchDoorCtrlList(Map<String,Object> params);
 }

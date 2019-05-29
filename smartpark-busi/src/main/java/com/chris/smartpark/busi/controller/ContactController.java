@@ -46,11 +46,6 @@ public class ContactController {
 		if (ValidateUtils.isEmpty(params.get(VisitorConstants.Keys.OPEN_ID))) {
 			throw new CommonException("微信openId为空");
 		}
-		if (VisitorUtils.isAdminRole(params.get(VisitorConstants.Keys.OPEN_ID).toString())) {
-			// 管理员角色可以查询所有
-			params.remove(VisitorConstants.Keys.OPEN_ID);
-		}
-
 		//查询列表数据
         Query query = new Query(params);
 

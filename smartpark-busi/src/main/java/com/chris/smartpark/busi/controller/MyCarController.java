@@ -45,10 +45,6 @@ public class MyCarController {
 		if (ValidateUtils.isEmpty(params.get(VisitorConstants.Keys.OPEN_ID))) {
 			throw new CommonException("微信openId为空");
 		}
-        if (VisitorUtils.isAdminRole(params.get(VisitorConstants.Keys.OPEN_ID).toString())) {
-            // 管理员角色可以查询所有
-            params.remove(VisitorConstants.Keys.OPEN_ID);
-        }
 		//查询列表数据
         Query query = new Query(params);
 
@@ -57,6 +53,34 @@ public class MyCarController {
 
 		PageUtils pageUtil = new PageUtils(myCarList, total, query.getLimit(), query.getPage());
 		
+		return CommonResponse.ok().put(VisitorConstants.Keys.PAGE, pageUtil);
+	}
+
+
+	/**
+	 * 管理员查询
+	 */
+	@PostMapping("/list4Admin")
+	@Login
+	public CommonResponse list4Admin(@RequestBody Map<String, Object> params){
+		if (ValidateUtils.isEmpty(params.get(VisitorConstants.Keys.OPEN_ID))) {
+			throw new CommonException("微信openId为空");
+		}
+		if (ValidateUtils.isEmpty(params.get(VisitorConstants.Keys.KEY_WORD))) {
+			throw new CommonException("查询关键字为空");
+		}
+        if (!VisitorUtils.isAdminRole(params.get(VisitorConstants.Keys.OPEN_ID).toString())) {
+			throw new CommonException("当前用户不是管理员");
+        }
+		params.remove(VisitorConstants.Keys.OPEN_ID);
+		//查询列表数据
+        Query query = new Query(params);
+
+		int total = myCarService.queryTotal(query);
+		List<MyCarEntity> myCarList = total > 0 ? myCarService.queryList(query) : Lists.newArrayList();
+
+		PageUtils pageUtil = new PageUtils(myCarList, total, query.getLimit(), query.getPage());
+
 		return CommonResponse.ok().put(VisitorConstants.Keys.PAGE, pageUtil);
 	}
 	

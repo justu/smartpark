@@ -254,12 +254,12 @@
 
 	<select id="queryDoorControllersByOpenId" resultType="com.chris.smartpark.busi.dto.DoorControllerDTO" >
 		SELECT
-		d.id AS doorId,
-		d.door_name AS doorName,
-		d.door_type AS doorType,
-		r.read_no AS readerNo,
-		dc.id AS doorControllerId,
-		d.ext1 AS mappingDoorId
+			d.id AS doorId,
+			d.door_name AS doorName,
+			d.door_type AS doorType,
+			r.read_no AS readerNo,
+			dc.id AS doorControllerId,
+			d.ext1 AS mappingDoorId
 		FROM sp_station s
 		INNER JOIN sp_user_station us ON us.station_id = s.id
 		INNER JOIN sp_group_station gs ON gs.station_id = s.id
@@ -275,6 +275,33 @@
 		</if>
 		GROUP BY d.id
 		ORDER BY d.id
+	</select>
+
+	<select id="searchDoorCtrlList" resultType="java.util.HashMap" parameterType="java.util.HashMap">
+		SELECT
+			d.id AS doorId,
+			d.door_name AS doorName,
+			d.floor_id AS floorId,
+			f.floor_name AS floorName,
+			d.ext1 AS tpDoorId,
+			b.building_name AS buildingName,
+			o.FULLNAME AS companyName,
+			o1.FULLNAME AS deptName,
+			r.read_no AS readNo,
+			dc.id AS doorCtrlId,
+			dc.controller_name AS doorCtrlName
+		FROM sp_door d
+		INNER JOIN base_organization o ON o.id = d.company_id
+		INNER JOIN base_organization o1 ON o1.id = d.dept_id
+		INNER JOIN base_floor f ON f.id = d.floor_id
+		INNER JOIN base_building b ON b.id = f.building_id
+		INNER JOIN sp_door_readno r ON d.door_readno_id = r.id
+		INNER JOIN sp_door_controller dc ON dc.id = r.controller_id
+		WHERE 1=1
+		<if test="keyword != null and keyword != '' ">
+			AND (d.door_name = #{keyword} or f.floor_name = #{keyword}
+			or INSTR(o.FULLNAME,#{keyword}) > 0 or INSTR(o1.FULLNAME,#{keyword}) > 0 or dc.controller_name = #{keyword})
+		</if>
 	</select>
 
 </mapper>
