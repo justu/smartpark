@@ -68,7 +68,7 @@ public class EntranceTest {
         user.setMobile("17601540345");
         user.setUsername("17601540345");
         user.setOpenId("obETm5dkiNlfhrX1A4ztTuU4vmHQ");
-        AppLoginUser appLoginUser = new AppLoginUser(user);
+        AppLoginUser appLoginUser = new AppLoginUser(user, user.getOpenId());
         // 记录开门日志
         OpenDoorLogEntity openDoorLogEntity = new OpenDoorLogEntity();
         openDoorLogEntity.setDoorId(4L);
