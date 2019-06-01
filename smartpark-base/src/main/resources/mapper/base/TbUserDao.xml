@@ -21,52 +21,54 @@
 		select t.*,r.role_id AS roleId,r.role_name AS roleName from tb_user t
 		LEFT JOIN (select ur.user_id,ur.role_id,r.role_name from sys_user_role ur,sys_role r where ur.role_id = r.role_id AND ur.user_source = 2) r ON r.user_id = t.user_id
 		where 1=1
-			<if test="userId != null and userId !='' ">
-				AND t.user_id = #{userId}
-			</if>
-				<if test="username != null and username !='' ">
-				AND t.username = #{username}
-			</if>
-				<if test="mobile != null and mobile !='' ">
-				AND t.mobile = #{mobile}
-			</if>
-				<if test="password != null and password !='' ">
-				AND t.password = #{password}
-			</if>
-				<if test="openId != null and openId !='' ">
-				AND t.open_id = #{openId}
-			</if>
-		        <choose>
-            <when test="sidx != null and sidx.trim() != ''">
-                order by ${sidx} ${order}
-            </when>
+		<if test="userId != null and userId !='' ">
+			AND t.user_id = #{userId}
+		</if>
+		<if test="username != null and username !='' ">
+			AND t.username = #{username}
+		</if>
+		<if test="mobile != null and mobile !='' ">
+			AND t.mobile = #{mobile}
+		</if>
+		<if test="openId != null and openId !='' ">
+			AND t.open_id = #{openId}
+		</if>
+		<if test="keyword != null and keyword !='' ">
+			AND (t.username = #{keyword} or t.mobile = #{keyword} or r.role_name = #{keyword})
+		</if>
+		<choose>
+			<when test="sidx != null and sidx.trim() != ''">
+				order by ${sidx} ${order}
+			</when>
 			<otherwise>
-                order by t.user_id desc
+				order by t.user_id desc
 			</otherwise>
-        </choose>
+		</choose>
 		<if test="offset != null and limit != null">
 			limit #{offset}, #{limit}
 		</if>
 	</select>
 	
  	<select id="queryTotal" resultType="int">
-		select count(*) from tb_user where 1=1
-			<if test="userId != null and userId !='' ">
-                AND user_id = #{userId}
-            </if>
-				<if test="username != null and username !='' ">
-                AND username = #{username}
-            </if>
-				<if test="mobile != null and mobile !='' ">
-                AND mobile = #{mobile}
-            </if>
-				<if test="password != null and password !='' ">
-                AND password = #{password}
-            </if>
-				<if test="openId != null and openId !='' ">
-                AND open_id = #{openId}
-            </if>
-			</select>
+		SELECT count(t.user_id) FROM tb_user t
+		LEFT JOIN (SELECT ur.user_id,ur.role_id,r.role_name FROM sys_user_role ur,sys_role r WHERE ur.role_id = r.role_id AND ur.user_source = 2) r ON r.user_id = t.user_id
+		WHERE 1=1
+		<if test="userId != null and userId !='' ">
+			AND t.user_id = #{userId}
+		</if>
+		<if test="username != null and username !='' ">
+			AND t.username = #{username}
+		</if>
+		<if test="mobile != null and mobile !='' ">
+			AND t.mobile = #{mobile}
+		</if>
+		<if test="openId != null and openId !='' ">
+			AND t.open_id = #{openId}
+		</if>
+		<if test="keyword != null and keyword !='' ">
+			AND (t.username = #{keyword} or t.mobile = #{keyword} or r.role_name = #{keyword})
+		</if>
+	</select>
 	 
 	<insert id="save" parameterType="com.chris.smartpark.base.entity.TbUserEntity" useGeneratedKeys="true" keyProperty="userId">
 		insert into tb_user

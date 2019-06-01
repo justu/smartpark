@@ -3,10 +3,14 @@ package com.chris.smartpark.base.service.impl;
 import com.chris.base.common.exception.CommonException;
 import com.chris.base.common.utils.Constant;
 import com.chris.base.common.utils.ValidateUtils;
+import com.chris.base.modules.app.cache.AppLoginUser;
+import com.chris.base.modules.app.cache.AppLoginUserCacheUtils;
 import com.chris.base.modules.sys.service.SysUserRoleService;
+import com.chris.smartpark.base.dao.TbUserDao;
 import com.chris.smartpark.base.dto.BaseStaffDTO;
-import com.chris.smartpark.base.entity.BaseStaffEntity;
+import com.chris.smartpark.base.entity.TbUserEntity;
 import com.chris.smartpark.base.service.BaseStaffService;
+import com.chris.smartpark.base.service.TbUserService;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +18,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
-
-import com.chris.smartpark.base.dao.TbUserDao;
-import com.chris.smartpark.base.entity.TbUserEntity;
-import com.chris.smartpark.base.service.TbUserService;
 
 
 
@@ -77,9 +77,19 @@ public class TbUserServiceImpl implements TbUserService {
 				throw new CommonException("用户手机号[" + user.getMobile() + "]未关联员工信息，不能设置");
 			}
 			this.sysUserRoleService.saveOrUpdate(user.getUserId(), ImmutableList.of(Constant.WXRole.STAFF), 2);
+			this.changeRole4AppUser(user, Constant.WXRole.STAFF);
 		} else if (ValidateUtils.equals(user.getRoleId(), Constant.WXRole.ADMIN)) {
 			this.sysUserRoleService.saveOrUpdate(user.getUserId(), ImmutableList.of(Constant.WXRole.ADMIN), 2);
+			this.changeRole4AppUser(user, Constant.WXRole.ADMIN);
 		}
+	}
+
+	private void changeRole4AppUser(TbUserEntity user, long roleId) {
+		AppLoginUser appUser = AppLoginUserCacheUtils.getAppLoginUser(user.getOpenId());
+		if (ValidateUtils.isNotEmpty(appUser)) {
+            appUser.setRoleId(roleId);
+            AppLoginUserCacheUtils.reloginMap.put(user.getOpenId(), true);
+        }
 	}
 
 	@Override

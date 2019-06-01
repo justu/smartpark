@@ -317,6 +317,14 @@
 	<select id="countReservationOrders" resultType="int" >
 		SELECT COUNT(1) FROM sp_visitor_reservation r
 		INNER JOIN sp_visitor_info_his v ON v.reservation_id = r.id
+		INNER JOIN base_staff s ON s.id = r.staff_id
+		WHERE 1=1
+		<if test="keyword != null">
+			AND (v.name = #{keyword} or v.phone = #{keyword} or v.idcard_no = #{keyword} or s.USERNAME = #{keyword} or s.mobile = #{keyword})
+		</if>
+		<if test="status != null">
+			AND r.status = #{status}
+		</if>
 	</select>
 
 	<select id="searchReservationOrders" resultType="com.chris.smartpark.busi.dto.ReservationOrderQryDTO" >
@@ -336,6 +344,9 @@
 		INNER JOIN sp_visitor_info_his v ON v.reservation_id = r.id
 		INNER JOIN base_staff s ON s.id = r.staff_id
 		WHERE 1=1
+		<if test="keyword != null">
+			AND (v.name = #{keyword} or v.phone = #{keyword} or v.idcard_no = #{keyword} or s.USERNAME = #{keyword} or s.mobile = #{keyword})
+		</if>
 		<if test="status != null">
 			AND r.status = #{status}
 		</if>
