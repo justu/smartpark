@@ -13,6 +13,7 @@ import com.chris.smartpark.busi.entity.DoorEntity;
 import com.chris.smartpark.busi.service.AccessRecordService;
 import com.chris.smartpark.busi.service.DoorService;
 import com.chris.smartpark.busi.service.EntranceService;
+import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -119,8 +120,8 @@ public class EntranceController {
         //查询列表数据
         Query query = new Query(params);
 
-        List<AccessRecordEntity> accessRecordList = this.accessRecordService.queryList(query);
         int total = this.accessRecordService.queryTotal(query);
+        List<AccessRecordEntity> accessRecordList = total > 0 ? this.accessRecordService.queryList(query) : Lists.newArrayList();
 
         PageUtils pageUtil = new PageUtils(accessRecordList, total, query.getLimit(), query.getPage());
 

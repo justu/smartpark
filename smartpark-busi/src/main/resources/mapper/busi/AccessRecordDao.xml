@@ -71,10 +71,10 @@
 			<if test="outTime != null and outTime !='' ">
 				<choose>
 					<when test="enterTime != null and enterTime !=''">
-						OR (access_time &lt;= #{outTime} AND access_type = 0))
+						OR (access_time &gt;= #{outTime} AND access_type = 0))
 					</when>
 					<otherwise>
-						AND (access_time &lt;= #{outTime} AND access_type = 0)
+						AND (access_time &gt;= #{outTime} AND access_type = 0)
 					</otherwise>
 				</choose>
 			</if>
@@ -153,10 +153,10 @@
 			<if test="outTime != null and outTime !='' ">
 				<choose>
 					<when test="enterTime != null and enterTime !=''">
-						OR (access_time &lt;= #{outTime} AND access_type = 0))
+						OR (access_time &gt;= #{outTime} AND access_type = 0))
 					</when>
 					<otherwise>
-						AND (access_time &lt;= #{outTime} AND access_type = 0)
+						AND (access_time &gt;= #{outTime} AND access_type = 0)
 					</otherwise>
 				</choose>
 			</if>
