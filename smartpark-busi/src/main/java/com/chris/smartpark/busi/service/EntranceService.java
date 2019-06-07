@@ -1,6 +1,7 @@
 package com.chris.smartpark.busi.service;
 
 import com.chris.base.common.tree.TreeNode;
+import com.chris.base.common.utils.CommonResponse;
 import com.chris.smartpark.busi.entity.DoorEntity;
 
 import java.util.List;
@@ -28,4 +29,6 @@ public interface EntranceService {
      * @param doorId
      */
     void remoteOpenDoor(Map<String, Object> doorId);
+
+    CommonResponse queryOpenDoorLogs(Map<String, Object> params);
 }

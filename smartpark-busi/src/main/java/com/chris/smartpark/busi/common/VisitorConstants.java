@@ -153,4 +153,14 @@ public class VisitorConstants {
         int CREATE = 1;
         int MODIFY = 2;
     }
+
+    /**
+     * 开门类型
+     * 1、正常开门
+     * 2、远程开门
+     */
+    public interface OpenDoorType {
+        int NORMAL = 1;
+        int REMOTE = 2;
+    }
 }

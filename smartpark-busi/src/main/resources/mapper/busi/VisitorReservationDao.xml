@@ -45,7 +45,7 @@
 	</select>
 
 	<select id="queryByStatusAndTime" resultType="com.chris.smartpark.busi.entity.VisitorReservationEntity">
-		select * from sp_visitor_reservation a where a.`status` in (1,3) and a.appoint_end_time &lt; CURRENT_TIMESTAMP()
+		select * from sp_visitor_reservation a where a.`status` in (1,3) and a.appoint_end_time &lt; DATE_ADD(now(),INTERVAL 5 MINUTE)
 	</select>
 
 	<select id="queryByStatusAndTime2" resultType="com.chris.smartpark.busi.entity.VisitorReservationEntity">
@@ -307,11 +307,11 @@
 	</delete>
 
 	<update id="updateStatus" parameterType="com.chris.smartpark.busi.entity.VisitorReservationEntity">
-		update sp_visitor_reservation set update_time = now(),status = #{status},physical_card_id = #{physicalCardId} where id = #{id}
+		update sp_visitor_reservation set update_time = now(),status = #{status},physical_card_id = #{physicalCardId},ext2 = #{ext2} where id = #{id}
 	</update>
 
 	<update id="updateRejectReasonAndStatus" parameterType="com.chris.smartpark.busi.entity.VisitorReservationEntity">
-		update sp_visitor_reservation set update_time = now(),status = #{status},ext1 = #{ext1} where id = #{id}
+		update sp_visitor_reservation set update_time = now(),status = #{status},ext1 = #{ext1},ext2 = #{ext2} where id = #{id}
 	</update>
 
 	<select id="countReservationOrders" resultType="int" >

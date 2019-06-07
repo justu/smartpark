@@ -3,6 +3,7 @@ package com.chris.smartpark.busi.entity;
 import java.io.Serializable;
 import java.util.Date;
 import com.chris.base.common.model.SysUpdateInfo;
+import com.chris.base.common.utils.ValidateUtils;
 
 
 /**
@@ -51,7 +52,9 @@ public class VisitorReservationEntity  extends SysUpdateInfo  implements Seriali
 	 * 审核不通过原因
 	 */
 	private String ext1;
-	//扩展字段2
+	/**
+	 * 状态流程
+	 */
 	private String ext2;
 	//扩展字段3
 	private String ext3;
@@ -212,5 +215,9 @@ public class VisitorReservationEntity  extends SysUpdateInfo  implements Seriali
 
 	public void setIsSendNotice(int isSendNotice) {
 		this.isSendNotice = isSendNotice;
+	}
+
+	public void setStatusFlow() {
+		this.ext2 = ValidateUtils.isEmptyString(this.ext2) ? this.status : this.ext2 + "," + this.status;
 	}
 }

@@ -134,4 +134,13 @@ public class EntranceController {
             throw new CommonException("车牌号、姓名、手机号、出入口、进入时间、出去时间请至少输入1个条件");
         }
     }
+
+    /**
+     * 查询开门记录
+     */
+    @PostMapping("/queryOpenDoorLogs")
+    @Login
+    public CommonResponse queryOpenDoorLogs(@RequestBody Map<String, Object> params){
+        return this.entranceService.queryOpenDoorLogs(params);
+    }
 }

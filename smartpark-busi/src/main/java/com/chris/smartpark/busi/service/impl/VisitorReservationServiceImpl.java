@@ -319,6 +319,8 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
                 //更新预约单状态为完成
                 reservationOrder.setStatus(VisitorConstants.ReservationOrderStatus.COMPLETED + "");
                 reservationOrder.setPhysicalCardId(String.valueOf(authIdCardDTO.getCardID()));
+                // 更新状态流程
+                reservationOrder.setStatusFlow();
                 this.visitorReservationDao.updateStatus(reservationOrder);
             }
         } catch (Exception e){
@@ -433,6 +435,8 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
                 log.info("========调用门禁接口授权成功=====");
                 //更新预约单状态为完成
                 reservationOrder.setStatus(VisitorConstants.ReservationOrderStatus.COMPLETED + "");
+                // 更新状态流程
+                reservationOrder.setStatusFlow();
                 this.visitorReservationDao.updateStatus(reservationOrder);
             }
         }
@@ -504,6 +508,8 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
             //更新预约单状态为审核不通过
             reservationOrder.setStatus(VisitorConstants.ReservationOrderStatus.APPROVE_REJECT + "");
             reservationOrder.setExt1(authorizeDTO.getRejectReaon());
+            // 更新状态流程
+            reservationOrder.setStatusFlow();
             this.visitorReservationDao.updateRejectReasonAndStatus(reservationOrder);
             //发送审核结果短信给访客
             this.sendApproveRejectSMS(authorizeDTO, visitorInfo);
@@ -533,6 +539,8 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
             reservationOrder.setActStartTime(authorizeDTO.getActStartTime());
             reservationOrder.setActEndTime(authorizeDTO.getActEndTime());
             reservationOrder.setStatus(VisitorConstants.ReservationOrderStatus.APPROVE_OK + "");
+            // 更新状态流程
+            reservationOrder.setStatusFlow();
             this.visitorReservationDao.update(reservationOrder);
             //5.发送审核成功短信给访客
             this.sendApproveOKSMS(authorizeDTO, visitorInfo, user);
@@ -646,7 +654,8 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
                 res.setUpdateTime(DateUtils.currentDate());
                 //变更为已过期
                 res.setStatus(String.valueOf(VisitorConstants.ReservationOrderStatus.EXPIRED));
-                visitorReservationDao.update(res);
+                res.setStatusFlow();
+                this.visitorReservationDao.update(res);
             }
         }catch (Exception e){
             log.error(e.toString());

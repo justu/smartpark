@@ -1,17 +1,17 @@
 package com.chris.smartpark.busi.service.impl;
-import java.util.Date;
 
 import com.chris.base.common.exception.CommonException;
 import com.chris.base.common.tree.TreeNode;
-import com.chris.base.common.utils.DateUtils;
-import com.chris.base.common.utils.ValidateUtils;
+import com.chris.base.common.utils.*;
 import com.chris.base.modules.app.cache.AppLoginUser;
 import com.chris.base.modules.app.cache.AppLoginUserCacheUtils;
 import com.chris.smartpark.base.dto.EsbResponse;
 import com.chris.smartpark.busi.common.VisitorConstants;
+import com.chris.smartpark.busi.common.VisitorUtils;
 import com.chris.smartpark.busi.dao.DoorControllerDao;
 import com.chris.smartpark.busi.dao.DoorDao;
 import com.chris.smartpark.busi.dto.DoorLevelDTO;
+import com.chris.smartpark.busi.dto.OpenDoorLogDTO;
 import com.chris.smartpark.busi.entity.DoorControllerEntity;
 import com.chris.smartpark.busi.entity.DoorEntity;
 import com.chris.smartpark.busi.entity.OpenDoorLogEntity;
@@ -24,10 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -141,19 +138,40 @@ public class EntranceServiceImpl implements EntranceService {
     private void recordOpenDoorLog(Long doorId, String openId, DoorControllerEntity doorController, EsbResponse resp) {
         AppLoginUser appLoginUser = AppLoginUserCacheUtils.getAppLoginUser(openId);
         // 记录开门日志
-        OpenDoorLogEntity openDoorLogEntity = new OpenDoorLogEntity();
-        openDoorLogEntity.setDoorId(doorId);
-        openDoorLogEntity.setUserId(appLoginUser.getUserId());
+        OpenDoorLogEntity openDoorLog = new OpenDoorLogEntity();
+        openDoorLog.setDoorId(doorId);
+        openDoorLog.setUserId(appLoginUser.getUserId());
+        openDoorLog.setUserType(appLoginUser.getRoleId() + "");
         Date currentDate = DateUtils.currentDate();
-        openDoorLogEntity.setOpenTime(currentDate);
-        openDoorLogEntity.setCreateTime(currentDate);
-        openDoorLogEntity.setOpenResult(resp.isOK() ? VisitorConstants.OpenDoorResult.SUCCESS : VisitorConstants.OpenDoorResult.FAILURE);
-        openDoorLogEntity.setOpenResultDesc(resp.isOK() ? VisitorConstants.OpenDoorResult.DESC_SUCCESS : VisitorConstants.OpenDoorResult.DESC_FAILURE);
-        openDoorLogEntity.setRemark(resp.getMsg());
+        openDoorLog.setOpenTime(currentDate);
+        openDoorLog.setCreateTime(currentDate);
+        openDoorLog.setOpenType(VisitorConstants.OpenDoorType.REMOTE + "");
+        openDoorLog.setOpenResult(resp.isOK() ? VisitorConstants.OpenDoorResult.SUCCESS : VisitorConstants.OpenDoorResult.FAILURE);
+        openDoorLog.setOpenResultDesc(resp.isOK() ? VisitorConstants.OpenDoorResult.DESC_SUCCESS : VisitorConstants.OpenDoorResult.DESC_FAILURE);
+        openDoorLog.setRemark(resp.getMsg());
         String detail = "ID=" + doorController.getId() + ",NAME=" + doorController.getControllerName() + ",READNO=" + doorController.getReaderNo() +
                 ",MAC_ADDR=" + doorController.getMacAddr() + ",IP:" + doorController.getControllerIp() + ",PORT=" + doorController.getControllerPort();
-        openDoorLogEntity.setExt3(detail);
-        openDoorLogEntity.setCreateUserId(appLoginUser.getUserId());
-        this.openDoorLogService.save(openDoorLogEntity);
+        openDoorLog.setExt3(detail);
+        openDoorLog.setCreateUserId(appLoginUser.getUserId());
+        this.openDoorLogService.save(openDoorLog);
+    }
+
+    @Override
+    public CommonResponse queryOpenDoorLogs(Map<String, Object> params) {
+        if (ValidateUtils.isEmpty(params.get(VisitorConstants.Keys.OPEN_ID))) {
+            throw new CommonException("openId为空");
+        }
+        if (VisitorUtils.isAdminRole(params.get(VisitorConstants.Keys.OPEN_ID).toString())) {
+            params.remove(VisitorConstants.Keys.OPEN_ID);
+        }
+        //查询列表数据
+        Query query = new Query(params);
+
+        int total = this.openDoorLogService.queryTotalByKeyword(query);
+        List<OpenDoorLogDTO> openDoorLogs = total > 0 ? this.openDoorLogService.queryListByKeyword(query) : Lists.newArrayList();
+
+        PageUtils pageUtil = new PageUtils(openDoorLogs, total, query.getLimit(), query.getPage());
+
+        return CommonResponse.ok().put(VisitorConstants.Keys.PAGE, pageUtil);
     }
 }
