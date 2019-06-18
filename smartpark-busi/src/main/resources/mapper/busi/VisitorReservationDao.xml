@@ -135,7 +135,12 @@
 		</if>
 		<if test="type == 2">
 			INNER JOIN tb_user u ON u.mobile = s.MOBILE
-			WHERE u.open_id = #{openId}
+			<if test="isAdminRole == true">
+				WHERE 1=1
+			</if>
+			<if test="isAdminRole == false">
+				WHERE u.open_id = #{openId}
+			</if>
 		</if>
 		<if test="status != null">
 			AND r.status = #{status}
@@ -155,7 +160,12 @@
 		<if test="type == 2">
 			INNER JOIN base_staff s ON s.id = r.staff_id
 			INNER JOIN tb_user u ON u.mobile = s.MOBILE
-			WHERE u.open_id = #{openId}
+			<if test="isAdminRole == true">
+				WHERE 1=1
+			</if>
+			<if test="isAdminRole == false">
+				WHERE u.open_id = #{openId}
+			</if>
 		</if>
 		<if test="status != null">
 			AND r.status = #{status}

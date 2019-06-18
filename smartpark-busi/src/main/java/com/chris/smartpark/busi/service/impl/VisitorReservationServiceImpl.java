@@ -111,6 +111,11 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
     public PageUtils queryReservationOrdersByOpenId(Map<String, Object> params) {
         //查询列表数据
         Query query = new Query(params);
+        if (VisitorUtils.isAdminRole(query.get(VisitorConstants.Keys.OPEN_ID).toString())) {
+            query.put("isAdminRole", true);
+        } else {
+            query.put("isAdminRole", false);
+        }
         int total = this.visitorReservationDao.countReservationOrdersByOpenId(query);
         List<ReservationOrderQryDTO> resultList = new ArrayList<>();
         if (total > 0) {
@@ -269,7 +274,7 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
         //验证有无有效预约单
         List<VisitorReservationEntity> reservationOrders = this.queryByIdcardAndStatus(authIdCardDTO.getCardNO(), VisitorConstants.ReservationOrderStatus.APPROVE_OK + "");
         if (ValidateUtils.isEmptyCollection(reservationOrders)) {
-            return CommonResponse.ok("现场访问").put("isSuccess","fasle").put("id","");
+            return CommonResponse.ok("现场访问").put("isSuccess","false").put("id","");
         } else {
             StringBuilder sb = new StringBuilder();
             for(VisitorReservationEntity reservation : reservationOrders){
@@ -342,7 +347,7 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
         // TODO 需要根据访客ID查询访客对应可授权的门禁列表
         List<String> mappingDoorIds = visitorDoorRelService.queryMappdingDoorIdsByReservationOrderId(reservationOrder.getId());
         if (ValidateUtils.isEmptyCollection(mappingDoorIds)) {
-            throw new CommonException("门ID未与第三方厂家做映射！");
+            throw new CommonException("门禁未与第三方厂家做映射！");
         }
         List<DoorCtrlAuthEntity> doorAuthList = new ArrayList<>();
         for (String mappingDoorId : mappingDoorIds) {
@@ -377,6 +382,9 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
      * @return
      */
     private int convertPhyCardId(String physicalCardId) {
+        if (physicalCardId.length() < 15) {
+            throw new CommonException("物理卡ID位数小于15位");
+        }
         String firstChar = physicalCardId.substring(8, 10);
         String secondChar = physicalCardId.substring(10, 12);
         String thirdChar = physicalCardId.substring(12, 14);
