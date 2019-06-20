@@ -149,7 +149,7 @@ public class VisitorReservationController {
 		log.error("现场预约请求参数 = {}", JSONObject.toJSONString(reservationOrderDTO));
 		ValidateUtils.validatedParams(result);
 		long id = visitorReservationService.createReservationOrder(reservationOrderDTO);
-		return CommonResponse.ok("现场来访上传成功").put("isSuccess", "true").put("id", id);
+		return CommonResponse.ok("现场预约成功").put("isSuccess", "true").put("id", id);
 	}
 	
 	/**

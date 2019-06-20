@@ -118,6 +118,7 @@ public class VisitorConstants {
         String DOOR_ID = "doorId";
         String ESB_SERVER = "ESB_SERVER";
         String KEY_WORD = "keyword";
+        String BUILDING = "building";
     }
 
 

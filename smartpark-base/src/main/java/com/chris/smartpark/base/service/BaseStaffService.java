@@ -38,5 +38,5 @@ public interface BaseStaffService {
 	 * @param mobile
 	 * @return
 	 */
-	String queryParkNameByStaffMobile(String mobile);
+	Map<String, Object> queryParkInfoByStaffMobile(String mobile);
 }

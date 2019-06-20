@@ -2,25 +2,17 @@ package com.chris.smartpark;
 
 import com.alibaba.fastjson.JSONObject;
 import com.chris.BaseApplication;
-import com.chris.base.modules.sys.entity.SysUserEntity;
-import com.chris.base.modules.sys.service.SysRoleService;
-import com.chris.base.modules.sys.service.SysUserService;
 import com.chris.smartpark.base.entity.BaseOrganizationEntity;
-import com.chris.smartpark.base.entity.BaseParkEntity;
 import com.chris.smartpark.base.entity.BaseStaffEntity;
-import com.chris.smartpark.base.service.BaseDeviceInfoService;
 import com.chris.smartpark.base.service.BaseOrganizationService;
-import com.chris.smartpark.base.service.BaseParkService;
 import com.chris.smartpark.base.service.BaseStaffService;
 import com.google.common.collect.ImmutableMap;
-import org.apache.commons.lang.builder.ToStringBuilder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.HashMap;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
@@ -567,7 +559,7 @@ public class BaseStaffTest {
 	 */
 	@Test
     public void queryStaffParkName() {
-		System.out.println("员工所有园区名称为 = " + this.baseStaffService.queryParkNameByStaffMobile("18975841003"));
+		System.out.println("员工所有园区名称为 = " + this.baseStaffService.queryParkInfoByStaffMobile("18975841003"));
 	}
 
 }

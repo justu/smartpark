@@ -4,6 +4,7 @@ import cn.afterturn.easypoi.excel.ExcelImportUtil;
 import cn.afterturn.easypoi.excel.entity.ImportParams;
 import cn.afterturn.easypoi.excel.entity.result.ExcelImportResult;
 import com.alibaba.fastjson.JSONObject;
+import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
 import com.chris.base.common.exception.CommonException;
 import com.chris.base.common.utils.*;
 import com.chris.base.modules.app.entity.UserEntity;
@@ -235,10 +236,21 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
             }
             this.carInfoService.batchInsert(reservationOrderDTO.getCarInfoEntitys());
         }
-        // TODO 4.保存同行人信息（暂缓）
+        // TODO 5.保存同行人信息（暂缓）
 
+        // 6、发送短信给员工
+        this.sendSMS2Staff(reservationOrder);
         return reservationOrder.getId();
     }
+
+    private void sendSMS2Staff(VisitorReservationEntity reservationOrder) {
+        SMSEntity smsEntity = new SMSEntity();
+        smsEntity.setMobile(reservationOrder.getStaffMobile());
+        smsEntity.setSmsType(Constant.SMSType.NOTICE);
+        smsEntity.setTemplateCode(Constant.SMSTemplateCode.RESERVATION_HANDLE.getTemplateCode());
+        SendSMSUtils.sendSms(smsEntity);
+    }
+
     /**
      * 校验预约单
      * @param reservationOrderDTO
@@ -606,14 +618,11 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
         smsEntity.setTemplateCode(Constant.SMSTemplateCode.RESERVATION_SUCCESS.getTemplateCode());
         JSONObject templateParam = new JSONObject();
         templateParam.put(VisitorConstants.Keys.TIME, DateUtils.format(authorizeDTO.getActStartTime(), "yyyy年MM月dd日 hh时mm分"));
-        // TODO 先写死
-        templateParam.put(VisitorConstants.Keys.PARK_NAME, this.getParkNameByUserMobile(user.getMobile()));
+        Map<String, Object> parkInfo = this.baseStaffService.queryParkInfoByStaffMobile(user.getMobile());
+        templateParam.put(VisitorConstants.Keys.PARK_NAME, parkInfo.get("parkName"));
+        templateParam.put(VisitorConstants.Keys.BUILDING, parkInfo.get("buildingName"));
         smsEntity.setTemplateParam(templateParam.toJSONString());
         SendSMSUtils.sendSms(smsEntity);
-    }
-
-    private String getParkNameByUserMobile(String mobile) {
-        return this.baseStaffService.queryParkNameByStaffMobile(mobile);
     }
 
     private void sendApproveRejectSMS(ReservationOrderApproveDTO authorizeDTO, VisitorInfoEntity visitorInfo) {

@@ -294,8 +294,8 @@
 		</foreach>
 	</delete>
 
-	<select id="queryParkNameByStaffMobile" parameterType="java.lang.String" resultType="java.lang.String">
-		SELECT p.name FROM base_park p
+	<select id="queryParkInfoByStaffMobile" parameterType="java.lang.String" resultType="java.util.HashMap">
+		SELECT b.building_name AS buildingName,p.name AS parkName FROM base_park p
 		INNER JOIN base_building b ON b.park_id = p.id
 		INNER JOIN base_floor f ON f.building_id = b.id
 		INNER JOIN sp_station s ON s.floor_id = f.id

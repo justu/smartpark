@@ -1,6 +1,5 @@
 package com.chris.smartpark.base.service.impl;
 
-import com.chris.base.common.utils.CommonUtils;
 import com.chris.base.common.utils.ValidateUtils;
 import com.chris.smartpark.base.dto.BaseStaffDTO;
 import com.google.common.collect.ImmutableMap;
@@ -89,7 +88,7 @@ public class BaseStaffServiceImpl implements BaseStaffService {
 	}
 
 	@Override
-	public String queryParkNameByStaffMobile(String mobile) {
-		return this.baseStaffDao.queryParkNameByStaffMobile(mobile);
+	public Map<String, Object> queryParkInfoByStaffMobile(String mobile) {
+		return this.baseStaffDao.queryParkInfoByStaffMobile(mobile);
 	}
 }

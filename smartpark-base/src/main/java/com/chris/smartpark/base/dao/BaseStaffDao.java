@@ -4,6 +4,8 @@ import com.chris.smartpark.base.entity.BaseStaffEntity;
 import com.chris.base.modules.sys.dao.BaseDao;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.Map;
+
 /**
  * 员工用户
  * 
@@ -14,5 +16,5 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface BaseStaffDao extends BaseDao<BaseStaffEntity> {
 
-    String queryParkNameByStaffMobile(String mobile);
+    Map<String, Object> queryParkInfoByStaffMobile(String mobile);
 }
