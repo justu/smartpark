@@ -187,8 +187,8 @@ public class VisitorTest {
      */
     @Test
     public void queryVisitorHisByIdcardNo() {
-        VisitorInfoHisEntity visitor = this.visitorInfoHisService.queryByIdcardNo("342225199109102078");
-        System.out.println("根据身份证号查询访客实例信息 = " + JSONObject.toJSONString(visitor));
+        List<VisitorInfoHisEntity> visitors = this.visitorInfoHisService.queryByIdcardNo("342225199109102078");
+        System.out.println("根据身份证号查询访客实例信息 = " + JSONObject.toJSONString(visitors));
     }
 
     /**
