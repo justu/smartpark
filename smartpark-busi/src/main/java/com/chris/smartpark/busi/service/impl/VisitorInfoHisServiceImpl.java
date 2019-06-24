@@ -1,11 +1,8 @@
 package com.chris.smartpark.busi.service.impl;
 
-import com.chris.base.common.utils.CommonResponse;
-import com.chris.base.common.utils.CommonValidator;
 import com.chris.base.common.utils.ValidateUtils;
 import com.chris.smartpark.busi.common.VisitorConstants;
 import com.chris.smartpark.busi.entity.CarInfoEntity;
-import com.chris.smartpark.busi.entity.VisitorInfoEntity;
 import com.chris.smartpark.busi.service.CarInfoService;
 import com.google.common.collect.ImmutableMap;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,13 +67,15 @@ public class VisitorInfoHisServiceImpl implements VisitorInfoHisService {
 	}
 
 	@Override
-	public VisitorInfoHisEntity queryByIdcardNo(String idcardNo) {
-		VisitorInfoHisEntity visitor = this.visitorInfoHisDao.queryByIdcardNo(idcardNo);
-		if (ValidateUtils.isNotEmpty(visitor)) {
-			// 根据最近的一次预约单ID 查询车辆信息
-			List<CarInfoEntity> carInfoList = this.carInfoService.queryList(ImmutableMap.of(VisitorConstants.Keys.RESERVATION_ORDER_ID, visitor.getReservationId()));
-			visitor.setCarInfoList(carInfoList);
-			return visitor;
+	public List<VisitorInfoHisEntity> queryByIdcardNo(String idcardNo) {
+		List<VisitorInfoHisEntity> visitors = this.visitorInfoHisDao.queryByIdcardNo(idcardNo);
+		if (ValidateUtils.isNotEmptyCollection(visitors)) {
+			for (VisitorInfoHisEntity visitor : visitors) {
+				// 根据最近的一次预约单ID 查询车辆信息
+				List<CarInfoEntity> carInfoList = this.carInfoService.queryList(ImmutableMap.of(VisitorConstants.Keys.RESERVATION_ORDER_ID, visitor.getReservationId()));
+				visitor.setCarInfoList(carInfoList);
+			}
+			return visitors;
 		}
 		return null;
 	}

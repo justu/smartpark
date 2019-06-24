@@ -61,8 +61,8 @@ public class VisitorInfoController {
 		if (!CommonValidator.isIDCard(idcardNo)) {
 			return CommonResponse.error("无效的身份证号码");
 		}
-		VisitorInfoHisEntity visitor = this.visitorInfoHisService.queryByIdcardNo(idcardNo);
-		return CommonResponse.ok().setData(visitor);
+		List<VisitorInfoHisEntity> visitors = this.visitorInfoHisService.queryByIdcardNo(idcardNo);
+		return CommonResponse.ok().setData(visitors);
 	}
 
 

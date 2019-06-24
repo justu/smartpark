@@ -30,5 +30,5 @@ public interface VisitorInfoHisService {
 	
 	void deleteBatch(Long[] ids);
 
-    VisitorInfoHisEntity queryByIdcardNo(String idcardNo);
+    List<VisitorInfoHisEntity> queryByIdcardNo(String idcardNo);
 }
