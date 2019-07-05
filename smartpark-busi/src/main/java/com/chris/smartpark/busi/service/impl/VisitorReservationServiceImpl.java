@@ -397,21 +397,28 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
         if (physicalCardId.length() < 15) {
             throw new CommonException("物理卡ID位数小于15位");
         }
-        String firstChar = physicalCardId.substring(8, 10);
+        /*String firstChar = physicalCardId.substring(8, 10);
         String secondChar = physicalCardId.substring(10, 12);
         String thirdChar = physicalCardId.substring(12, 14);
-        String cardId = thirdChar + secondChar + firstChar;
+        String cardId = thirdChar + secondChar + firstChar;*/
+        String cardId = physicalCardId.substring(10);
         int resultValue = VisitorUtils.hex2Int(cardId);
         log.error("物理卡ID[{}]转换后的值为[{}]", physicalCardId, resultValue);
         return resultValue;
     }
 
     public static void main(String[] args) {
-        int cardId = new VisitorReservationServiceImpl().convertPhyCardId("1164B001ACB58707");
+        // "4196FB0431B86F87"
+//        int cardId = new VisitorReservationServiceImpl().convertPhyCardId("4196FB0431B86F87");
+        String [] ids = {"4196FB0431B86F87", "30E43792801382B2", "3233127FC0178588"};
+        for (String id : ids) {
+            new VisitorReservationServiceImpl().convertPhyCardId(id);
+        }
+//        int cardId = new VisitorReservationServiceImpl().convertPhyCardId("3233127FC0178588");
+//        int cardId = new VisitorReservationServiceImpl().convertPhyCardId("1164B001ACB58707");
 //        convertPhyCardId("20A2C42894518466");
         /*System.out.println("vvvv = " + VisitorUtils.hex2Int("845194"));
         System.out.println("value = " + VisitorUtils.hex2Int("87b5ac"));*/
-        System.out.println("cardId = " + cardId);
     }
 
 
