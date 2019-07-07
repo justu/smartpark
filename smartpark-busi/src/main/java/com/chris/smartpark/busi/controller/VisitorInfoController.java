@@ -6,6 +6,7 @@ import java.util.Map;
 import com.chris.base.common.utils.*;
 import com.chris.base.modules.app.annotation.Login;
 import com.chris.smartpark.busi.common.VisitorConstants;
+import com.chris.smartpark.busi.dto.UserAndCarsDTO;
 import com.chris.smartpark.busi.entity.VisitorInfoHisEntity;
 import com.chris.smartpark.busi.service.VisitorInfoHisService;
 import com.google.common.collect.ImmutableMap;
@@ -63,6 +64,21 @@ public class VisitorInfoController {
 		}
 		List<VisitorInfoHisEntity> visitors = this.visitorInfoHisService.queryByIdcardNo(idcardNo);
 		return CommonResponse.ok().setData(visitors);
+	}
+
+	/**
+	 * 根据 openid 查询用户信息和车辆信息
+	 * @param openId
+	 * @return
+	 */
+	@GetMapping("/queryUserAndCars.notoken")
+	@Login
+	public CommonResponse queryUserAndCars(String openId){
+		if (ValidateUtils.isEmptyString(openId)) {
+			return CommonResponse.error("微信openId为空");
+		}
+		UserAndCarsDTO userAndCarsDTO = this.visitorInfoHisService.queryUserAndCars(openId);
+		return CommonResponse.ok().setData(userAndCarsDTO);
 	}
 
 

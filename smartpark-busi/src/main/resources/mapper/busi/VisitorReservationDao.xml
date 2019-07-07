@@ -137,6 +137,9 @@
 			INNER JOIN tb_user u ON u.mobile = s.MOBILE
 			<if test="isAdminRole == true">
 				WHERE 1=1
+				<if test="keyword != null and keyword !=''">
+					AND (s.USERNAME = #{keyword} or s.MOBILE = #{keyword})
+				</if>
 			</if>
 			<if test="isAdminRole == false">
 				WHERE u.open_id = #{openId}
@@ -162,6 +165,9 @@
 			INNER JOIN tb_user u ON u.mobile = s.MOBILE
 			<if test="isAdminRole == true">
 				WHERE 1=1
+				<if test="keyword != null and keyword !=''">
+					AND (s.USERNAME = #{keyword} or s.MOBILE = #{keyword})
+				</if>
 			</if>
 			<if test="isAdminRole == false">
 				WHERE u.open_id = #{openId}

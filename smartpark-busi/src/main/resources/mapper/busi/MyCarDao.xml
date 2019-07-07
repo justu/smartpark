@@ -24,13 +24,14 @@
 
 	<select id="queryList" resultType="com.chris.smartpark.busi.entity.MyCarEntity">
 		SELECT t.*,u1.username AS createUserName,u2.username AS updateUserName,
-			d1.name AS brandName,d2.name AS color,u.USERNAME AS staffName,u.mobile,u.IDCARDNUMBER as idcardNo
+			d1.name AS brandName,d2.name AS color,u.USERNAME AS staffName,
+			u.mobile,u.IDCARDNUMBER as idcardNo,u.deptName
 		FROM sp_my_car t
 		LEFT JOIN tb_user u1 ON t.create_user_id = u1.user_id
 		LEFT JOIN tb_user u2 ON t.update_user_id = u2.user_id
 		LEFT JOIN (select name,value FROM sys_data_dict where type = 'CAR_BRAND') d1 ON t.car_brand = d1.value
 		LEFT JOIN (select name,value FROM sys_data_dict where type = 'CAR_COLOR') d2 ON t.car_color = d2.value
-		INNER JOIN (select u.open_id,u.mobile,s.USERNAME,s.IDCARDNUMBER FROM tb_user u,base_staff s where u.mobile = s.MOBILE) u ON t.open_id = u.open_id
+		LEFT JOIN (select u.open_id,u.mobile,s.USERNAME,s.IDCARDNUMBER,o.DEPTNAME AS deptName FROM tb_user u,base_staff s,base_organization o where u.mobile = s.MOBILE and s.SDEPTCODE = o.SDEPTCODE) u ON t.open_id = u.open_id
 		WHERE 1=1
 			<if test="id != null and id !='' ">
 				AND t.id = #{id}
@@ -78,7 +79,7 @@
 		LEFT JOIN tb_user u2 ON t.update_user_id = u2.user_id
 		LEFT JOIN (select name,value FROM sys_data_dict where type = 'CAR_BRAND') d1 ON t.car_brand = d1.value
 		LEFT JOIN (select name,value FROM sys_data_dict where type = 'CAR_COLOR') d2 ON t.car_color = d2.value
-		INNER JOIN (select u.open_id,u.mobile,s.USERNAME FROM tb_user u,base_staff s where u.mobile = s.MOBILE) u ON t.open_id = u.open_id
+		LEFT JOIN (select u.open_id,u.mobile,s.USERNAME,s.IDCARDNUMBER,o.DEPTNAME AS deptName FROM tb_user u,base_staff s,base_organization o where u.mobile = s.MOBILE and s.SDEPTCODE = o.SDEPTCODE) u ON t.open_id = u.open_id
 		WHERE 1=1
 			<if test="id != null and id !='' ">
 				AND t.id = #{id}

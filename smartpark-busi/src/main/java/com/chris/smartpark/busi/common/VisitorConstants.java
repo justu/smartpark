@@ -119,6 +119,7 @@ public class VisitorConstants {
         String ESB_SERVER = "ESB_SERVER";
         String KEY_WORD = "keyword";
         String BUILDING = "building";
+        String DOOR_CTRL_PROVIDER = "DOOR_CTRL_PROVIDER";
     }
 
 

@@ -20,6 +20,7 @@ import com.chris.smartpark.busi.common.*;
 import com.chris.smartpark.busi.dao.AuthenticationRecordDao;
 import com.chris.smartpark.busi.dao.VisitorDoorRelDao;
 import com.chris.smartpark.busi.dao.VisitorReservationDao;
+import com.chris.smartpark.busi.doorctrl.provider.DoorCtrlProvider;
 import com.chris.smartpark.busi.dto.*;
 import com.chris.smartpark.busi.entity.*;
 import com.chris.smartpark.busi.facade.EsbFacade;
@@ -397,12 +398,8 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
         if (physicalCardId.length() < 15) {
             throw new CommonException("物理卡ID位数小于15位");
         }
-        /*String firstChar = physicalCardId.substring(8, 10);
-        String secondChar = physicalCardId.substring(10, 12);
-        String thirdChar = physicalCardId.substring(12, 14);
-        String cardId = thirdChar + secondChar + firstChar;*/
-        String cardId = physicalCardId.substring(10);
-        int resultValue = VisitorUtils.hex2Int(cardId);
+        DoorCtrlProvider doorCtrlProvider = SpringContextUtils.getBean(this.cacheDataUtils.getConfigValueByKey(VisitorConstants.Keys.DOOR_CTRL_PROVIDER), DoorCtrlProvider.class);
+        int resultValue = doorCtrlProvider.convertPhyCardId(physicalCardId);
         log.error("物理卡ID[{}]转换后的值为[{}]", physicalCardId, resultValue);
         return resultValue;
     }
