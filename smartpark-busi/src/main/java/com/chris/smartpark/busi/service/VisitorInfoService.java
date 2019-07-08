@@ -1,5 +1,6 @@
 package com.chris.smartpark.busi.service;
 
+import com.chris.smartpark.busi.dto.UserAndCarsDTO;
 import com.chris.smartpark.busi.entity.VisitorInfoEntity;
 
 import java.util.List;
@@ -30,4 +31,5 @@ public interface VisitorInfoService {
 	
 	void deleteBatch(Long[] ids);
 
+	UserAndCarsDTO queryUserAndCars(String openId);
 }

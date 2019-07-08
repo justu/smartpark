@@ -33,5 +33,4 @@ public interface VisitorInfoHisService {
 
     List<VisitorInfoHisEntity> queryByIdcardNo(String idcardNo);
 
-    UserAndCarsDTO queryUserAndCars(String openId);
 }

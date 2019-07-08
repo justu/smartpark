@@ -1,9 +1,17 @@
 package com.chris.smartpark.busi.service.impl;
 
+import com.chris.base.common.exception.CommonException;
 import com.chris.base.common.utils.DateUtils;
 import com.chris.base.common.utils.ValidateUtils;
+import com.chris.base.modules.app.entity.UserEntity;
+import com.chris.base.modules.app.service.UserService;
+import com.chris.smartpark.busi.common.VisitorConstants;
+import com.chris.smartpark.busi.dto.UserAndCarsDTO;
 import com.chris.smartpark.busi.entity.CarInfoEntity;
+import com.chris.smartpark.busi.entity.MyCarEntity;
+import com.chris.smartpark.busi.entity.VisitorInfoHisEntity;
 import com.chris.smartpark.busi.service.CarInfoService;
+import com.chris.smartpark.busi.service.MyCarService;
 import com.google.common.collect.ImmutableMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,8 +29,15 @@ import com.chris.smartpark.busi.service.VisitorInfoService;
 public class VisitorInfoServiceImpl implements VisitorInfoService {
 	@Autowired
 	private VisitorInfoDao visitorInfoDao;
+
 	@Autowired
 	private CarInfoService carInfoService;
+
+	@Autowired
+	private UserService userService;
+
+	@Autowired
+	private MyCarService myCarService;
 	
 	@Override
 	public VisitorInfoEntity queryObject(Long id){
@@ -67,6 +82,25 @@ public class VisitorInfoServiceImpl implements VisitorInfoService {
 	@Override
 	public void deleteBatch(Long[] ids){
 		visitorInfoDao.deleteBatch(ids);
+	}
+
+	@Override
+	public UserAndCarsDTO queryUserAndCars(String openId) {
+		UserEntity user = this.userService.queryUserByOpenId(openId);
+		if (ValidateUtils.isEmpty(user)) {
+			throw new CommonException("用户不存在");
+		}
+		List<VisitorInfoEntity> visitors = this.queryList(ImmutableMap.of("phone", user.getMobile(), "sidx", "create_time", "order", "desc"));
+		UserAndCarsDTO userAndCarsDTO = null;
+		if (ValidateUtils.isNotEmptyCollection(visitors)) {
+			VisitorInfoEntity visitor = visitors.get(0);
+			userAndCarsDTO = new UserAndCarsDTO(visitor.getName(), user.getMobile(), visitor.getIdcardNo());
+		} else {
+			userAndCarsDTO = new UserAndCarsDTO(ValidateUtils.isNotEmptyString(user.getStaffName()) ? user.getStaffName() : user.getUsername(), user.getMobile(), "");
+		}
+		List<MyCarEntity> myCars = this.myCarService.queryList(ImmutableMap.of(VisitorConstants.Keys.OPEN_ID, openId));
+		userAndCarsDTO.setMyCars(myCars);
+		return userAndCarsDTO;
 	}
 
 }

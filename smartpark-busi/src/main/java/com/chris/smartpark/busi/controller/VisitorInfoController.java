@@ -77,7 +77,7 @@ public class VisitorInfoController {
 		if (ValidateUtils.isEmptyString(openId)) {
 			return CommonResponse.error("微信openId为空");
 		}
-		UserAndCarsDTO userAndCarsDTO = this.visitorInfoHisService.queryUserAndCars(openId);
+		UserAndCarsDTO userAndCarsDTO = this.visitorInfoService.queryUserAndCars(openId);
 		return CommonResponse.ok().setData(userAndCarsDTO);
 	}
 

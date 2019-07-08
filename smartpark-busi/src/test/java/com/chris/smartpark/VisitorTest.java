@@ -13,6 +13,7 @@ import com.chris.smartpark.busi.common.BeanUtil;
 import com.chris.smartpark.busi.common.VisitorConstants;
 import com.chris.smartpark.busi.dto.ReservationOrderApproveDTO;
 import com.chris.smartpark.busi.dto.ReservationOrderDTO;
+import com.chris.smartpark.busi.dto.UserAndCarsDTO;
 import com.chris.smartpark.busi.entity.*;
 import com.chris.smartpark.busi.facade.EsbFacade;
 import com.chris.smartpark.busi.service.VisitorInfoHisService;
@@ -234,5 +235,11 @@ public class VisitorTest {
         door2.setAuthorStatus(2);
         door2.setStartTime(DateUtils.parseDate("2018-12-28 19:35:00", "yyyy-MM-dd HH:mm:ss"));
         return Lists.newArrayList(door1, door2);
+    }
+
+    @Test
+    public void queryUserAndMyCars() {
+        UserAndCarsDTO data = this.visitorInfoService.queryUserAndCars("obETm5XYpz_S0y2mlmESAOAb6tj8");
+        System.out.println("查询用户和车辆信息 = " + JSONObject.toJSONString(data));
     }
 }
