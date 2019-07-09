@@ -3,9 +3,12 @@ package com.chris.smartpark;
 import com.alibaba.fastjson.JSONObject;
 import com.chris.BusiApplication;
 import com.chris.base.common.tree.TreeNode;
+import com.chris.base.common.utils.CommonResponse;
 import com.chris.base.common.utils.Constant;
 import com.chris.base.common.utils.DateUtils;
 import com.chris.base.common.utils.SendSMSUtils;
+import com.chris.base.common.wx.dto.WXMsgTempSendDTO;
+import com.chris.base.common.wx.service.WXService;
 import com.chris.base.modules.app.cache.AppLoginUser;
 import com.chris.base.modules.app.entity.UserEntity;
 import com.chris.base.modules.sms.entity.SMSEntity;
@@ -35,6 +38,9 @@ public class SmsTest {
     @Autowired
     private BaseStaffService baseStaffService;
 
+    @Autowired
+    private WXService wxService;
+
     @Test
     public void sendApproveOKSMS() {
         String mobile = "18975841003";
@@ -57,6 +63,18 @@ public class SmsTest {
         smsEntity2.setTemplateCode(Constant.SMSTemplateCode.RESERVATION_HANDLE.getTemplateCode());
         SendSMSUtils.sendSms(smsEntity2);
         System.out.println("发送预约单处理短信给员工");
+    }
+
+    @Test
+    public void wxMsgSend() {
+        WXMsgTempSendDTO msg = new WXMsgTempSendDTO();
+        msg.setTouser("obETm5c3-tUxjFf3Rgq5qRbZPRfk");
+        msg.setTemplate_id("tyO1NzleQYuI6uwPR0b72xN3RpBRVtKCHQ8FP4tIoTY");
+        msg.setPage("index");
+        msg.setForm_id("sdfsdf");
+//        msg.setData(new JSONObject());
+        CommonResponse resp = this.wxService.sendWXMsgTemp(msg, "wx2543cd2140b815b1", "2b530219c5266ffe918650556b74889c");
+        System.out.println("发送微信小程序消息模板 = " + JSONObject.toJSONString(resp));
     }
 
 }
