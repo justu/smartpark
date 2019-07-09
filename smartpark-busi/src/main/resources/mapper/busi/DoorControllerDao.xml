@@ -127,7 +127,7 @@
 
 	<!-- 根据门禁id查询门禁控制器信息 -->
 	<select id="queryDoorControllerByDoorId" resultType="com.chris.smartpark.busi.entity.DoorControllerEntity" parameterType="java.util.Map" >
-		select dc.*,dr.read_no as readerNo
+		select dc.*,dr.read_no as readerNo,d.ext1 as mappingDoorId
 		from sp_door_controller dc
 		INNER JOIN sp_door_readno dr ON dr.controller_id = dc.id
 		INNER JOIN sp_door d ON d.door_readno_id = dr.id

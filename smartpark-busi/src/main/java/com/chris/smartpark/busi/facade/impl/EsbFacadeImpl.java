@@ -43,9 +43,16 @@ public class EsbFacadeImpl implements EsbFacade {
         jsonObject.put("doorCtrlIP", param.getControllerIp());
         jsonObject.put("macAddr", param.getMacAddr());
         jsonObject.put("doorReaderNo", param.getReaderNo());
+        jsonObject.put("doorId", param.getMappingDoorId());
+        jsonObject.put("doorCtrlProvier", this.cacheDataUtils.getConfigValueByKey(VisitorConstants.Keys.DOOR_CTRL_PROVIDER));
         return jsonObject;
     }
 
+    /**
+     * 门禁授权和预约
+     * @param doorAuthList
+     * @return
+     */
     @Override
     public EsbResponse doorCtrlAuthAndReserve(List<DoorCtrlAuthEntity> doorAuthList) {
         String url = this.cacheDataUtils.getConfigValueByKey(VisitorConstants.Keys.ESB_SERVER) + "doorCtrlReserve";

@@ -29,6 +29,8 @@ public class DoorControllerEntity  extends SysUpdateInfo  implements Serializabl
 	//状态 0 废弃 1正常
 	private String status;
 
+	private String mappingDoorId;
+
 	/**
 	 * 读头号
 	 */
@@ -90,5 +92,13 @@ public class DoorControllerEntity  extends SysUpdateInfo  implements Serializabl
 
 	public void setReaderNo(int readerNo) {
 		this.readerNo = readerNo;
+	}
+
+	public String getMappingDoorId() {
+		return mappingDoorId;
+	}
+
+	public void setMappingDoorId(String mappingDoorId) {
+		this.mappingDoorId = mappingDoorId;
 	}
 }
