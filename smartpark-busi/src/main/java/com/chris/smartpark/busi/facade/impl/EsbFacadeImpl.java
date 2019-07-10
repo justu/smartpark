@@ -5,6 +5,7 @@ import com.chris.base.common.utils.CacheDataUtils;
 import com.chris.base.common.utils.RestTemplateUtils;
 import com.chris.smartpark.base.dto.EsbResponse;
 import com.chris.smartpark.busi.common.VisitorConstants;
+import com.chris.smartpark.busi.dto.CosonDoorCtrlReqDTO;
 import com.chris.smartpark.busi.entity.DoorControllerEntity;
 import com.chris.smartpark.busi.entity.DoorCtrlAuthEntity;
 import com.chris.smartpark.busi.facade.EsbFacade;
@@ -63,8 +64,23 @@ public class EsbFacadeImpl implements EsbFacade {
             return JSONObject.parseObject(resp, EsbResponse.class);
         } catch (Exception e) {
             e.printStackTrace();
-            log.error("远程开门异常！原因：" + e.getMessage());
-            return EsbResponse.error("远程开门异常！原因：" + e.getMessage());
+            log.error("达实门禁授权异常！原因：" + e.getMessage());
+            return EsbResponse.error("达实门禁授权异常！原因：" + e.getMessage());
+        }
+    }
+
+    @Override
+    public EsbResponse doorCtrlAuthAndReserve4Coson(List<CosonDoorCtrlReqDTO> reqList) {
+        String url = this.cacheDataUtils.getConfigValueByKey(VisitorConstants.Keys.ESB_SERVER) + "doorCtrlReserve4Coson";
+        try {
+            Map<String, Object> paramMap = Maps.newHashMap();
+            paramMap.put("params", reqList);
+            String resp = this.restTemplateUtils.httpPostMediaTypeJson(url, String.class, paramMap);
+            return JSONObject.parseObject(resp, EsbResponse.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("科松门禁授权异常！原因：" + e.getMessage());
+            return EsbResponse.error("科松门禁授权异常！原因：" + e.getMessage());
         }
     }
 

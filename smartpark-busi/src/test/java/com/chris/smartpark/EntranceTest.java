@@ -51,9 +51,11 @@ public class EntranceTest {
     @Test
     public void remoteOpenDoor() {
         DoorControllerEntity param = new DoorControllerEntity();
-        param.setControllerIp("192.168.1.150");
+//        param.setControllerIp("192.168.1.150");
+        param.setControllerIp("192.168.1.77");
         param.setMacAddr("861CB1");
         param.setReaderNo(0);
+        param.setMappingDoorId("1");
         EsbResponse resp = this.esbFacade.remoteOpenDoor(param);
         System.out.println("远程开门结果 = " + JSONObject.toJSONString(resp));
     }

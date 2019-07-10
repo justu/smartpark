@@ -454,8 +454,13 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
                     visitorIdcard.setId(idcardList.get(0).getId());
                     this.visitorIdcardService.update(visitorIdcard);
                 }
-                List<DoorCtrlAuthEntity> doorCtrlAuthList = this.buildDoorCtrlAuthParams(visitorIdcard, reservationOrder);
-                this.saveDoorAuthRecords(doorCtrlAuthList);
+                if (VisitorUtils.isCosonDoorCtrl()) {
+                    this.processDoorCtrlAuth4Coson(visitorIdcard, reservationOrder);
+                } else {
+                    // 处理达实门禁授权
+                    List<DoorCtrlAuthEntity> doorCtrlAuthList = this.buildDoorCtrlAuthParams(visitorIdcard, reservationOrder);
+                    this.saveDoorAuthRecords(doorCtrlAuthList);
+                }
                 log.info("========调用门禁接口授权成功=====");
                 //更新预约单状态为完成
                 reservationOrder.setStatus(VisitorConstants.ReservationOrderStatus.COMPLETED + "");
@@ -463,6 +468,25 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
                 reservationOrder.setStatusFlow();
                 this.visitorReservationDao.updateStatus(reservationOrder);
             }
+        }
+    }
+
+    private void processDoorCtrlAuth4Coson(VisitorIdcardEntity visitorIdcard, VisitorReservationEntity reservationOrder) {
+        // 处理科松门禁授权
+        int userCardId = this.convertPhyCardId(visitorIdcard.getPhysicalCardId());
+        // 查询控制器
+        List<CosonDoorCtrlReqDTO> reqList = this.visitorReservationDao.queryCosonDoorCtrlParams(reservationOrder.getId());
+        if (ValidateUtils.isEmptyCollection(reqList)) {
+            throw new CommonException("未配置门禁权限");
+        }
+        reqList.forEach(item -> {
+            item.setStartTime(DateUtils.format(reservationOrder.getAppointStartTime(), DateUtils.DATE_TIME_PATTERN));
+            item.setEndTime(DateUtils.format(reservationOrder.getAppointEndTime(), DateUtils.DATE_TIME_PATTERN));
+            item.setUserCardId(userCardId + "");
+        });
+        EsbResponse resp = this.esbFacade.doorCtrlAuthAndReserve4Coson(reqList);
+        if (!resp.isOK()) {
+            throw new CommonException(resp.getMsg());
         }
     }
 
@@ -557,7 +581,12 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
             }
             if (VisitorConstants.ReservationOrderType.OFFLINE == reservationOrder.getType()) {
                 // 线下预约的预约单需要送门禁
-                this.sendPhyIdCard2DoorCtrlSys(reservationOrder, this.queryVisitorIdcardByOrderId(reservationOrder.getId() + ""));
+                VisitorIdcardEntity visitorIdcard = this.queryVisitorIdcardByOrderId(reservationOrder.getId() + "");
+                if (VisitorUtils.isCosonDoorCtrl()) {
+                    this.processDoorCtrlAuth4Coson(visitorIdcard, reservationOrder);
+                } else {
+                    this.sendPhyIdCard2DoorCtrlSys(reservationOrder, visitorIdcard);
+                }
             }
             //4.更新预约信息
             reservationOrder.setActStartTime(authorizeDTO.getActStartTime());

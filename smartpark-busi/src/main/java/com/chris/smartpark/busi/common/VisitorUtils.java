@@ -1,9 +1,6 @@
 package com.chris.smartpark.busi.common;
 
-import com.chris.base.common.utils.Constant;
-import com.chris.base.common.utils.DateUtils;
-import com.chris.base.common.utils.SendSMSUtils;
-import com.chris.base.common.utils.ValidateUtils;
+import com.chris.base.common.utils.*;
 import com.chris.base.modules.app.cache.AppLoginUser;
 import com.chris.base.modules.app.cache.AppLoginUserCacheUtils;
 
@@ -98,5 +95,10 @@ public final class VisitorUtils {
         } else {
             return carNo.matches(REG_CAR_NO);
         }
+    }
+
+    public static boolean isCosonDoorCtrl() {
+        CacheDataUtils cacheDataUtils = (CacheDataUtils) SpringContextUtils.getBean("cacheDataUtils");
+        return ValidateUtils.equals("cosonDoorCtrlProvider", cacheDataUtils.getConfigValueByKey(VisitorConstants.Keys.DOOR_CTRL_PROVIDER));
     }
 }

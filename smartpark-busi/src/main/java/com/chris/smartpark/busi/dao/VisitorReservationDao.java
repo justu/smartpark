@@ -1,6 +1,7 @@
 package com.chris.smartpark.busi.dao;
 
 import com.chris.base.common.utils.Query;
+import com.chris.smartpark.busi.dto.CosonDoorCtrlReqDTO;
 import com.chris.smartpark.busi.dto.ReservationOrderQryDTO;
 import com.chris.smartpark.busi.entity.VisitorReservationEntity;
 import com.chris.base.modules.sys.dao.BaseDao;
@@ -42,4 +43,6 @@ public interface VisitorReservationDao extends BaseDao<VisitorReservationEntity>
     int countReservationOrders(Query query);
 
     List<ReservationOrderQryDTO> searchReservationOrders(Query query);
+
+    List<CosonDoorCtrlReqDTO> queryCosonDoorCtrlParams(Long id);
 }

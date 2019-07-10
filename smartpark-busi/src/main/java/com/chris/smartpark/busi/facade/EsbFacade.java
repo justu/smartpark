@@ -2,6 +2,7 @@ package com.chris.smartpark.busi.facade;
 
 import com.chris.base.common.utils.CommonResponse;
 import com.chris.smartpark.base.dto.EsbResponse;
+import com.chris.smartpark.busi.dto.CosonDoorCtrlReqDTO;
 import com.chris.smartpark.busi.entity.DoorCtrlAuthEntity;
 import com.chris.smartpark.busi.entity.DoorControllerEntity;
 
@@ -20,4 +21,6 @@ public interface EsbFacade {
      * @return
      */
     EsbResponse doorCtrlAuthAndReserve(List<DoorCtrlAuthEntity> doorAuthList);
+
+    EsbResponse doorCtrlAuthAndReserve4Coson(List<CosonDoorCtrlReqDTO> reqList);
 }

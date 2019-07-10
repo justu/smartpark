@@ -372,4 +372,13 @@
 		</if>
 	</select>
 
+	<select id="queryCosonDoorCtrlParams" parameterType="java.lang.Long" resultType="com.chris.smartpark.busi.dto.CosonDoorCtrlReqDTO">
+		select t.door_id as doorId,d.ext1 AS mappingDoorId,dc.controller_ip AS doorCtrlIp
+		FROM sp_visitor_door_rel t
+		INNER JOIN sp_door d ON d.id = t.door_id
+		INNER JOIN sp_door_readno dr ON dr.id = d.door_readno_id
+		INNER JOIN sp_door_controller dc ON dc.id = dr.controller_id
+		where t.reservation_id = #{reservationOrderId}
+	</select>
+
 </mapper>
