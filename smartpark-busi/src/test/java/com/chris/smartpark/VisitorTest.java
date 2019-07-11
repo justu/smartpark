@@ -16,6 +16,7 @@ import com.chris.smartpark.busi.dto.ReservationOrderDTO;
 import com.chris.smartpark.busi.dto.UserAndCarsDTO;
 import com.chris.smartpark.busi.entity.*;
 import com.chris.smartpark.busi.facade.EsbFacade;
+import com.chris.smartpark.busi.service.VisitorIdcardService;
 import com.chris.smartpark.busi.service.VisitorInfoHisService;
 import com.chris.smartpark.busi.service.VisitorInfoService;
 import com.chris.smartpark.busi.service.VisitorReservationService;
@@ -50,6 +51,9 @@ public class VisitorTest {
 
 	@Autowired
     private EsbFacade esbFacade;
+
+	@Autowired
+	private VisitorIdcardService visitorIdcardService;
 
 	@Test
 	public void queryVisitorInfo() {
@@ -130,7 +134,7 @@ public class VisitorTest {
      */
     @Test
     public void checkReservationOrder() {
-        VisitorIdcardEntity visitorIdcard = new VisitorIdcardEntity();
+        /*VisitorIdcardEntity visitorIdcard = new VisitorIdcardEntity();
         visitorIdcard.setPhysicalCardId(VerifyCodeUtils.getValidationCode(20));
         visitorIdcard.setIdcardNo("342225199109102078");
         visitorIdcard.setName("李森");
@@ -142,7 +146,9 @@ public class VisitorTest {
         visitorIdcard.setEffDate(DateUtils.parseDate("2010-09-10 18:22"));
         visitorIdcard.setExpDate(DateUtils.parseDate("2030-09-10 18:33"));
         visitorIdcard.setCreateTime(new Date());
-        visitorIdcard.setUpdateTime(new Date());
+        visitorIdcard.setUpdateTime(new Date());*/
+
+        VisitorIdcardEntity visitorIdcard = this.visitorIdcardService.queryObject(77L);
         System.out.println("访客身份信息JSON = " + JSONObject.toJSONString(visitorIdcard));
         this.visitorReservationService.checkIdCardAndGetAuth(visitorIdcard);
         System.out.println("访客身份校验成功！访客身份信息ID = " + visitorIdcard.getId());
