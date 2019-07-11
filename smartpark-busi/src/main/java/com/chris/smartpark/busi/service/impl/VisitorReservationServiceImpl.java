@@ -7,6 +7,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
 import com.chris.base.common.exception.CommonException;
 import com.chris.base.common.utils.*;
+import com.chris.base.common.wx.dto.WXMsgTempSendDTO;
+import com.chris.base.common.wx.service.WXService;
 import com.chris.base.modules.app.entity.UserEntity;
 import com.chris.base.modules.app.service.UserService;
 import com.chris.base.modules.oss.entity.SysAttachmentEntity;
@@ -69,6 +71,9 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
 
     @Autowired
     private EsbFacade esbFacade;
+
+    @Autowired
+    private WXService wxService;
 
     /**
      * 查询预约单明细
@@ -483,6 +488,8 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
             item.setStartTime(DateUtils.format(reservationOrder.getAppointStartTime(), DateUtils.DATE_TIME_PATTERN));
             item.setEndTime(DateUtils.format(reservationOrder.getAppointEndTime(), DateUtils.DATE_TIME_PATTERN));
             item.setUserCardId(userCardId + "");
+            item.setUserType(1); // TODO 暂时写死为固定卡
+            item.setOperationType(4); // TODO 暂时写死为临时卡设置授权时间
         });
         EsbResponse resp = this.esbFacade.doorCtrlAuthAndReserve4Coson(reqList);
         if (!resp.isOK()) {
@@ -559,7 +566,7 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
             // 更新状态流程
             reservationOrder.setStatusFlow();
             this.visitorReservationDao.updateRejectReasonAndStatus(reservationOrder);
-            //发送审核结果短信给访客
+            //发送审核不通过短信给访客
             this.sendApproveRejectSMS(authorizeDTO, visitorInfo);
         } else if (ValidateUtils.equals(VisitorConstants.ApproveResult.OK, authorizeDTO.getApproveReslut())) {
             /**
@@ -598,6 +605,13 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
             //5.发送审核成功短信给访客
             this.sendApproveOKSMS(authorizeDTO, visitorInfo, user);
         }
+        // 模板消息推送
+        JSONObject msg = new JSONObject();
+        msg.put("keyword1", ImmutableMap.of("value", ValidateUtils.equals(VisitorConstants.ApproveResult.OK, authorizeDTO.getApproveReslut()) ? "审核通过" : "审核不通过"));
+        msg.put("keyword2", ImmutableMap.of("value", reservationOrder.getReservationNo()));
+        this.wxService.sendWXMsgTemp(WXMsgTempSendDTO.builder().form_id(authorizeDTO.getFormId()).template_id("tyO1NzleQYuI6uwPR0b72xN3RpBRVtKCHQ8FP4tIoTY").
+                touser(ValidateUtils.isNotEmptyString(visitorInfo.getExt1()) ? visitorInfo.getExt1() : user.getOpenId()).page("/staff/pages/visit/info?id=" + reservationOrder.getId()).data(msg).build(),
+                this.cacheDataUtils.getConfigValueByKey("WX_APP_ID"), this.cacheDataUtils.getConfigValueByKey("WX_APP_SECRET"));
         this.saveAuthenticationRecord(authorizeDTO, reservationOrder, user);
         log.error("授权结束......");
     }

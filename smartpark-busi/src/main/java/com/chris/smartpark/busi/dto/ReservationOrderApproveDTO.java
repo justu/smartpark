@@ -23,6 +23,8 @@ public class ReservationOrderApproveDTO implements Serializable {
     //预约授权结束时间
     private Date actEndTime;
 
+    private String formId;
+
     public Long getReservationId() {
         return reservationId;
     }
@@ -77,5 +79,13 @@ public class ReservationOrderApproveDTO implements Serializable {
 
     public void setActEndTime(Date actEndTime) {
         this.actEndTime = actEndTime;
+    }
+
+    public String getFormId() {
+        return formId;
+    }
+
+    public void setFormId(String formId) {
+        this.formId = formId;
     }
 }

@@ -67,11 +67,8 @@ public class SmsTest {
 
     @Test
     public void wxMsgSend() {
-        WXMsgTempSendDTO msg = new WXMsgTempSendDTO();
-        msg.setTouser("obETm5c3-tUxjFf3Rgq5qRbZPRfk");
-        msg.setTemplate_id("tyO1NzleQYuI6uwPR0b72xN3RpBRVtKCHQ8FP4tIoTY");
-        msg.setPage("index");
-        msg.setForm_id("sdfsdf");
+        WXMsgTempSendDTO msg = WXMsgTempSendDTO.builder().touser("obETm5c3-tUxjFf3Rgq5qRbZPRfk").template_id("tyO1NzleQYuI6uwPR0b72xN3RpBRVtKCHQ8FP4tIoTY").
+                page("index").form_id("sdfsdf").build();
 //        msg.setData(new JSONObject());
         CommonResponse resp = this.wxService.sendWXMsgTemp(msg, "wx2543cd2140b815b1", "2b530219c5266ffe918650556b74889c");
         System.out.println("发送微信小程序消息模板 = " + JSONObject.toJSONString(resp));

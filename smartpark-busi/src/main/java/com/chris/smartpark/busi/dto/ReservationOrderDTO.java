@@ -71,6 +71,8 @@ public class ReservationOrderDTO extends SysUpdateInfo implements Serializable {
 
     private String status;
 
+    private String formId;
+
     public String getName() {
         return name;
     }
@@ -237,5 +239,13 @@ public class ReservationOrderDTO extends SysUpdateInfo implements Serializable {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getFormId() {
+        return formId;
+    }
+
+    public void setFormId(String formId) {
+        this.formId = formId;
     }
 }

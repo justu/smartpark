@@ -23,7 +23,12 @@
     </resultMap>
 
 	<select id="queryObject" resultType="com.chris.smartpark.busi.entity.VisitorInfoEntity">
-		select * from sp_visitor_info where id = #{value}
+		SELECT t.id,t.name,t.idcard_no AS idcardNo,t.phone,t.type,t.update_time AS updateTime,t.update_user_id AS updateUserId,
+			t.photo_url AS photoUrl,t.company,t.remark,t.create_time AS createTime,t.create_user_id AS createUserId,u.open_id AS ext1
+		FROM sp_visitor_info t
+		LEFT JOIN tb_user u ON u.mobile = t.phone
+		where t.id = #{value}
+
 	</select>
 	<select id="selectByIdcardNo" resultType="com.chris.smartpark.busi.entity.VisitorInfoEntity" parameterType="java.lang.String">
 		select * from sp_visitor_info where idcard_no = #{idcardNo}

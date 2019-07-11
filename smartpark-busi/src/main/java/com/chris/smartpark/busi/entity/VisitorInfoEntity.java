@@ -32,7 +32,10 @@ public class VisitorInfoEntity  extends SysUpdateInfo  implements Serializable {
 	private String company;
 	//备注
 	private String remark;
-	//扩展字段1
+	/**
+	 * 访客对应的微信 openid
+	 * 用访客手机号与用户表关联
+	 */
 	private String ext1;
 	//扩展字段2
 	private String ext2;

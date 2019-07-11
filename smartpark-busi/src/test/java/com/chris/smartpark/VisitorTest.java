@@ -154,13 +154,13 @@ public class VisitorTest {
     @Test
     public void reservationApprove() {
         ReservationOrderApproveDTO authorizeDTO = new ReservationOrderApproveDTO();
-        authorizeDTO.setReservationId(5L);
-        authorizeDTO.setDoorList(ImmutableList.of(4L, 6L));
+        authorizeDTO.setReservationId(238L);
+        authorizeDTO.setDoorList(ImmutableList.of(4L, 8L));
         authorizeDTO.setApproveReslut(VisitorConstants.ApproveResult.OK);
 //        authorizeDTO.setRejectReaon("");
-        authorizeDTO.setOpenId("YzcmCZNvbXocrsz9dm8e"); // 授权人openId
-        authorizeDTO.setActStartTime(DateUtils.parseDate("2018-11-20 09:00"));
-        authorizeDTO.setActEndTime(DateUtils.parseDate("2018-11-20 18:00"));
+        authorizeDTO.setOpenId("obETm5c3-tUxjFf3Rgq5qRbZPRfk"); // 授权人openId
+        authorizeDTO.setActStartTime(DateUtils.parseDate("2019-07-12 09:00"));
+        authorizeDTO.setActEndTime(DateUtils.parseDate("2019-07-12 18:00"));
 
         System.out.println("预约审核请求JSON = " + JSONObject.toJSONString(authorizeDTO));
         this.visitorReservationService.approve(authorizeDTO);
