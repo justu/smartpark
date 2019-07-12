@@ -3,10 +3,7 @@ package com.chris.smartpark;
 import com.alibaba.fastjson.JSONObject;
 import com.chris.BusiApplication;
 import com.chris.base.common.tree.TreeNode;
-import com.chris.base.common.utils.CommonResponse;
-import com.chris.base.common.utils.Constant;
-import com.chris.base.common.utils.DateUtils;
-import com.chris.base.common.utils.SendSMSUtils;
+import com.chris.base.common.utils.*;
 import com.chris.base.common.wx.dto.WXMsgTempSendDTO;
 import com.chris.base.common.wx.service.WXService;
 import com.chris.base.modules.app.cache.AppLoginUser;
@@ -42,7 +39,7 @@ public class SmsTest {
     private WXService wxService;
 
     @Test
-    public void sendApproveOKSMS() {
+    public void sendNoticeSMS() {
         String mobile = "18975841003";
         SMSEntity smsEntity = new SMSEntity();
         smsEntity.setMobile(mobile);
@@ -63,6 +60,40 @@ public class SmsTest {
         smsEntity2.setTemplateCode(Constant.SMSTemplateCode.RESERVATION_HANDLE.getTemplateCode());
         SendSMSUtils.sendSms(smsEntity2);
         System.out.println("发送预约单处理短信给员工");
+    }
+
+    @Test
+    public void sendVerifySMS() {
+        String mobile = "18975841003";
+        SMSEntity smsEntity = new SMSEntity();
+        smsEntity.setMobile(mobile);
+        smsEntity.setSmsType(Constant.SMSType.VERIFY);
+        smsEntity.setTemplateCode(Constant.SMSTemplateCode.REGISTER_VERIFY_CODE.getTemplateCode());
+        JSONObject templateParam = new JSONObject();
+        templateParam.put("code", 4);
+        smsEntity.setTemplateParam(templateParam.toJSONString());
+        try {
+            SendSMSUtils.sendSms(smsEntity);
+            System.out.println("发送注册验证短信成功");
+            String code = SendSMSUtils.getVerifyCode4App(smsEntity.getMobile(), smsEntity.getTemplateCode());
+            System.out.println("输入的校验码 = " + code);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        SMSEntity smsEntity2 = new SMSEntity();
+        smsEntity2.setMobile(mobile);
+        smsEntity2.setSmsType(Constant.SMSType.VERIFY);
+        smsEntity2.setTemplateCode(Constant.SMSTemplateCode.RESERVATION_VERIFY_CODE.getTemplateCode());
+        smsEntity2.setTemplateParam(templateParam.toJSONString());
+        try {
+            SendSMSUtils.sendSms(smsEntity2);
+            System.out.println("发送预约验证短信成功");
+            String code = SendSMSUtils.getVerifyCode4App(smsEntity2.getMobile(), smsEntity2.getTemplateCode());
+            System.out.println("输入的校验码 = " + code);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
