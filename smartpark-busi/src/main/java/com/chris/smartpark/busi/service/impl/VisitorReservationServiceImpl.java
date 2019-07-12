@@ -460,8 +460,10 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
                     this.visitorIdcardService.update(visitorIdcard);
                 }
                 if (VisitorUtils.isCosonDoorCtrl()) {
+                    log.error("处理科松门禁");
                     this.processDoorCtrlAuth4Coson(visitorIdcard, reservationOrder);
                 } else {
+                    log.error("处理达实门禁");
                     // 处理达实门禁授权
                     List<DoorCtrlAuthEntity> doorCtrlAuthList = this.buildDoorCtrlAuthParams(visitorIdcard, reservationOrder);
                     this.saveDoorAuthRecords(doorCtrlAuthList);
@@ -590,8 +592,10 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
                 // 线下预约的预约单需要送门禁
                 VisitorIdcardEntity visitorIdcard = this.queryVisitorIdcardByOrderId(reservationOrder.getId() + "");
                 if (VisitorUtils.isCosonDoorCtrl()) {
+                    log.error("处理科松门禁");
                     this.processDoorCtrlAuth4Coson(visitorIdcard, reservationOrder);
                 } else {
+                    log.error("处理达实门禁");
                     this.sendPhyIdCard2DoorCtrlSys(reservationOrder, visitorIdcard);
                 }
             }

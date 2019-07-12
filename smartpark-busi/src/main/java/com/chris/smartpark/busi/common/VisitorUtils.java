@@ -98,7 +98,8 @@ public final class VisitorUtils {
     }
 
     public static boolean isCosonDoorCtrl() {
-        CacheDataUtils cacheDataUtils = (CacheDataUtils) SpringContextUtils.getBean("cacheDataUtils");
-        return ValidateUtils.equals("cosonDoorCtrlProvider", cacheDataUtils.getConfigValueByKey(VisitorConstants.Keys.DOOR_CTRL_PROVIDER));
+        /*CacheDataUtils cacheDataUtils = (CacheDataUtils) SpringContextUtils.getBean("cacheDataUtils");
+        return ValidateUtils.equals("cosonDoorCtrlProvider", cacheDataUtils.getConfigValueByKey(VisitorConstants.Keys.DOOR_CTRL_PROVIDER));*/
+        return true;
     }
 }
