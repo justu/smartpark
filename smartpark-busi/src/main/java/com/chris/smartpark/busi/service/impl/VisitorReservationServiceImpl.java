@@ -335,10 +335,7 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
                     visitorIdcard.setUpdateTime(DateUtils.currentDate());
                     this.visitorIdcardService.update(visitorIdcard);
                 }
-                //添加送门禁开关
-                if (VisitorConstants.SendDoorCtrlFlag.YES.equals(sysconfigservice.getValue("SEND_TO_ENTRANCE"))) {
-                    this.sendPhyIdCard2DoorCtrlSys(reservationOrder, visitorIdcard);
-                }
+                this.processDoorCtrlAuth4Coson(visitorIdcard, reservationOrder);
                 //更新预约单状态为完成
                 reservationOrder.setStatus(VisitorConstants.ReservationOrderStatus.COMPLETED + "");
                 reservationOrder.setPhysicalCardId(String.valueOf(authIdCardDTO.getCardID()));

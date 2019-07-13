@@ -12,7 +12,7 @@ public class CosonDoorCtrlProvider implements DoorCtrlProvider {
         if (physicalCardId.length() < 10) {
             throw new CommonException("物理卡ID位数小于10位");
         }
-        String cardId = physicalCardId.substring(-8);
+        String cardId = physicalCardId.substring(physicalCardId.length() - 8);
         return cardId;
     }
 }

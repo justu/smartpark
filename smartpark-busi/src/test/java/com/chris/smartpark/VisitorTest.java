@@ -2,15 +2,13 @@ package com.chris.smartpark;
 
 import com.alibaba.fastjson.JSONObject;
 import com.chris.BusiApplication;
-import com.chris.base.common.utils.DateUtils;
-import com.chris.base.common.utils.HttpContextUtils;
-import com.chris.base.common.utils.PageUtils;
-import com.chris.base.common.utils.VerifyCodeUtils;
+import com.chris.base.common.utils.*;
 import com.chris.smartpark.base.dto.BaseStaffDTO;
 import com.chris.smartpark.base.dto.EsbResponse;
 import com.chris.smartpark.base.service.BaseStaffService;
 import com.chris.smartpark.busi.common.BeanUtil;
 import com.chris.smartpark.busi.common.VisitorConstants;
+import com.chris.smartpark.busi.dto.AuthIdCardDTO;
 import com.chris.smartpark.busi.dto.ReservationOrderApproveDTO;
 import com.chris.smartpark.busi.dto.ReservationOrderDTO;
 import com.chris.smartpark.busi.dto.UserAndCarsDTO;
@@ -247,5 +245,13 @@ public class VisitorTest {
     public void queryUserAndMyCars() {
         UserAndCarsDTO data = this.visitorInfoService.queryUserAndCars("obETm5XYpz_S0y2mlmESAOAb6tj8");
         System.out.println("查询用户和车辆信息 = " + JSONObject.toJSONString(data));
+    }
+
+    @Test
+    public void test() {
+        String json = "{\"cardID\":\"40AEDB0009338362\",\"cardNO\":\"430102197607040034\",\"cardName\":\"龚剑\",\"cardPht\":\"222222\",\"id\":\"245\"}";
+        AuthIdCardDTO authIdCardDTO = JSONObject.parseObject(json, AuthIdCardDTO.class);
+        CommonResponse result = this.visitorReservationService.saveCardAndGetAuth(authIdCardDTO);
+        System.out.println(JSONObject.toJSONString(result));
     }
 }
