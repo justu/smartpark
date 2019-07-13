@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 @Service("dasDoorCtrlProvider")
 public class DasDoorCtrlProvider implements DoorCtrlProvider {
     @Override
-    public int convertPhyCardId(String physicalCardId) {
+    public String convertPhyCardId(String physicalCardId) {
         if (physicalCardId.length() < 15) {
             throw new CommonException("物理卡ID位数小于15位");
         }
@@ -17,6 +17,6 @@ public class DasDoorCtrlProvider implements DoorCtrlProvider {
         String thirdChar = physicalCardId.substring(12, 14);
         String cardId = thirdChar + secondChar + firstChar;
         int resultValue = VisitorUtils.hex2Int(cardId);
-        return resultValue;
+        return resultValue + "";
     }
 }

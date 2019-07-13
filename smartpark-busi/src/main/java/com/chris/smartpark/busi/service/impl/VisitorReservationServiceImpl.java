@@ -4,7 +4,6 @@ import cn.afterturn.easypoi.excel.ExcelImportUtil;
 import cn.afterturn.easypoi.excel.entity.ImportParams;
 import cn.afterturn.easypoi.excel.entity.result.ExcelImportResult;
 import com.alibaba.fastjson.JSONObject;
-import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
 import com.chris.base.common.exception.CommonException;
 import com.chris.base.common.utils.*;
 import com.chris.base.common.wx.dto.WXMsgTempSendDTO;
@@ -372,7 +371,7 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
             //一个门对应两条数据
             DoorCtrlAuthEntity door1 = new DoorCtrlAuthEntity();
             DoorCtrlAuthEntity door2 = new DoorCtrlAuthEntity();
-            door1.setCardID(this.convertPhyCardId(visitorIdcard.getPhysicalCardId()));
+            door1.setCardID(Integer.valueOf(this.convertPhyCardId(visitorIdcard.getPhysicalCardId())));
             door1.setDoorID(Integer.valueOf(mappingDoorId));
             door1.setPassword("0000");
             door1.setDueDate(DateUtils.parseDate("2099-12-31"));
@@ -399,12 +398,12 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
      * @param physicalCardId
      * @return
      */
-    private int convertPhyCardId(String physicalCardId) {
+    private String convertPhyCardId(String physicalCardId) {
         if (physicalCardId.length() < 15) {
             throw new CommonException("物理卡ID位数小于15位");
         }
         DoorCtrlProvider doorCtrlProvider = SpringContextUtils.getBean(this.cacheDataUtils.getConfigValueByKey(VisitorConstants.Keys.DOOR_CTRL_PROVIDER), DoorCtrlProvider.class);
-        int resultValue = doorCtrlProvider.convertPhyCardId(physicalCardId);
+        String resultValue = doorCtrlProvider.convertPhyCardId(physicalCardId);
         log.error("物理卡ID[{}]转换后的值为[{}]", physicalCardId, resultValue);
         return resultValue;
     }
@@ -412,9 +411,12 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
     public static void main(String[] args) {
         // "4196FB0431B86F87"
 //        int cardId = new VisitorReservationServiceImpl().convertPhyCardId("4196FB0431B86F87");
-        String [] ids = {"4196FB0431B86F87", "30E43792801382B2", "3233127FC0178588"};
+        String [] ids = {"4196FB0431B86F87", "30E43792801382B2", "3233127FC0178588", "1237788520"};
         for (String id : ids) {
-            new VisitorReservationServiceImpl().convertPhyCardId(id);
+            String cardId = id.substring(id.length() - 8);
+            System.out.println(cardId);
+            int resultValue = VisitorUtils.hex2Int(cardId);
+            System.out.println(resultValue);
         }
 //        int cardId = new VisitorReservationServiceImpl().convertPhyCardId("3233127FC0178588");
 //        int cardId = new VisitorReservationServiceImpl().convertPhyCardId("1164B001ACB58707");
@@ -480,7 +482,7 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
 
     private void processDoorCtrlAuth4Coson(VisitorIdcardEntity visitorIdcard, VisitorReservationEntity reservationOrder) {
         // 处理科松门禁授权
-        int userCardId = this.convertPhyCardId(visitorIdcard.getPhysicalCardId());
+        String userCardId = this.convertPhyCardId(visitorIdcard.getPhysicalCardId());
         // 查询控制器
         List<CosonDoorCtrlReqDTO> reqList = this.visitorReservationDao.queryCosonDoorCtrlParams(reservationOrder.getId());
         if (ValidateUtils.isEmptyCollection(reqList)) {
@@ -489,7 +491,7 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
         reqList.forEach(item -> {
             item.setStartTime(DateUtils.format(reservationOrder.getAppointStartTime(), DateUtils.DATE_TIME_PATTERN));
             item.setEndTime(DateUtils.format(reservationOrder.getAppointEndTime(), DateUtils.DATE_TIME_PATTERN));
-            item.setUserCardId(userCardId + "");
+            item.setUserCardId(userCardId);
             item.setUserType(1); // TODO 暂时写死为固定卡
             item.setOperationType(4); // TODO 暂时写死为临时卡设置授权时间
         });
@@ -516,7 +518,7 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
             //一个门对应两条数据
             DoorCtrlAuthEntity door1 = new DoorCtrlAuthEntity();
             DoorCtrlAuthEntity door2 = new DoorCtrlAuthEntity();
-            door1.setCardID(this.convertPhyCardId(visitorIdcard.getPhysicalCardId()));
+            door1.setCardID(Integer.valueOf(this.convertPhyCardId(visitorIdcard.getPhysicalCardId())));
             door1.setDoorID(Math.toIntExact(door.getDoorId()));
             door1.setPassword("0000");
             door1.setDueDate(DateUtils.parseDate("2099-12-31"));

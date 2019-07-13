@@ -8,12 +8,11 @@ import org.springframework.stereotype.Service;
 @Service("cosonDoorCtrlProvider")
 public class CosonDoorCtrlProvider implements DoorCtrlProvider {
     @Override
-    public int convertPhyCardId(String physicalCardId) {
+    public String convertPhyCardId(String physicalCardId) {
         if (physicalCardId.length() < 10) {
             throw new CommonException("物理卡ID位数小于10位");
         }
-        String cardId = physicalCardId.substring(10);
-        int resultValue = VisitorUtils.hex2Int(cardId);
-        return resultValue;
+        String cardId = physicalCardId.substring(-8);
+        return cardId;
     }
 }
