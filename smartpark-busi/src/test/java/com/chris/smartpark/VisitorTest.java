@@ -249,7 +249,8 @@ public class VisitorTest {
 
     @Test
     public void test() {
-        String json = "{\"cardID\":\"40AEDB0009338362\",\"cardNO\":\"430102197607040034\",\"cardName\":\"龚剑\",\"cardPht\":\"222222\",\"id\":\"245\"}";
+//        String json = "{\"cardID\":\"40AEDB0009338362\",\"cardNO\":\"430102197607040034\",\"cardName\":\"龚剑\",\"cardPht\":\"222222\",\"id\":\"245\"}";
+        String json = "{\"cardID\":\"3233127FC0178588\",\"cardNO\":\"430302198410030794\",\"cardName\":\"丁众\",\"cardPht\":\"newbalance\",\"id\":\"244\"}";
         AuthIdCardDTO authIdCardDTO = JSONObject.parseObject(json, AuthIdCardDTO.class);
         CommonResponse result = this.visitorReservationService.saveCardAndGetAuth(authIdCardDTO);
         System.out.println(JSONObject.toJSONString(result));
