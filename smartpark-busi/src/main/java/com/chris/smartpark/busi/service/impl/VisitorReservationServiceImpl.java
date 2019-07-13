@@ -238,6 +238,7 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
             for (CarInfoEntity carInfo : reservationOrderDTO.getCarInfoEntitys()) {
                 carInfo.setCreateTime(DateUtils.currentDate());
                 carInfo.setReservationId(reservationOrder.getId());
+                carInfo.setId(null);
             }
             this.carInfoService.batchInsert(reservationOrderDTO.getCarInfoEntitys());
         }
