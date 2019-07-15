@@ -263,8 +263,8 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
      */
     private void validateReservationOrder(ReservationOrderDTO reservationOrderDTO) {
         //校验预约结束时间结束时间在开始时间一小时以后
-        if(!this.isOneHourAfter(reservationOrderDTO.getAppointStartTime(),reservationOrderDTO.getAppointEndTime())){
-            throw new CommonException("预约结束时间需要在开始时间一小时以后！");
+        if(!this.isOneMinuteAfter(reservationOrderDTO.getAppointStartTime(),reservationOrderDTO.getAppointEndTime())){
+            throw new CommonException("预约结束时间需要在开始时间一分钟以后！");
         }
         //校验身份证是否合法
         if (!CommonValidator.isIDCard(reservationOrderDTO.getIdcardNo())) {
@@ -407,6 +407,7 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
     }
 
     public static void main(String[] args) {
+        VisitorReservationServiceImpl v = new VisitorReservationServiceImpl();
         // "4196FB0431B86F87"
 //        int cardId = new VisitorReservationServiceImpl().convertPhyCardId("4196FB0431B86F87");
         String [] ids = {"4196FB0431B86F87", "30E43792801382B2", "3233127FC0178588", "1237788520"};
@@ -416,6 +417,9 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
             int resultValue = VisitorUtils.hex2Int(cardId);
             System.out.println(resultValue);
         }
+        System.out.println("v = " + v.isOneMinuteAfter(DateUtils.parseDate("2019-07-15 23:09:30", DateUtils.DATE_TIME_PATTERN), DateUtils.parseDate("2019-07-15 23:11:30", DateUtils.DATE_TIME_PATTERN)));
+        System.out.println("v2 = " + v.isOneMinuteAfter(DateUtils.parseDate("2019-07-15 23:09:30", DateUtils.DATE_TIME_PATTERN), DateUtils.parseDate("2019-07-15 23:10:22", DateUtils.DATE_TIME_PATTERN)));
+
 //        int cardId = new VisitorReservationServiceImpl().convertPhyCardId("3233127FC0178588");
 //        int cardId = new VisitorReservationServiceImpl().convertPhyCardId("1164B001ACB58707");
 //        convertPhyCardId("20A2C42894518466");
@@ -887,8 +891,8 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
      */
     private void validateBatchReservationOrder(BatchReservationOrderDTO reservationOrderDTO) {
         //校验预约结束时间结束时间在开始时间一小时以后
-        if(!this.isOneHourAfter(reservationOrderDTO.getAppointStartTime(),reservationOrderDTO.getAppointEndTime())){
-            throw new CommonException("预约结束时间需要在开始时间一小时以后！");
+        if(!this.isOneMinuteAfter(reservationOrderDTO.getAppointStartTime(),reservationOrderDTO.getAppointEndTime())){
+            throw new CommonException("预约结束时间需要在开始时间一分钟以后！");
         }
         //校验身份证是否合法
         if (!CommonValidator.isIDCard(reservationOrderDTO.getIdcardNo())) {
@@ -904,12 +908,9 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
         }
     }
 
-    private boolean isOneHourAfter(java.util.Date actStartTime, java.util.Date actEndTime){
-        long interval = (actEndTime.getTime() - actStartTime.getTime())/1000 - 3600;
-        if(interval<0){
-           return false;
-        }
-        return true;
+    private boolean isOneMinuteAfter(java.util.Date actStartTime, java.util.Date actEndTime){
+        int intervalMins = DateUtils.getBetweenMinutes(actStartTime, actEndTime);
+        return intervalMins >= 1;
     }
 
     @Override
