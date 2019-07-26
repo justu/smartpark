@@ -29,6 +29,7 @@ import com.chris.smartpark.busi.service.*;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.concurrent.BasicThreadFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -36,6 +37,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 @Slf4j
 @Service("visitorReservationService")
@@ -73,6 +76,8 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
 
     @Autowired
     private WXService wxService;
+
+    private ScheduledExecutorService scheduledExecutorService;
 
     /**
      * 查询预约单明细
@@ -244,9 +249,52 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
         }
         // TODO 5.保存同行人信息（暂缓）
 
-        // 6、发送短信给员工
-        this.sendSMS2Staff(reservationOrder);
+        // 发送消息
+        this.asyncSendMsg(reservationOrder, visitorInfo, reservationOrderDTO.getFormId());
         return reservationOrder.getId();
+    }
+
+    /**
+     * 异步发送消息
+     * @param reservationOrder
+     * @param visitorInfo
+     * @param formId
+     */
+    private void asyncSendMsg(VisitorReservationEntity reservationOrder, VisitorInfoEntity visitorInfo, String formId) {
+        this.initScheduledExecutorService();
+        this.scheduledExecutorService.execute(() -> {
+            try {
+                // 模板消息推送
+                JSONObject msg = new JSONObject();
+                //访客姓名
+                msg.put("keyword1", ImmutableMap.of("value", visitorInfo.getName()));
+                //预约单号
+                msg.put("keyword2", ImmutableMap.of("value", reservationOrder.getReservationNo()));
+                //来访时间
+                msg.put("keyword3", ImmutableMap.of("value", this.buildVisitTime(reservationOrder)));
+                //来访事由
+                msg.put("keyword4", ImmutableMap.of("value", reservationOrder.getRemark()));
+                this.wxService.sendWXMsgTemp(WXMsgTempSendDTO.builder().form_id(formId).template_id("ACIneEtrq_Qd1plikRjksShw0LXUa6go7xE56M5rul4").
+                                touser(reservationOrder.getOpenId()).page("/staff/pages/visit/info?id=" + reservationOrder.getId()).data(msg).build(),
+                        this.cacheDataUtils.getConfigValueByKey("WX_APP_ID"), this.cacheDataUtils.getConfigValueByKey("WX_APP_SECRET"));
+                log.info("异步消息发送成功！");
+                this.sendSMS2Staff(reservationOrder);
+            } catch (Exception e) {
+                log.error("异步消息发送异常！", e);
+            }
+        });
+    }
+
+    private String buildVisitTime(VisitorReservationEntity reservationOrder) {
+        return DateUtils.format(reservationOrder.getAppointStartTime(), "yyyy年MM月dd日 hh时mm分") + " 至 " +
+                DateUtils.format(reservationOrder.getAppointEndTime(), "yyyy年MM月dd日 hh时mm分");
+    }
+
+    private void initScheduledExecutorService() {
+        if (ValidateUtils.isEmpty(this.scheduledExecutorService)) {
+            this.scheduledExecutorService =  new ScheduledThreadPoolExecutor(2,
+                    new BasicThreadFactory.Builder().namingPattern("scheduled-sendmsg-%d").daemon(true).build());
+        }
     }
 
     private void sendSMS2Staff(VisitorReservationEntity reservationOrder) {
@@ -255,6 +303,7 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
         smsEntity.setSmsType(Constant.SMSType.NOTICE);
         smsEntity.setTemplateCode(Constant.SMSTemplateCode.RESERVATION_HANDLE.getTemplateCode());
         SendSMSUtils.sendSms(smsEntity);
+        log.info("发送短信给员工成功");
     }
 
     /**
