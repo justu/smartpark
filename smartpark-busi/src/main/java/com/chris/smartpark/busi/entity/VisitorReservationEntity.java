@@ -56,7 +56,9 @@ public class VisitorReservationEntity  extends SysUpdateInfo  implements Seriali
 	 * 状态流程
 	 */
 	private String ext2;
-	//扩展字段3
+	/**
+	 * 员工 openId
+	 */
 	private String ext3;
 	//访客物理卡id
 	private String physicalCardId;
@@ -220,4 +222,5 @@ public class VisitorReservationEntity  extends SysUpdateInfo  implements Seriali
 	public void setStatusFlow() {
 		this.ext2 = ValidateUtils.isEmptyString(this.ext2) ? this.status : this.ext2 + "," + this.status;
 	}
+
 }

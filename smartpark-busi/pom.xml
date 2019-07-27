@@ -51,11 +51,11 @@
 			</exclusions>
 		</dependency>
 
-		<dependency>
+		<!--<dependency>
 			<groupId>com.chris.smartpark</groupId>
 			<artifactId>smartpark-ibms</artifactId>
 			<version>${chrisbase.version}</version>
-		</dependency>
+		</dependency>-->
 
 		<dependency>
 			<groupId>com.google.code.gson</groupId>

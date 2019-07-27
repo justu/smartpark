@@ -6,8 +6,6 @@ import cn.afterturn.easypoi.excel.entity.result.ExcelImportResult;
 import com.alibaba.fastjson.JSONObject;
 import com.chris.base.common.exception.CommonException;
 import com.chris.base.common.utils.*;
-import com.chris.base.common.wx.dto.WXMsgTempSendDTO;
-import com.chris.base.common.wx.service.WXService;
 import com.chris.base.modules.app.entity.UserEntity;
 import com.chris.base.modules.app.service.UserService;
 import com.chris.base.modules.oss.entity.SysAttachmentEntity;
@@ -17,7 +15,10 @@ import com.chris.base.modules.sys.service.SysConfigService;
 import com.chris.smartpark.base.dto.EsbResponse;
 import com.chris.smartpark.base.entity.BaseStaffEntity;
 import com.chris.smartpark.base.service.BaseStaffService;
-import com.chris.smartpark.busi.common.*;
+import com.chris.smartpark.busi.common.BeanUtil;
+import com.chris.smartpark.busi.common.VisitorConstants;
+import com.chris.smartpark.busi.common.VisitorUtils;
+import com.chris.smartpark.busi.common.WXNoticeMsgUtils;
 import com.chris.smartpark.busi.dao.AuthenticationRecordDao;
 import com.chris.smartpark.busi.dao.VisitorDoorRelDao;
 import com.chris.smartpark.busi.dao.VisitorReservationDao;
@@ -36,7 +37,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 
@@ -75,7 +79,7 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
     private EsbFacade esbFacade;
 
     @Autowired
-    private WXService wxService;
+    private WXNoticeMsgUtils wxNoticeMsgUtils;
 
     private ScheduledExecutorService scheduledExecutorService;
 
@@ -258,36 +262,18 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
      * 异步发送消息
      * @param reservationOrder
      * @param visitorInfo
-     * @param formId
      */
     private void asyncSendMsg(VisitorReservationEntity reservationOrder, VisitorInfoEntity visitorInfo, String formId) {
         this.initScheduledExecutorService();
         this.scheduledExecutorService.execute(() -> {
             try {
-                // 模板消息推送
-                JSONObject msg = new JSONObject();
-                //访客姓名
-                msg.put("keyword1", ImmutableMap.of("value", visitorInfo.getName()));
-                //预约单号
-                msg.put("keyword2", ImmutableMap.of("value", reservationOrder.getReservationNo()));
-                //来访时间
-                msg.put("keyword3", ImmutableMap.of("value", this.buildVisitTime(reservationOrder)));
-                //来访事由
-                msg.put("keyword4", ImmutableMap.of("value", reservationOrder.getRemark()));
-                this.wxService.sendWXMsgTemp(WXMsgTempSendDTO.builder().form_id(formId).template_id("ACIneEtrq_Qd1plikRjksShw0LXUa6go7xE56M5rul4").
-                                touser(reservationOrder.getOpenId()).page("/staff/pages/visit/info?id=" + reservationOrder.getId()).data(msg).build(),
-                        this.cacheDataUtils.getConfigValueByKey("WX_APP_ID"), this.cacheDataUtils.getConfigValueByKey("WX_APP_SECRET"));
-                log.info("异步消息发送成功！");
+                this.wxNoticeMsgUtils.sendOrderCreatedMsg2Visitor(reservationOrder, formId);
+                this.wxNoticeMsgUtils.sendOrderAccpetMsg2Staff(reservationOrder, visitorInfo, formId);
                 this.sendSMS2Staff(reservationOrder);
             } catch (Exception e) {
                 log.error("异步消息发送异常！", e);
             }
         });
-    }
-
-    private String buildVisitTime(VisitorReservationEntity reservationOrder) {
-        return DateUtils.format(reservationOrder.getAppointStartTime(), "yyyy年MM月dd日 hh时mm分") + " 至 " +
-                DateUtils.format(reservationOrder.getAppointEndTime(), "yyyy年MM月dd日 hh时mm分");
     }
 
     private void initScheduledExecutorService() {
@@ -662,13 +648,7 @@ public class VisitorReservationServiceImpl implements VisitorReservationService 
             //5.发送审核成功短信给访客
             this.sendApproveOKSMS(authorizeDTO, visitorInfo, user);
         }
-        // 模板消息推送
-        JSONObject msg = new JSONObject();
-        msg.put("keyword1", ImmutableMap.of("value", ValidateUtils.equals(VisitorConstants.ApproveResult.OK, authorizeDTO.getApproveReslut()) ? "审核通过" : "审核不通过"));
-        msg.put("keyword2", ImmutableMap.of("value", reservationOrder.getReservationNo()));
-        this.wxService.sendWXMsgTemp(WXMsgTempSendDTO.builder().form_id(authorizeDTO.getFormId()).template_id("tyO1NzleQYuI6uwPR0b72xN3RpBRVtKCHQ8FP4tIoTY").
-                touser(ValidateUtils.isNotEmptyString(visitorInfo.getExt1()) ? visitorInfo.getExt1() : user.getOpenId()).page("/staff/pages/visit/info?id=" + reservationOrder.getId()).data(msg).build(),
-                this.cacheDataUtils.getConfigValueByKey("WX_APP_ID"), this.cacheDataUtils.getConfigValueByKey("WX_APP_SECRET"));
+        this.wxNoticeMsgUtils.sendOrderApproveResultMsg2Visitor(reservationOrder, authorizeDTO);
         this.saveAuthenticationRecord(authorizeDTO, reservationOrder, user);
         log.error("授权结束......");
     }
